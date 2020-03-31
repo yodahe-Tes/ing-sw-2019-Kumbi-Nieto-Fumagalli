@@ -3,11 +3,13 @@ package Model;
 /**
  * La suddivisione avviene prima in base al tipo di effetto e successivamente
  * ogni divinità implementerà il prorpio potere
+ *
+ * @author Francisco
  */
 //interface Model.Deity e class delle singole divinità
 interface Deity{
     public enum  type{
-        Move, Build;
+        Move, Build, Opponent;
     }
 }
 
