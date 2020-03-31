@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 /**
  * A class to check losing condition
@@ -19,10 +19,6 @@ public class LosingConditionChecker implements LosingCondition {
 
 public class DefaultLosingCondition implements LosingCondition {
 
-    public boolean checkCondition() {
-
-    }
-
 
     }
 
@@ -35,7 +31,11 @@ public class DefaultLosingCondition implements LosingCondition {
 
 public class DefaultVictoryCondition extends LosingConditionChecker {
 
+    public boolean checkcondition() {
 
+        }
+
+    }
 }
 
 /**
@@ -45,6 +45,6 @@ public class DefaultVictoryCondition extends LosingConditionChecker {
 
 interface LosingCondition {
 
-    boolean checkCondition();
+    public boolean checkCondition();
 
 }
