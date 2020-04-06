@@ -1,50 +1,50 @@
 package model;
 
-/**
- * La suddivisione avviene prima in base al tipo di effetto e successivamente
- * ogni divinità implementerà il prorpio potere
+import java.util.Observer;
+
+/**Every god implements their own rule based on the choose made from the GodType class
+ * and also any of them implements the method power which describes what they can or can't do
  */
-//interface Model.Deity e class delle singole divinità
-interface Deity{
-    public enum  type{
-        Move, Build;
-    }
-}
+abstract class Atlas implements Deity, BuildingRule{
+    public abstract String type();
+    public void power() {
 
-class Atlas implements Deity, BuildingRule{
-    type TypeOfGod = type.Build;
-    public void power() {//può costruire su qualsiasi livello
 
     }
 }
-class Demetra implements Deity, BuildingPhase{
-    type TypeOfGod = type.Build;
+abstract class Demetra implements Deity, BuildingPhase{
+    public abstract String type();
     public void power() {
 
     }
 }
-class Artemis implements Deity, MovementPhase{
-    type TypeOfGod = type.Move;
+abstract class Artemis implements Deity, MovementPhase{
+    public abstract String type();
     public void power() {
 
     }
 }
-class Apollo implements Deity, MovementRule{
-    type TypeOfGod = type.Move;
+abstract class Apollo implements Deity, MovementRule{
+    public abstract String type();
     public void power() {
 
     }
 }
-class Athena implements Deity, MovementRule{
-    type TypeOfGod = type.Move;
-    String playerOwner = //nickname.player;
-//metodo observer e il notify
-    public void power() {
+abstract class Athena implements Deity, MovementRule, Observer {
+    public abstract String type();
+    private boolean conditionFulfilled;
+    public String playerOwner;
 
+    public void power() {
     }
+
+    public void update();
+
 }
 
-//interface delle regole
+
+/** This set of interfaces helps to implements the class power
+ */
 
 interface BuildingRule {
     public void power();
@@ -61,8 +61,10 @@ interface MovementPhase {
 
 
 
-//classi che implementano le interface delle regole
-
+/**
+ *This set of classes helps looks on the checkRules class and confirm the capability to use or not the
+ * power of a god
+ */
 class DefaultBuildingRule implements BuildingRule{
     public void power() {
     }
