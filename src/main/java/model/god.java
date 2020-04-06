@@ -34,7 +34,10 @@ abstract class Artemis implements Deity, MovementPhase{
      * back to its initial space.
      */
     public abstract String type();
-    public void power() {
+    public void power(worker, movementRulesCollection) {
+        if movementRulesCollection == true
+                worker.move();
+
 
     }
 }
@@ -106,13 +109,13 @@ class DefaultMovementRule implements MovementRule{
     }
 }
 
-class DefaultMovementPhase {
+class DefaultMovementPhase implements MovementPhase{
     public void power() {
     }
 }
 
 class BuildingRuleChecker {
-    char buildingRules[];
+    buildingRules[];
     //regole da soddisfare
     public void checkRules(){
         //controlla tutte le regole in array e controlla se sono state soddisfatte
