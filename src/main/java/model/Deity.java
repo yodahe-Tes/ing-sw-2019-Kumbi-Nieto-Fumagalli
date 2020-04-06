@@ -1,8 +1,7 @@
 package model;
 
 /**
- * La suddivisione avviene prima in base al tipo di effetto e successivamente
- * ogni divinità implementerà il prorpio potere
+ * At first every god is divided by their type
  */
 //interface Model.Deity e class delle singole divinità
 public interface Deity{

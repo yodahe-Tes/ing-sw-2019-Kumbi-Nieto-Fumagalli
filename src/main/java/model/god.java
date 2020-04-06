@@ -6,6 +6,10 @@ import java.util.Observer;
  * and also any of them implements the method power which describes what they can or can't do
  */
 abstract class Atlas implements Deity, BuildingRule{
+    /**
+     *Your Build: Your Worker may
+     * build a dome at any level.
+     */
     public abstract String type();
     public void power() {
 
@@ -13,24 +17,46 @@ abstract class Atlas implements Deity, BuildingRule{
     }
 }
 abstract class Demetra implements Deity, BuildingPhase{
+    /**
+     *Your Build: Your Worker may
+     * build one additional time, but not
+     * on the same space.
+     */
     public abstract String type();
     public void power() {
 
     }
 }
 abstract class Artemis implements Deity, MovementPhase{
+    /**
+     *Your Move: Your Worker may
+     * move one additional time, but not
+     * back to its initial space.
+     */
     public abstract String type();
     public void power() {
 
     }
 }
 abstract class Apollo implements Deity, MovementRule{
+    /**
+     *Your Move: Your Worker may
+     * move into an opponent Worker’s
+     * space by forcing their Worker to
+     * the space yours just vacated.
+     */
     public abstract String type();
     public void power() {
 
     }
 }
 abstract class Athena implements Deity, MovementRule, Observer {
+    /**
+     *Opponent’s Turn: If one of your
+     * Workers moved up on your last
+     * turn, opponent Workers cannot
+     * move up this turn
+     */
     public abstract String type();
     private boolean conditionFulfilled;
     public String playerOwner;
