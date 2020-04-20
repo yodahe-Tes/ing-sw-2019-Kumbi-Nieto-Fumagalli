@@ -1,9 +1,11 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Observer;
 
 /**Every god implements their own rule based on the choose made from the GodType class
  * and also any of them implements the method power which describes what they can or can't do
+ * @author Nieto
  */
 abstract class Atlas implements Deity, BuildingRule{
     /**
@@ -11,7 +13,7 @@ abstract class Atlas implements Deity, BuildingRule{
      * build a dome at any level.
      */
     public abstract String type();
-    public void power() {
+    public void doCheckRule() {
 
 
     }
@@ -23,7 +25,7 @@ abstract class Demetra implements Deity, BuildingPhase{
      * on the same space.
      */
     public abstract String type();
-    public void power() {
+    public void doCheckRule() {
 
     }
 }
@@ -34,7 +36,7 @@ abstract class Artemis implements Deity, MovementPhase{
      * back to its initial space.
      */
     public abstract String type();
-    public void power(worker, movementRulesCollection) {
+    public void doCheckRule(worker, movementRulesCollection) {
         if movementRulesCollection == true
                 worker.move();
 
@@ -49,7 +51,7 @@ abstract class Apollo implements Deity, MovementRule{
      * the space yours just vacated.
      */
     public abstract String type();
-    public void power() {
+    public void doCheckRule() {
 
     }
 }
@@ -64,7 +66,7 @@ abstract class Athena implements Deity, MovementRule, Observer {
     private boolean conditionFulfilled;
     public String playerOwner;
 
-    public void power() {
+    public void doCheckRule() {
     }
 
     public void update();
@@ -76,16 +78,16 @@ abstract class Athena implements Deity, MovementRule, Observer {
  */
 
 interface BuildingRule {
-    public void power();
+    public void doCheckRule();
 }
 interface BuildingPhase {
-    public void power();
+    public void doCheckRule();
 }
 interface MovementRule {
-    public void power();
+    public void doCheckRule();
 }
 interface MovementPhase {
-    public void power();
+    public void doCheckRule();
 }
 
 
@@ -95,35 +97,70 @@ interface MovementPhase {
  * power of a god
  */
 class DefaultBuildingRule implements BuildingRule{
-    public void power() {
+    public void doCheckRule() {
     }
 }
 
 class DefaultBuildingPhase implements BuildingPhase{
-    public void power() {
+    public void doCheckRule() {
     }
 }
 
 class DefaultMovementRule implements MovementRule{
-    public void power() {
+    public void doCheckRule() {
     }
 }
 
 class DefaultMovementPhase implements MovementPhase{
-    public void power() {
+    public void doCheckRule() {
     }
 }
-
-class BuildingRuleChecker {
-    buildingRules[];
+/**interface that is implemented by the every
+ *class and owns the method to check the rules
+ */
+interface RulesChecker{
+    public void doCheckRule();
+}
+class MasterRulesChecker {
+    /**
+     * A class that contains the arrylist of rules
+     * and contains a for cycle that uses the method checkRules
+     * for every element of the array
+     */
+    private ArrayList<RulesChecker> listaDiCheck;
     //regole da soddisfare
-    public void checkRules(){
-        //controlla tutte le regole in array e controlla se sono state soddisfatte
-        //boolean per la costruzione
+    public void addCheck(RulesChecker){
+        listaDiCheck.add(RulesChecker);
+
     }
+    public void checkRules(){
+        for (RulesChecker var : listaDiCheck) {
+            var.checkRules();
+        }
+    }
+    MasterRulesChecker.addCheck(BuildingRuleChecker);
+    MasterRulesChecker.addCheck(MovementRulesChecker);
+
+}
+class BuildingRuleChecker implements RulesChecker{
+    private ArrayList<RulesChecker> listaDiCheck;
+
+    public void checkRules(){
+        for (listaDiCheck:RulesChecker){
+            listaDiCheck.checkRules();
+        }
+    }
+
 }
 
-class MovementRulesChecker {
+class MovementRulesChecker implements RulesChecker{
+    private ArrayList<RulesChecker> listaDiCheck;
+
+    public void checkRules(){
+        for (listaDiCheck:RulesChecker){
+        listaDiCheck.checkRules();
+        }
+    }
 
 }
 

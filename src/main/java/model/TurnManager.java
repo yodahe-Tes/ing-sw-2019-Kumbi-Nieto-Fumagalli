@@ -2,7 +2,7 @@ package model;
 
 /**
  * A class to manage the game and player turns
- * @author Kumbi
+ * @author Nieto
  */
 
 public class TurnManager {
@@ -13,7 +13,8 @@ public class TurnManager {
 
 /**
  * A class to manage move and phase turns
- * @author Kumbi
+ * @author Nieto
+ *
  */
 
 public class Turn {
