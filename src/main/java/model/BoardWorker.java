@@ -11,6 +11,8 @@ public class BoardWorker implements Subject{
 
     private int[] position;
 
+    private int[] oldPosition;
+
     private ArrayList<Observer> observer;
 
 
@@ -25,15 +27,18 @@ public class BoardWorker implements Subject{
 
         observer = new ArrayList<Observer>();
 
+        oldPosition = null;
+
     }
 
 
     /**
-     * Move the worker to an other square
+     * Move the worker to an other square and takes track of older position
      * @param row is the row of the ending square
      * @param column is the column of the ending square
      */
     public void move(int row, int column){
+        oldPosition = position;
         position[0] = row;
         position[1] = column;
         notifyObservers();
@@ -79,5 +84,13 @@ public class BoardWorker implements Subject{
         for(Observer toBeNotified : observer){
             toBeNotified.update();
         }
+    }
+
+    /**
+     * returns the older position
+     * @return an array of 2 int rapresenting a position
+     */
+    public int[] getOldPosition(){
+        return oldPosition;
     }
 }
