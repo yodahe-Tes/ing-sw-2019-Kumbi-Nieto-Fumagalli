@@ -1,16 +1,12 @@
 package model;
 
 /**
- * At first every god is divided by their type
+ * interface that helps to understand
+ * where the powers of the deity is going to be activated
  */
 //interface Model.Deity e class delle singole divinità
 public interface Deity{
-    public enum  GodType{
-        BuildingRule, MovementRule, BuildingPhase, MovementPhase, opponent
-    }
-
-    public String type(){
-        return GodType;
-
+     enum  GodType{
+       Player, Opponent
     }
 }
