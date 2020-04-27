@@ -63,9 +63,7 @@ public class Player {
      * @param column is the column part of the square where the worker will move
      */
     public void moveWorker(int workerNum, int row, int column){
-        try{
             worker[workerNum-1].move(row, column);
-        }catch(ArrayIndexOutOfBoundsException e){}
     }
 
 
@@ -75,9 +73,7 @@ public class Player {
      * @return the worker's position
      */
     public int[] workerPosition(int workerNum){
-        try{
             return worker[workerNum-1].getPosition();
-        }catch (ArrayIndexOutOfBoundsException e){}
     }
 
 

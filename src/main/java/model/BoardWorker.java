@@ -6,6 +6,8 @@ import java.util.ArrayList;
  * A class modelling a worker in Santorini gameboard
  * @author Fumagalli
  */
+
+
 public class BoardWorker implements Subject{
 
 
@@ -33,7 +35,7 @@ public class BoardWorker implements Subject{
 
 
     /**
-     * Move the worker to an other square and takes track of older position
+     * Moves the worker to an other square, takes track of older position, calls observers
      * @param row is the row of the ending square
      * @param column is the column of the ending square
      */
@@ -42,6 +44,16 @@ public class BoardWorker implements Subject{
         position[0] = row;
         position[1] = column;
         notifyObservers();
+    }
+
+    /**
+     * Forced move that doesn't call observers
+     * @param row
+     * @param column
+     */
+    public void forced(int row, int column){
+        position[0]=row;
+        position[1]=column;
     }
 
     /**

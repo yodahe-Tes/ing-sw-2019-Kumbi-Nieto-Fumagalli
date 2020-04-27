@@ -1,9 +1,5 @@
 package model;
 
-/* TODO
-*   Handle exception 'ArrayIndexOutOfBoundException'
-* */
-
 
 /**
  * @author Fumagalli
@@ -12,7 +8,7 @@ package model;
 
 public class Board {
 
-    private final Square[][] checkboard;
+    private final Square[][] checkerboard;
     private final Player[] player;
 
     private final int rowNumber = 5;
@@ -24,11 +20,11 @@ public class Board {
      */
     public Board(Player[] player){
 
-        checkboard = new Square[rowNumber][columnNumber];
+        checkerboard = new Square[rowNumber][columnNumber];
 
         for(int i=0; i<rowNumber;i++){
             for(int j=0; j<columnNumber; j++){
-                checkboard[i][j] = new Square();
+                checkerboard[i][j] = new Square();
             }
         }
 
@@ -42,9 +38,7 @@ public class Board {
      * @param column is the column of the square
      */
     public void addFloorTo(int row, int column){
-        try {
-            checkboard[row - 1][column - 1].addFloor();
-        }catch (ArrayIndexOutOfBoundsException e){}
+            checkerboard[row - 1][column - 1].addFloor();
     }
 
 
@@ -54,9 +48,7 @@ public class Board {
      * @param column is the column of the square
      */
     public void addDomeTo(int row, int column){
-        try {
-            checkboard[row - 1][column - 1].addDome();
-        }catch(ArrayIndexOutOfBoundsException e){}
+            checkerboard[row - 1][column - 1].addDome();
     }
 
 
@@ -67,9 +59,7 @@ public class Board {
      * @return the floor of the chosen square
      */
     public int getFloorFrom(int row, int column){
-        try {
-            return checkboard[row - 1][column - 1].getFloor();
-        }catch (ArrayIndexOutOfBoundsException e){}
+            return checkerboard[row - 1][column - 1].getFloor();
     }
 
 
@@ -80,23 +70,18 @@ public class Board {
      * @return true if the chosen square has a dome
      */
     public boolean squareHasDome(int row, int column){
-        try {
-            return checkboard[row][column].hasDome();
-        }catch(ArrayIndexOutOfBoundsException e){}
+            return checkerboard[row][column].hasDome();
     }
 
 
     /**
      * simple getter for player
      * @param playerNumber player's number ID (1 or 2 in a normal 2 players game)
-     * @return reference to player
      */
     public Player getPlayer(int playerNumber) {
-        try {
             return player[playerNumber - 1];
-        }catch(ArrayIndexOutOfBoundsException e){}
     }
-
+    
 
 
 }

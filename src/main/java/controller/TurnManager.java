@@ -1,7 +1,5 @@
 package controller;
 
-import model.Turn;
-
 /**
  * @author Fumagalli
  * a class that manages the game turns
@@ -13,19 +11,25 @@ public class TurnManager {
 
     /**
      * constructor
-     * @param turn1 is the first to play
-     * @param turn2 is the second to play
+     * @param turn is the array of turns
      */
-    public TurnManager(Turn turn1, Turn turn2){
-        turn = new Turn[]{turn1, turn2};
+    public TurnManager(Turn[] turn){
+        this.turn = turn;
     }
 
-    public startGame(){
-        for(int i=0; i<=turn.length; i++) {
-            turn[i].movePhase();
-            turn[i].buildPhase();
-            if (i==turn.length)
-                    i=0;
-        }
+
+    /**
+     * a method that handle the turns' cycle
+     */
+    public void startGame(){
+        PhaseResult currentResult = PhaseResult.DEFEAT;
+        int i=0;
+        do{
+            currentResult=turn[i].doTurn();
+            if(i<turn.length-1)
+                i++;
+            else
+                i=0;
+        }while(currentResult == PhaseResult.NEXT);
     }
 }
