@@ -1,5 +1,4 @@
 package model;
-import static model.BuildingPhase.doBuildingPhase.*;
 
 /**
  * A class for the deity Hephaestus
@@ -13,20 +12,12 @@ import static model.BuildingPhase.doBuildingPhase.*;
  * on top of your first block.
  */
 
-public class Hephaestus implements Deity,BuildingPhase {
+public class Hephaestus implements Deity,BuildingPhase {/*
     int[] newPosition;
     int[] myPosition;
     int[] oppWorkerPosition1;
     int[] oppWorkerPosition2;
     int[] oldPosition;
-
-    /**
-     * class constructor
-     *
-     * @param myWorker is the selected worker that is going to move
-     * @param position is the position selected to move
-     * @param player   is the actual player moving
-     */
 
     public Hephaestus(BoardWorker myWorker, int[] position, Board player) {
         newPosition = position;
@@ -67,5 +58,5 @@ public class Hephaestus implements Deity,BuildingPhase {
             oldPosition = newPosition;
             return PROSSIMO;
         }
-    }
+    }*/
 }

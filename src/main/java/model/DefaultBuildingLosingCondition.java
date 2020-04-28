@@ -10,7 +10,10 @@ public class DefaultBuildingLosingCondition {
 
     private final Board board;
 
-
+    /**
+     * constructor
+     * @param board is the board where the condition will be checked
+     */
     public DefaultBuildingLosingCondition(Board board) {
         this.board = board;
     }
@@ -23,9 +26,10 @@ public class DefaultBuildingLosingCondition {
      * @return true if player can't move any worker
      */
 
-    public boolean DoCheckRule(BuildingRuleChecker checker, BoardWorker worker){
+    public boolean doCheckRule(BuildingRuleChecker checker, BoardWorker worker){
 
         int[] checkBuildingIn = new int[2];
+        BuildingAction checkBuilding;
 
         for(int i= 1; i<=5; i++){
 
@@ -33,7 +37,9 @@ public class DefaultBuildingLosingCondition {
 
                 checkBuildingIn = new int[] {i,j};
 
-                if (checker.doCheckRules(worker, checkBuildingIn))
+                checkBuilding= new BuildingAction(checkBuildingIn, false);
+
+                if (checker.doCheckRules(worker, checkBuilding))
                     return false;
             }
         }

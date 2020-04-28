@@ -1,6 +1,6 @@
 package controller;
 
-import model.BoardWorker;
+import model.MovementAction;
 import model.MovementRule;
 import model.Player;
 
@@ -26,16 +26,18 @@ public class MovementRuleChecker {
 
     /**
      * a method that checks if every rule is fulfilled
-     * @param worker the worker that is going to move
-     * @param row the row of the destination
-     * @param column the column of the destination
+     * @param action is the action that is needed to check
      * @return true if every condition is fulfilled
      */
-    public boolean doCheckRule(BoardWorker worker, int row, int column){
+    public boolean doCheckRule(MovementAction action){
         for(MovementRule check : rule){
-            if(!check.doCheckRule(worker, row, column))
+            if(!check.doCheckRule(action))
                 return false;
         }
         return true;
+    }
+
+    public Player getOwner(){
+        return owner;
     }
 }

@@ -1,14 +1,10 @@
 package model;
 
 /**
- * At first every god is divided by their type
+ * A simple enum that defines if the god will act in the player's turn or in opponent's
+ * @Author Fumagalli
  */
-//interface Model.Deity e class delle singole divinità
 
 public interface Deity{
-    public enum  GodType{
-        PLAYER, OPPONENT
-    }
-
     public GodType type();
 }

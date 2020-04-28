@@ -19,10 +19,10 @@ public class DefaultVictoryCondition {
 
     /**
      * check if the worker moved to a tier 3 square ad so won the game
-     * @param worker the worker that moved in the last turn
+     * @param justMoved the square where the worker last moved
      * @return true if the victory condition is satisfied
      */
-    public boolean doCheckCondition(BoardWorker worker){
-        return((board.getFloorFrom(worker.getPosition()[0], worker.getPosition()[1])) == 3);
+    public boolean doCheckCondition(int[] justMoved){
+        return(board.getFloorFrom(justMoved) == 3);
     }
 }

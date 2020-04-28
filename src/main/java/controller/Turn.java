@@ -1,7 +1,9 @@
 package controller;
 
+import model.BoardWorker;
 import model.BuildingPhase;
 import model.MovementPhase;
+import model.MovementPhaseResult;
 
 /**
  * A class to manage move and build phases
@@ -12,8 +14,6 @@ public class Turn {
 
     private final MovementPhase move;
     private final BuildingPhase build;
-    private final MovementRuleChecker movCheck;
-    private final BuildingRuleChecker buiCheck;
 
     /**
      * construtor
@@ -26,17 +26,20 @@ public class Turn {
     public Turn(MovementPhase move, BuildingPhase build, MovementRuleChecker movCheck,BuildingRuleChecker buiCheck) {
         this.move=move;
         this.build=build;
-        this.movCheck = movCheck;
-        this.buiCheck = buiCheck;
     }
 
     public PhaseResult doTurn(){
         
-        move.doMovement();
+        MovementPhaseResult moved = move.doMovement();
 
-        build.doBuild();
+        PhaseResult result = moved.getResult();
 
-        return PhaseResult.NEXT;
+        if(result==PhaseResult.NEXT)
+            build.doBuild(moved.getWorker());
+        if(result==PhaseResult.VICTORY) {
+            //notify users of the game's end
+        }
+        return result;
     }
 
 

@@ -30,11 +30,13 @@ public class Player {
 
         nickname = playerName;
 
-        worker= new BoardWorker[2];
+       BoardWorker[] initWorker= new BoardWorker[2];
 
-        for(BoardWorker workerNew : worker){
+        for(BoardWorker workerNew : initWorker){
             workerNew = new BoardWorker();
         }
+
+        worker = initWorker;
     }
 
 
@@ -59,11 +61,10 @@ public class Player {
     /**
      * allows those who has a player reference to move its workers
      * @param workerNum is the worker's number ID (1 or 2 in normal games)
-     * @param row is the row part of the square where the worker will move
-     * @param column is the column part of the square where the worker will move
+     * @param destination is the coordinates of the square where the worker will move
      */
-    public void moveWorker(int workerNum, int row, int column){
-            worker[workerNum-1].move(row, column);
+    public void moveWorker(int workerNum, int[] destination){
+            worker[workerNum-1].move(destination);
     }
 
 
@@ -74,6 +75,10 @@ public class Player {
      */
     public int[] workerPosition(int workerNum){
             return worker[workerNum-1].getPosition();
+    }
+
+    public BoardWorker getWorker(int workerNum){
+        return worker[workerNum-1];
     }
 
 

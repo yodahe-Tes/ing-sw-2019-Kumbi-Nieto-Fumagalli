@@ -25,10 +25,13 @@ public class Square {
 
 
     /**
-     *Adds one floor on the square
+     *Adds one floor on the square, or a dome if there are already 3 floor built
      */
     public void addFloor(){
-        floor++;
+        if (floor==3)
+            dome = true;
+        else
+            floor++;
     }
 
 

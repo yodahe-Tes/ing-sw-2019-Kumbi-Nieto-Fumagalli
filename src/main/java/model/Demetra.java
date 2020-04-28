@@ -1,67 +1,91 @@
 package model;
-import static model.BuildingPhase.doBuildingPhase.*;
 
 /**
  * A class for the deity Demetra
- * @author Nieto
+ * @author Fumagalli
  */
 
-/**
+import controller.BuildingRuleChecker;
+import controller.PhaseResult;
+
+/*
  *Your Build: Your Worker may
  * build one additional time, but not
  * on the same space.
  */
+
 class Demetra implements Deity, BuildingPhase {
 
-    int[] newPosition;
-    int[] myPosition;
-    int[] oppWorkerPosition1;
-    int[] oppWorkerPosition2;
-    int[] oldPosition;
+    DefaultBuildingLosingCondition loose;
+    BuildingRuleChecker checker;
+    Board board;
+
+    public Demetra(Board board, DefaultBuildingLosingCondition loose, BuildingRuleChecker checker) {
+        this.checker = checker;
+        this.loose = loose;
+        this.board = board;
+    }
 
     /**
-     * class constructor
-     *
-     * @param myWorker is the selected worker that is going to move
-     * @param position is the position selected to move
-     * @param player   is the actual player moving
+     * represents if the god activates during player or opponent's phase
+     * @return PLAYER phase
      */
-
-    public Demetra(BoardWorker myWorker, int[] position, Board player) {
-        newPosition = position;
-        myPosition = myWorker.getPosition();
-        int i = 0;
-
-        if (myPosition == (player.getPlayer(1)).workerPosition(1)) {
-            i = 1;
-        } else if (myPosition == (player.getPlayer(1)).workerPosition(2)) {
-            i = 1;
-        } else {
-            i = 2;
-            oppWorkerPosition1 = (player.getPlayer(i)).workerPosition(1);
-            oppWorkerPosition2 = (player.getPlayer(i)).workerPosition(2);
-        }
-    }
-
+    @Override
     public GodType type() {
-        return GodType.Player;
+        return GodType.PLAYER;
     }
 
-    public doBuildingPhase doBuildingPhase(BoardWorker worker, int[] position) {
-        Square position = new Square();
-        Square myPosition = new Square();
+    /**
+     * the actual building phase
+     * @param worker is the worker used for the moving phase
+     * @return if the player was DEFEATed or if the game can go to the NEXT phase
+     */
+    @Override
+    public PhaseResult doBuild(BoardWorker worker) {
 
-        if (position.hasDome()) {
-            return DEFEAT;
-        } else if (newPosition == oppWorkerPosition1) {
-            return DEFEAT;
-        } else if (newPosition == oppWorkerPosition2) {
-            return DEFEAT;
-        } else if (newPosition==oldPosition){
-            return DEFEAT;
-        } else {
-            oldPosition=newPosition;
-            return PROSSIMO;
+        //checks if defeated
+        if (loose.doCheckRule(checker, worker))
+            return PhaseResult.DEFEAT;
+
+        //first build
+
+        BuildingAction action;
+
+        do{
+            action = //gets from view
+        }while(!checker.doCheckRules(worker, action));
+
+        board.build(action);
+
+        //second building action
+
+        if(canBuildFurther(worker,action.getDestination())){
+            if(/*player wants*/){
+                do{action = //gets from view
+                }while(!checker.doCheckRules(worker,action));
+            }
         }
+
+        return PhaseResult.NEXT;
+    }
+
+    /**
+     * a side method that checks if the player can build more with the chosen worker
+     * @param worker the worker that is going to build
+     * @param previousAction the last built square, where the worker can't build anymore for this turn
+     * @return true if the condition is fulfilled
+     */
+    private boolean canBuildFurther(BoardWorker worker, int[] previousAction) {
+        BuildingAction action;
+        for(int i=1; i<=5; i++){
+            for(int j=1; j<=5; j++){
+                if(previousAction[0]!=i || previousAction[1]!=j){
+                    action = new BuildingAction(new int[]{i,j});
+                    if(checker.doCheckRules(worker, action))
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 }

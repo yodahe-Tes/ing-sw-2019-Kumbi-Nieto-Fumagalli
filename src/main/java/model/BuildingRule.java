@@ -7,5 +7,11 @@ package model;
 
 public interface BuildingRule {
 
-    public boolean doCheckRule(BoardWorker worker, int row, int column);
+    /**
+     * The method that implements the actual rule
+     * @param worker is the worker used in the moving phase
+     * @param action is the building action that the player wants to do
+     * @return true if the condition is fulfilled
+     */
+    public boolean doCheckRule(BoardWorker worker, BuildingAction action);
 }

@@ -17,11 +17,12 @@ public class BoardWorker implements Subject{
 
     private ArrayList<Observer> observer;
 
+    private boolean wasMoved;
 
 
 
     /**
-     * Class constuctor
+     * Class constructor
      */
     public BoardWorker(){
 
@@ -29,31 +30,30 @@ public class BoardWorker implements Subject{
 
         observer = new ArrayList<Observer>();
 
-        oldPosition = null;
+        oldPosition = position;
 
+        wasMoved=false;
     }
 
 
     /**
      * Moves the worker to an other square, takes track of older position, calls observers
-     * @param row is the row of the ending square
-     * @param column is the column of the ending square
+     * @param newPosition is the destination of the move
      */
-    public void move(int row, int column){
+    public void move(int[] newPosition){
+        wasMoved=true;
         oldPosition = position;
-        position[0] = row;
-        position[1] = column;
+        position = newPosition;
         notifyObservers();
+        wasMoved=false;
     }
 
     /**
      * Forced move that doesn't call observers
-     * @param row
-     * @param column
+     * @param newPosition is the destination of the forced move
      */
-    public void forced(int row, int column){
-        position[0]=row;
-        position[1]=column;
+    public void forced(int[] newPosition){
+        position = newPosition;
     }
 
     /**
@@ -92,17 +92,18 @@ public class BoardWorker implements Subject{
      *notifies every observer that position is change
      */
     @Override
-    public void notifyObservers(){
-        for(Observer toBeNotified : observer){
+    public void notifyObservers() {
+        for (Observer toBeNotified : observer) {
             toBeNotified.update();
         }
     }
 
-    /**
-     * returns the older position
-     * @return an array of 2 int rapresenting a position
-     */
+
     public int[] getOldPosition(){
         return oldPosition;
+    }
+
+    public boolean isWasMoved() {
+        return wasMoved;
     }
 }

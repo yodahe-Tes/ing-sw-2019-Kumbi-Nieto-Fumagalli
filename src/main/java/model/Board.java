@@ -33,44 +33,52 @@ public class Board {
 
 
     /**
-     * Adds a floor on the square specified
-     * @param row is the row of the square
-     * @param column is the column of the square
+     * the building action
+     * @param action the desired action
      */
-    public void addFloorTo(int row, int column){
-            checkerboard[row - 1][column - 1].addFloor();
+
+    public void build(BuildingAction action){
+        if (action.isForceBuildDome())
+            addDomeTo(action.getDestination());
+        else addFloorTo(action.getDestination());
+    }
+
+
+    /**
+     * Adds a floor on the square specified
+     * @param position is the array that identifies the coordinates
+     */
+    public void addFloorTo(int[] position){
+            checkerboard[position[0] - 1][position[1] - 1].addFloor();
     }
 
 
     /**
      * Adds a dome on the square specified
-     * @param row is the row of the square
-     * @param column is the column of the square
+     * @param position is the array that identifies the coordinates
      */
-    public void addDomeTo(int row, int column){
-            checkerboard[row - 1][column - 1].addDome();
+    public void addDomeTo(int[] position){
+            checkerboard[position[0] - 1][position[1] - 1].addDome();
     }
 
 
     /**
      * check the floor of a chosen square inside the gameboard
-     * @param row is the row of the square
-     * @param column is the column of the square
+     * @param position is the array that identifies the coordinates
      * @return the floor of the chosen square
      */
-    public int getFloorFrom(int row, int column){
-            return checkerboard[row - 1][column - 1].getFloor();
+    public int getFloorFrom(int[] position){
+            return checkerboard[position[0] - 1][position[1] - 1].getFloor();
     }
 
 
     /**
      * check if the square has a dome
-     * @param row is the row of the square
-     * @param column is the column of the square
+     * @param position is the array of int that identifies the coordinates
      * @return true if the chosen square has a dome
      */
-    public boolean squareHasDome(int row, int column){
-            return checkerboard[row][column].hasDome();
+    public boolean squareHasDome(int[] position){
+            return checkerboard[position[0]-1][position[1]-1].hasDome();
     }
 
 

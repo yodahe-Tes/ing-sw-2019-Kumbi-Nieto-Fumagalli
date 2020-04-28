@@ -1,13 +1,11 @@
 package model;
 
-import java.util.Observer;
-
 /**
  * A class for the deity Athena
- * @author Nieto
+ * @author Fumagalli
  */
 
-/**
+/*
  *Opponent’s Turn: If one of your
  * Workers moved up on your last
  * turn, opponent Workers cannot
@@ -16,45 +14,58 @@ import java.util.Observer;
 
 class Athena implements Deity, MovementRule, Observer {
 
-    int[] newPosition;
-    int[] myPosition;
-    int[] oppWorkerPosition1 ;
-    int[] oppWorkerPosition2 ;
+    private boolean conditionFulfilled;
+    private final Board board;
+    private final Player owner;
+
+    public Athena (Board board, Player owner){
+        this.owner=owner;
+        this.board=board;
+    }
 
     /**
-     * class constructor
-     * @param myWorker is the selected worker that is going to move
-     * @param position is the position selected to move
-     * @param player is the actual player moving
+     * represents if the god activates during player or opponent's phase
+     * @return OPPONENT phase
      */
+    @Override
+    public GodType type(){ return GodType.OPPONENT; };
 
-    public Apollo (BoardWorker myWorker, int [] position, Board player){
-        newPosition = position;
-        myPosition = myWorker.getPosition();
-        int i=0;
+    /**
+     * checks if Athena's restrictions are fulfilled
+     * @param action is the movement action (worker + destination)
+     * @return true if move is legal
+     */
+    @Override
+    public boolean doCheckRule(MovementAction action) {
 
-        if (myPosition ==(player.getPlayer(1)).workerPosition(1)){
-            i=1;
-        } else if (myPosition == (player.getPlayer(1)).workerPosition(2)){
-            i=1;
-        } else {
-            i=2;
-            oppWorkerPosition1 = (player.getPlayer(i)).workerPosition(1);
-            oppWorkerPosition2 = (player.getPlayer(i)).workerPosition(2);
+        //if owner condition not fulfilled opponents condition deactivated
+        if(!conditionFulfilled)
+            return true;
+
+        //check condition
+        return(board.getFloorFrom(action.getWorker().getPosition())>=board.getFloorFrom(action.getDestination()));
+    }
+
+    /**
+     * updates if the condition for activating power are fulfilled
+     */
+    @Override
+    public void update(){
+        for(int i = 0; i<=1;i++){
+            if(owner.getWorker(i).isWasMoved()){
+                conditionFulfilled=checkConditionFulfilled(owner.getWorker(i));
+            }
+            else conditionFulfilled=false;
         }
     }
 
-
-    public  GodType type(){
-        return GodType.Player;
-    };
-    boolean conditionFulfilled;
-
-    public boolean doCheckRule(BoardWorker worker, int[] position) {
-        //updating...
-
+    /**
+     * a side method that checks if the worker moved up
+     * @param worker the last moved worker
+     * @return true if waas moved up
+     */
+    private boolean checkConditionFulfilled(BoardWorker worker){
+        return (board.getFloorFrom(worker.getOldPosition())<board.getFloorFrom(worker.getPosition()));
     }
-
-    public void update();
 
 }

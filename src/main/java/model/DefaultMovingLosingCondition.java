@@ -1,7 +1,6 @@
 package model;
 
-import model.Board;
-import model.MovementRulesChecker;
+import controller.MovementRuleChecker;
 
 /**
  * A class to check default losing condition
@@ -27,9 +26,10 @@ public class DefaultMovingLosingCondition {
      * @return true if player can't move any worker
      */
 
-    public boolean DoCheckRule(MovementRulesChecker checker){
+    public boolean DoCheckRule(MovementRuleChecker checker){
 
         int[] checkMovementIn = new int[2];
+        MovementAction checkMovement;
 
         for(int workerNum=1; workerNum<=2; workerNum++){
 
@@ -39,7 +39,9 @@ public class DefaultMovingLosingCondition {
 
                     checkMovementIn = new int[] {i,j};
 
-                    if (checker.checkRules(workerNum, checkMovementIn))
+                    checkMovement= new MovementAction(checker.getOwner().getWorker(workerNum), checkMovementIn);
+
+                    if (checker.doCheckRule(checkMovement))
                         return false;
                 }
             }

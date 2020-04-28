@@ -1,12 +1,18 @@
 package model;
 
 /**
- * @author Fumagalii
+ * @author Fumagalli
  * An interface that describes a rule applied in deciding if a worker can move on a square or not
  */
 
 public interface MovementRule {
 
-    public boolean doCheckRule(BoardWorker worker, int row, int column);
+    /**
+     * the method that checks the rule
+     * @param action is the movement action (worker + destination)
+     * @return true if the condition is fulfilled
+     */
+
+    public boolean doCheckRule(MovementAction action);
 
 }

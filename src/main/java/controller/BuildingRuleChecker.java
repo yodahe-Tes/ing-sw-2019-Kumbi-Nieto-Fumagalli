@@ -2,6 +2,7 @@ package controller;
 
 
 import model.BoardWorker;
+import model.BuildingAction;
 import model.BuildingRule;
 import model.Player;
 
@@ -27,14 +28,12 @@ public class BuildingRuleChecker {
 
     /**
      * the method that validates every rule for requested move
-     * @param worker the worker is going to move
-     * @param row the row of the destination
-     * @param column the column of the destination
+     * @param action is the action to check
      * @return true if every condition is fulfilled
      */
-    public boolean doCheckRules(BoardWorker worker, int row, int column){
+    public boolean doCheckRules(BoardWorker worker, BuildingAction action){
         for (BuildingRule check : rule){
-            if(!check.doCheckRule(worker, row, column))
+            if(!check.doCheckRule(worker,action))
                 return false;
         }
         return true;
