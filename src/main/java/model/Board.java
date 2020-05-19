@@ -1,6 +1,8 @@
 package model;
 
 
+import java.util.ArrayList;
+
 /**
  * @author Fumagalli
  * A class that implements the Santorini boardgame's board status
@@ -13,7 +15,7 @@ public class Board {
 
     private final int rowNumber = 5;
     private final int columnNumber = 5;
-
+    private ArrayList<Observer> observer;
 
     /**
      * Class constructor
@@ -29,6 +31,7 @@ public class Board {
         }
 
         this.player = player;
+        observer = new ArrayList<Observer>();
     }
 
 
@@ -41,6 +44,7 @@ public class Board {
         if (action.isForceBuildDome())
             addDomeTo(action.getDestination());
         else addFloorTo(action.getDestination());
+        notifyObservers();
     }
 
 
@@ -50,6 +54,7 @@ public class Board {
      */
     public void addFloorTo(int[] position){
             checkerboard[position[0] - 1][position[1] - 1].addFloor();
+            notifyObservers();
     }
 
 
@@ -59,6 +64,7 @@ public class Board {
      */
     public void addDomeTo(int[] position){
             checkerboard[position[0] - 1][position[1] - 1].addDome();
+            notifyObservers();
     }
 
 
@@ -89,7 +95,43 @@ public class Board {
     public Player getPlayer(int playerNumber) {
             return player[playerNumber - 1];
     }
-    
+
+    /**
+     * Adds o to the observer arraylist
+     * @param o is the observer that needs to be notified
+     */
+    @Override
+    public void attach(Observer o) {
+
+        observer.add(o);
+
+    }
+
+
+
+    /**
+     *Deletes reference to o in the observer arraylist
+     * @param o is an observer that doesn't need anymore updates
+     */
+    @Override
+    public void detach(Observer o) {
+        observer.remove(o);
+    }
+
+
+
+    /**
+     *notifies every observer that position is change
+     */
+    @Override
+    public void notifyObservers() {
+        for (Observer toBeNotified : observer) {
+            toBeNotified.update();
+        }
+    }
+
+
 
 
 }
+
