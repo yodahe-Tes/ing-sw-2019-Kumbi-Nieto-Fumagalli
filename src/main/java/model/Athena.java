@@ -12,7 +12,7 @@ package model;
  * move up this turn
  */
 
-class Athena implements Deity, MovementRule, Observer {
+public class Athena implements Deity, MovementRule, Observer {
 
     private boolean conditionFulfilled;
     private final Board board;
@@ -21,6 +21,10 @@ class Athena implements Deity, MovementRule, Observer {
     public Athena (Board board, Player owner){
         this.owner=owner;
         this.board=board;
+
+        for(BoardWorker worker : owner.getWorker()){
+            worker.attach(this);
+        }
     }
 
     /**
@@ -28,7 +32,7 @@ class Athena implements Deity, MovementRule, Observer {
      * @return OPPONENT phase
      */
     @Override
-    public GodType type(){ return GodType.OPPONENT; };
+    public GodType type(){ return GodType.OPPONENT; }
 
     /**
      * checks if Athena's restrictions are fulfilled
@@ -51,11 +55,13 @@ class Athena implements Deity, MovementRule, Observer {
      */
     @Override
     public void update(){
-        for(int i = 0; i<=1;i++){
+        for(int i = 1; i<=2;i++){
             if(owner.getWorker(i).isWasMoved()){
                 conditionFulfilled=checkConditionFulfilled(owner.getWorker(i));
+                break;
+            } else {
+                conditionFulfilled=false;
             }
-            else conditionFulfilled=false;
         }
     }
 
@@ -68,4 +74,10 @@ class Athena implements Deity, MovementRule, Observer {
         return (board.getFloorFrom(worker.getOldPosition())<board.getFloorFrom(worker.getPosition()));
     }
 
+    /**
+     * Athena doesn't force move any worker, so this method does nothing
+     * @param action is the action that would cause the forced move
+     */
+    @Override
+    public void doForced(MovementAction action){}
 }

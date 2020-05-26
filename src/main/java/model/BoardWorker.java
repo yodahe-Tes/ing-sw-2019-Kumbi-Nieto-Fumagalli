@@ -1,5 +1,7 @@
 package model;
 
+import org.junit.*;
+
 import java.util.ArrayList;
 
 /**
@@ -106,4 +108,5 @@ public class BoardWorker implements Subject{
     public boolean isWasMoved() {
         return wasMoved;
     }
+
 }

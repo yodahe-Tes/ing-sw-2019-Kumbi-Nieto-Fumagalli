@@ -10,5 +10,5 @@ public interface MovementPhase {
      * the method that defines what the player have to do in the movement phase
      * @return VICTORY if the player won, DEFEAT if he/she loose, NEXT otherwise
      */
-    public MovementPhaseResult doMovement();
+    MovementPhaseResult doMovement();
 }

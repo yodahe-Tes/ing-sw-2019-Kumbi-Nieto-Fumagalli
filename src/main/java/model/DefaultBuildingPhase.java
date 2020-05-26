@@ -3,7 +3,9 @@ package model;
 import controller.BuildingRuleChecker;
 import controller.PhaseResult;
 
-class DefaultBuildingPhase implements BuildingPhase{
+import java.util.Scanner;
+
+public class DefaultBuildingPhase implements BuildingPhase{
 
     Board board;
     BuildingRuleChecker checker;
@@ -29,11 +31,11 @@ class DefaultBuildingPhase implements BuildingPhase{
     public PhaseResult doBuild(BoardWorker worker) {
         BuildingAction action;
 
-        if(loose.DoCheckRule(checker, worker))
+        if(loose.doCheckRule(checker, worker))
             return PhaseResult.DEFEAT;
 
         do {
-            action = //gets from view
+            action = getFromPlayer();//TODO gets from view
         }while (!checker.doCheckRules(worker, action));
 
         if (action.isForceBuildDome())
@@ -41,5 +43,17 @@ class DefaultBuildingPhase implements BuildingPhase{
         else
             board.addFloorTo(action.getDestination());
         return PhaseResult.NEXT;
+    }
+
+
+    @Override
+    public Player getOwner(){return checker.getOwner();}
+
+    @Override
+    public Board getBoard(){return board;}
+
+    @Deprecated
+    private BuildingAction getFromPlayer(){
+        return TestActionProvider.getProvider().getNextBuild();
     }
 }

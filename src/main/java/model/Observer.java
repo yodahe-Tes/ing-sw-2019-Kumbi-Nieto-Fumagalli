@@ -11,5 +11,5 @@ public interface Observer {
     /**
      *A method called by the subject class to notify that something changed
      */
-    public void update();
+    void update();
 }

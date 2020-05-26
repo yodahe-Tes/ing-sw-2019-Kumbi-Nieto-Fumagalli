@@ -3,6 +3,8 @@ package model;
 import controller.MovementRuleChecker;
 import controller.PhaseResult;
 
+import java.util.Arrays;
+
 /**
  * A class implementing the deity Artemis
  * @author Fumagalli
@@ -14,7 +16,7 @@ import controller.PhaseResult;
  * back to its initial space.
  */
 
-class Artemis implements Deity, MovementPhase{
+public class Artemis implements Deity, MovementPhase{
 
     private final MovementRuleChecker checker;
     private final DefaultMovingLosingCondition defeated;
@@ -52,12 +54,16 @@ class Artemis implements Deity, MovementPhase{
         MovementAction destination;
 
         do {
-            action = //get from view
-            destination = interpretateAction(action);
+            action = getFromPlayer(); //TODO get from view
+            destination = interpretAction(action);
 
         }while(!checker.doCheckRule(destination));
 
         int[] startingSquare = destination.getWorker().getPosition();
+
+        //checks if a forced move is needed and does it
+        checker.checkForcedMove(destination);
+
 
         destination.getWorker().move(destination.getDestination());
 
@@ -70,16 +76,17 @@ class Artemis implements Deity, MovementPhase{
         //second movement
         if(canMoveFurther(destination.getWorker(), startingSquare)){
 
-            if(/*player wants to use Demetra's power*/){
+            if(getBoolFromPlayer()/*TODO gets from player*/){
 
                 MovementAction secondDestination;
 
                 do{
-                    action = //gets next position from view
-                    secondDestination = new MovementAction(destination.getWorker(), action);
-                }while(!checker.doCheckRule(secondDestination) || secondDestination.getDestination().equals(destination.getDestination()));
+                    action = getFromPlayer(); //TODO insert here player input
+                    secondDestination = interpretAction(action);
+                }while(!checker.doCheckRule(secondDestination) || Arrays.equals(secondDestination.getDestination(), startingSquare));
 
-                destination.getWorker().move(destination.getDestination());
+                checker.checkForcedMove(secondDestination);
+                destination.getWorker().move(secondDestination.getDestination());
 
                 if(win.doCheckCondition(secondDestination.getDestination())){
                     return new MovementPhaseResult(destination.getWorker(), PhaseResult.VICTORY);
@@ -115,10 +122,23 @@ class Artemis implements Deity, MovementPhase{
      * @return an Action that contains the worker references
      */
 
-    private MovementAction interpretateAction(int[] action){
+    private MovementAction interpretAction(int[] action){
         BoardWorker worker = this.checker.getOwner().getWorker(action[0]);
         int[] destination = new int[]{action[1],action[2]};
         return new MovementAction(worker, destination);
     }
 
+    /**
+     * a testing method for getting the input for phase
+     * @return the move
+     */
+    @Deprecated
+    private int[] getFromPlayer(){
+        return TestActionProvider.getProvider().getNextMove();
+    }
+
+    @Deprecated
+    private boolean getBoolFromPlayer(){
+        return TestActionProvider.getProvider().getNextAnswer();
+    }
 }
