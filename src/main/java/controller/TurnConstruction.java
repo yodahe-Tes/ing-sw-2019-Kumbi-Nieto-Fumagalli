@@ -3,9 +3,7 @@ package controller;
 import model.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 /**
  * @author Fumagalli
@@ -116,7 +114,7 @@ public class TurnConstruction {
             switch (pickedGods.get(i)) {
 
                 case ( apollo): {
-                    Apollo apolloGod = new Apollo(board);
+                    Apollo apolloGod = new Apollo(board, player[i]);
                     playerRules[i].add(apolloGod);
                     player[i].setDeity(apolloGod);
                     break;
@@ -128,7 +126,7 @@ public class TurnConstruction {
 
                     for (int j = 0; j < pickedGods.size(); j++) {
                         if (i != j) {
-                            playerRules[i].add(athenaGod);
+                            playerRules[j].add(athenaGod);
                         }
                     }
                 }

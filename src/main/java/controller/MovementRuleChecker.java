@@ -6,7 +6,7 @@ import model.Player;
 
 /**
  * a class that checks if the movement requested is legal
- * @Author Fumagalli
+ * @author Fumagalli
  */
 
 public class MovementRuleChecker {
@@ -35,6 +35,16 @@ public class MovementRuleChecker {
                 return false;
         }
         return true;
+    }
+
+    /**
+     * does the forced move for the rules
+     * @param action the movement action that causes the forced move execution
+     */
+    public void checkForcedMove(MovementAction action){
+        for(MovementRule particularRule : rule){
+            particularRule.doForced(action);
+        }
     }
 
     public Player getOwner(){

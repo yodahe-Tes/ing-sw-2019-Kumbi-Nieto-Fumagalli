@@ -38,4 +38,8 @@ public class BuildingRuleChecker {
         }
         return true;
     }
+
+    public Player getOwner() {
+        return owner;
+    }
 }

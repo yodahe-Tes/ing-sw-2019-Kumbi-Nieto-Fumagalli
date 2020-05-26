@@ -3,6 +3,8 @@ package model;
 import controller.MovementRuleChecker;
 import controller.PhaseResult;
 
+import java.util.Scanner;
+
 /**
  * a class that implements the default movement phase
  * @author Fumagalli
@@ -46,11 +48,15 @@ public class DefaultMovementPhase implements MovementPhase{
         MovementAction destination;
 
         do {
-            action = //get from view
-            destination = interpretateAction(action);
+            action = getFromPlayer(); //TODO get from view
+            destination = interpretAction(action);
 
         }while(!check.doCheckRule(destination));
 
+        //checks if a forced move is needed
+        check.checkForcedMove(destination);
+
+        //does the actual move
         destination.getWorker().move(destination.getDestination());
 
         //Checks victory condition
@@ -69,9 +75,19 @@ public class DefaultMovementPhase implements MovementPhase{
      * @return an Action that contains the worker references
      */
 
-    private MovementAction interpretateAction(int[] action){
+    private MovementAction interpretAction(int[] action){
         BoardWorker worker = this.check.getOwner().getWorker(action[0]);
         int[] destination = new int[]{action[1],action[2]};
         return new MovementAction(worker, destination);
     }
+
+    /**
+     * a testing method for getting the input for phase
+     * @return the move
+     */
+    @Deprecated
+    private int[] getFromPlayer(){
+        return TestActionProvider.getProvider().getNextMove();
+    }
+
 }

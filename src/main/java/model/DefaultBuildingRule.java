@@ -29,11 +29,12 @@ public class DefaultBuildingRule implements BuildingRule{
         int[] destination = action.getDestination();
         boolean buildDome = action.isForceBuildDome();
 
-
-        if(oneSquareDistance(worker,destination)){
-            if(destinationIsEmpty(destination)) {
-                if (!buildDome)
-                    return true;
+        if(destination[0]<=5 && destination[0]>=1 && destination[1]<=5 && destination[1]>=1) {
+            if (oneSquareDistance(worker, destination)) {
+                if (destinationIsEmpty(destination)) {
+                    if (!buildDome)
+                        return true;
+                }
             }
         }
         return false;
@@ -46,9 +47,13 @@ public class DefaultBuildingRule implements BuildingRule{
      * @return true if the square is next to the worker
      */
     private boolean oneSquareDistance(BoardWorker worker, int[] destination){
-        if (abs(worker.getPosition()[0]-destination[0])==1){
-            if(abs(worker.getPosition()[1]-destination[0])==1)
-                return true;
+        int row = destination[0];
+        int column = destination [1];
+        if (worker.getPosition()[0]!=row || worker.getPosition()[1]!=column){
+            if (abs(worker.getPosition()[0]-row)<=1){
+                if(abs(worker.getPosition()[1]-column)<=1)
+                    return true;
+            }
         }
         return false;
     }
