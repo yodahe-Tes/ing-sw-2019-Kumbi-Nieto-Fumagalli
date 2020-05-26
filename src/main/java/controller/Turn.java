@@ -1,9 +1,6 @@
 package controller;
 
-import model.BoardWorker;
-import model.BuildingPhase;
-import model.MovementPhase;
-import model.MovementPhaseResult;
+import model.*;
 
 /**
  * A class to manage move and build phases
@@ -16,18 +13,20 @@ public class Turn {
     private final BuildingPhase build;
 
     /**
-     * construtor
+     * constructor
      * @param move the movement phase of the turn
      * @param build the build phase of the turn
-     * @param movCheck the movement rules checker of the player
-     * @param buiCheck the building rules checker of the player
      */
 
-    public Turn(MovementPhase move, BuildingPhase build, MovementRuleChecker movCheck,BuildingRuleChecker buiCheck) {
+    public Turn(MovementPhase move, BuildingPhase build) {
         this.move=move;
         this.build=build;
     }
 
+    /**
+     * the method that models the turn' execution
+     * @return a PhaseResult enum that express the turn's outcome: VICTORY, DEFEAT or nothing (so NEXT turn)
+     */
     public PhaseResult doTurn(){
         
         MovementPhaseResult moved = move.doMovement();
@@ -42,6 +41,20 @@ public class Turn {
         return result;
     }
 
+    public Player getOwner(){
+        return build.getOwner();
+    }
 
 
+    public Board getBoard(){
+        return build.getBoard();
+    }
+
+    public BuildingPhase getBuild() {
+        return build;
+    }
+
+    public MovementPhase getMove() {
+        return move;
+    }
 }

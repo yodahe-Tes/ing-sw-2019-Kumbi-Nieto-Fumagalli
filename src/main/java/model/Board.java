@@ -1,6 +1,8 @@
 package model;
 
 
+import org.junit.BeforeClass;
+
 /**
  * @author Fumagalli
  * A class that implements the Santorini boardgame's board status
@@ -17,6 +19,7 @@ public class Board {
 
     /**
      * Class constructor
+     * @param player are the players involved in the game
      */
     public Board(Player[] player){
 
@@ -89,7 +92,6 @@ public class Board {
     public Player getPlayer(int playerNumber) {
             return player[playerNumber - 1];
     }
-    
 
-
+    public Player[] getPlayer(){return player;}
 }

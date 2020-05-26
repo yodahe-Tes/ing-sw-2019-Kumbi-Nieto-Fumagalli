@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Arrays;
+
 import static java.lang.Math.abs;
 
 /**
@@ -31,10 +33,12 @@ public class DefaultMovementRule implements MovementRule {
         BoardWorker worker = action.getWorker();
         int[] destination = action.getDestination();
 
-        if(oneSquareDistance(worker,destination)){
-            if(isNotTooHigh(worker,destination)) {
-                if (destinationIsEmpty(destination))
-                    return true;
+        if(destination[0]<=5 && destination[0]>=1 && destination[1]<=5 && destination[1]>=1) {
+            if (oneSquareDistance(worker, destination)) {
+                if (isNotTooHigh(worker, destination)) {
+                    if (destinationIsEmpty(destination))
+                        return true;
+                }
             }
         }
         return false;
@@ -49,9 +53,11 @@ public class DefaultMovementRule implements MovementRule {
     private boolean oneSquareDistance(BoardWorker worker, int[] destination){
         int row = destination[0];
         int column = destination [1];
-        if (abs(worker.getPosition()[0]-row)==1){
-            if(abs(worker.getPosition()[1]-column)==1)
-                return true;
+        if (worker.getPosition()[0]!=row || worker.getPosition()[1]!=column){
+            if (abs(worker.getPosition()[0]-row)<=1){
+                if(abs(worker.getPosition()[1]-column)<=1)
+                    return true;
+            }
         }
         return false;
     }
@@ -78,10 +84,17 @@ public class DefaultMovementRule implements MovementRule {
             return false;
         for(int i=1;i<3;i++){
             for(int j=1; j<3; j++){
-                if((board.getPlayer(i).workerPosition(j)[0]==destination[0])&&(board.getPlayer(i).workerPosition(j)[1]==destination[1]))
+                if(Arrays.equals(board.getPlayer(i).workerPosition(j), destination))
                     return false;
             }
         }
         return true;
     }
+
+    /**
+     * The default movement phase doesn't force-move any worker, so this method does nothing
+     * @param action is the action that would cause the forced move
+     */
+    @Override
+    public void doForced(MovementAction action) {}
 }

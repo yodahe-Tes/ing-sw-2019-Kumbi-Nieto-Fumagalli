@@ -26,7 +26,6 @@ public class CliView implements Observer {
         this.board = board;
         this.player = player;
         scanner = new Scanner(System.in);
-        board.attach(this);
         boardWorker.attach(this);
     }
 
@@ -59,7 +58,7 @@ public class CliView implements Observer {
             if (choice == 1) {
                 workerChoiceQuery();
             } else if (choice == 2) {
-                buildLocationAndTypeQuery();
+                buildLocationAndTypeQuery(1);
             } else {
                 System.out.print("input [1] or [2]");
                 workerChoiceQuery();
@@ -114,7 +113,7 @@ public class CliView implements Observer {
 
                     int[] destination = {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
 
-                        return BuildingAction buildingAction = new BuildingAction(destination,workerId);
+                        return new int[] {0,0,0};
 
                 } catch (NumberFormatException e) {
                     System.out.println("Please provide integer values as coordinates");
@@ -125,7 +124,7 @@ public class CliView implements Observer {
         else {
 
         }
-        return movementAction;
+        return null;
     }
 
 
@@ -152,9 +151,9 @@ public class CliView implements Observer {
                             int choice = scanner.nextInt();
 
                             if (choice == 1) {
-                                return BuildingAction buildingAction = new BuildingAction(buildLocation, false);
+                                return new BuildingAction(buildLocation);
                             } else if (choice == 2) {
-                                return BuildingAction buildingAction = new BuildingAction(buildLocation, true);
+                                return new BuildingAction(buildLocation, true);
                             } else {
                                 System.out.print("input [1] or [2]");
                                 workerChoiceQuery();
@@ -168,6 +167,7 @@ public class CliView implements Observer {
             }
 
         }
+        return null;
     }
 
 }

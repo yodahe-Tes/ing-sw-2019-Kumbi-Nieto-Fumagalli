@@ -43,7 +43,8 @@ public class ImageBuilder {
 
                 int[] pos = {i+1,j+1};         //  because at i= 0 it throws outofBound exception
 
-                boardView[i][j] = join(join(Integer.toString(board.getFloorFrom(pos))," "),Boolean.toString(board.squareHasDome(pos)));
+
+                //boardView[i][j] = join(join(Integer.toString(board.getFloorFrom(pos))," "),Boolean.toString(board.squareHasDome(pos)));
 
             }
 
@@ -67,7 +68,7 @@ public class ImageBuilder {
 
             for (int j= 0; j <2; j++){
 
-                workerPosition = player[i].getWorker(j+1).getPosition();
+                //workerPosition = player[i].getWorker(j+1).getPosition();
 
                 String workerIdentifierStr = " P"+(i+1)+"W"+(j+1);
 

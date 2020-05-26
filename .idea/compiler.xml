@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="ing-sw-2019-Kumbi-Nieto-Fumagalli" target="6" />
+      <module name="ing-sw-2019-Kumbi-Nieto-Fumagalli" target="7" />
     </bytecodeTargetLevel>
   </component>
 </project>

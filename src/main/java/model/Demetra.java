@@ -14,7 +14,7 @@ import controller.PhaseResult;
  * on the same space.
  */
 
-class Demetra implements Deity, BuildingPhase {
+public class Demetra implements Deity, BuildingPhase {
 
     DefaultBuildingLosingCondition loose;
     BuildingRuleChecker checker;
@@ -28,6 +28,7 @@ class Demetra implements Deity, BuildingPhase {
 
     /**
      * represents if the god activates during player or opponent's phase
+     *
      * @return PLAYER phase
      */
     @Override
@@ -37,6 +38,7 @@ class Demetra implements Deity, BuildingPhase {
 
     /**
      * the actual building phase
+     *
      * @param worker is the worker used for the moving phase
      * @return if the player was DEFEATed or if the game can go to the NEXT phase
      */
@@ -51,18 +53,20 @@ class Demetra implements Deity, BuildingPhase {
 
         BuildingAction action;
 
-        do{
-            action = //gets from view
-        }while(!checker.doCheckRules(worker, action));
+        do {
+            action = getFromPlayer(); //TODO gets from view
+        } while (!checker.doCheckRules(worker, action));
 
         board.build(action);
 
         //second building action
 
-        if(canBuildFurther(worker,action.getDestination())){
-            if(/*player wants*/){
-                do{action = //gets from view
-                }while(!checker.doCheckRules(worker,action));
+        if (canBuildFurther(worker, action.getDestination())) {
+            if (getBoolFromPlayer()) {
+                do {
+                    action = getFromPlayer();//TODO gets from view
+                } while (!checker.doCheckRules(worker, action));
+                board.build(action);
             }
         }
 
@@ -71,21 +75,42 @@ class Demetra implements Deity, BuildingPhase {
 
     /**
      * a side method that checks if the player can build more with the chosen worker
-     * @param worker the worker that is going to build
+     *
+     * @param worker         the worker that is going to build
      * @param previousAction the last built square, where the worker can't build anymore for this turn
      * @return true if the condition is fulfilled
      */
     private boolean canBuildFurther(BoardWorker worker, int[] previousAction) {
         BuildingAction action;
-        for(int i=1; i<=5; i++){
-            for(int j=1; j<=5; j++){
-                if(previousAction[0]!=i || previousAction[1]!=j){
-                    action = new BuildingAction(new int[]{i,j});
-                    if(checker.doCheckRules(worker, action))
+        for (int i = 1; i <= 5; i++) {
+            for (int j = 1; j <= 5; j++) {
+                if (previousAction[0] != i || previousAction[1] != j) {
+                    action = new BuildingAction(new int[]{i, j});
+                    if (checker.doCheckRules(worker, action))
                         return true;
                 }
             }
         }
         return false;
+    }
+
+    @Override
+    public Player getOwner() {
+        return checker.getOwner();
+    }
+
+    @Override
+    public Board getBoard() {
+        return board;
+    }
+
+    @Deprecated
+    private BuildingAction getFromPlayer() {
+        return TestActionProvider.getProvider().getNextBuild();
+    }
+
+    @Deprecated
+    private boolean getBoolFromPlayer(){
+        return TestActionProvider.getProvider().getNextAnswer();
     }
 }

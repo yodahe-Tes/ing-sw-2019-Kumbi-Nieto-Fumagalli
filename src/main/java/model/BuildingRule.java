@@ -13,5 +13,5 @@ public interface BuildingRule {
      * @param action is the building action that the player wants to do
      * @return true if the condition is fulfilled
      */
-    public boolean doCheckRule(BoardWorker worker, BuildingAction action);
+    boolean doCheckRule(BoardWorker worker, BuildingAction action);
 }

@@ -13,6 +13,12 @@ public interface MovementRule {
      * @return true if the condition is fulfilled
      */
 
-    public boolean doCheckRule(MovementAction action);
+    boolean doCheckRule(MovementAction action);
+
+    /**
+     * does a forced move on a worker according to rules if necessary
+     * @param action is the action that would cause the forced move
+     */
+    void doForced(MovementAction action);
 
 }

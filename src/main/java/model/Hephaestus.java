@@ -12,7 +12,7 @@ package model;
  * on top of your first block.
  */
 
-public class Hephaestus implements Deity,BuildingPhase {/*
+public class Hephaestus {/*
     int[] newPosition;
     int[] myPosition;
     int[] oppWorkerPosition1;

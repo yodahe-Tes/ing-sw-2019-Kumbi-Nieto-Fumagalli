@@ -1,9 +1,9 @@
 package model;
 
-/*TODO
-*  Handle ArrayIndexOutOfBoundsException
- */
-
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * A class modelling a Santorini boardgame player
@@ -12,7 +12,7 @@ package model;
 
 public class Player {
 
-    private final Deity deity;
+    private Deity deity;
 
     private final String  nickname;
 
@@ -22,21 +22,20 @@ public class Player {
     /**
      * Class constructor. Stores the deity and the nickname of the player, creates the workers.
      * @param playerName of player
-     * @param god the player owns for the game
      */
-    public Player( String playerName , Deity god) {
-
-        deity = god;
+    public Player( String playerName) {
 
         nickname = playerName;
 
        BoardWorker[] initWorker= new BoardWorker[2];
 
-        for(BoardWorker workerNew : initWorker){
-            workerNew = new BoardWorker();
+        for(int i=0;i<2;i++){
+            initWorker[i] = new BoardWorker();
         }
 
         worker = initWorker;
+
+        deity=null;
     }
 
 
@@ -59,16 +58,6 @@ public class Player {
 
 
     /**
-     * allows those who has a player reference to move its workers
-     * @param workerNum is the worker's number ID (1 or 2 in normal games)
-     * @param destination is the coordinates of the square where the worker will move
-     */
-    public void moveWorker(int workerNum, int[] destination){
-            worker[workerNum-1].move(destination);
-    }
-
-
-    /**
      * allows those who has a player reference to get its workers' position
      * @param workerNum is the number which identifies the worker (1 or 2 in normal games)
      * @return the worker's position
@@ -77,10 +66,23 @@ public class Player {
             return worker[workerNum-1].getPosition();
     }
 
+    /**
+     * returns a chosen worker
+     * @param workerNum the chosen worker's ID
+     * @return the chosen worker
+     */
     public BoardWorker getWorker(int workerNum){
         return worker[workerNum-1];
     }
 
+    public BoardWorker[] getWorker(){ return worker; }
 
-
+    /**
+     * this method allows only one initialization for player's god
+     * @param god the god the player will uses as its
+     */
+    public void setDeity(Deity god){
+        if(deity==null)
+            deity=god;
+    }
 }

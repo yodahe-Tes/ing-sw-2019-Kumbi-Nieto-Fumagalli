@@ -10,7 +10,7 @@ import static java.lang.Math.abs;
  *Your Build: Your Worker may
  * build a dome at any level
  */
-class Atlas implements Deity, BuildingRule{
+public class Atlas implements Deity, BuildingRule{
 
     Board board;
 
@@ -37,12 +37,12 @@ class Atlas implements Deity, BuildingRule{
     public boolean doCheckRule(BoardWorker worker, BuildingAction action) {
 
         int[] destination = action.getDestination();
-        boolean buildDome = action.isForceBuildDome();
 
-
-        if(oneSquareDistance(worker,destination)){
-            if(destinationIsEmpty(destination)) {
-                return true;
+        if(destination[0]<=5 && destination[0]>=1 && destination[1]<=5 && destination[1]>=1) {
+            if (oneSquareDistance(worker, destination)) {
+                if (destinationIsEmpty(destination)) {
+                    return true;
+                }
             }
         }
             return false;
@@ -55,10 +55,14 @@ class Atlas implements Deity, BuildingRule{
     * @return true if the square is next to the worker
     */
     private boolean oneSquareDistance(BoardWorker worker, int[] destination){
-        if (abs(worker.getPosition()[0]-destination[0])==1){
-            if(abs(worker.getPosition()[1]-destination[0])==1)
-                return true;
+        int row = destination[0];
+        int column = destination [1];
+        if (worker.getPosition()[0]!=row || worker.getPosition()[1]!=column){
+            if (abs(worker.getPosition()[0]-row)<=1){
+                if(abs(worker.getPosition()[1]-column)<=1)
+                    return true;
             }
+        }
         return false;
     }
 
