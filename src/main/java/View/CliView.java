@@ -1,5 +1,8 @@
 package View;
 import model.*;
+import Network.*;
+import model.Observer;
+
 
 import java.io.Serializable;
 
@@ -9,14 +12,14 @@ import java.io.Serializable;
  * Class for the CLI View
  */
 
-public class CliView implements Observer  {
+public class CliView implements Observer {
 
 
 
     private Board board;
     private BoardWorker[] worker;
     private Player[] player;
-    private ClientStatus client;
+    private clientStatus client;
     public static final String GREEN = "\u001B[32m";
     public static final String RED = "\u001B[31m";
     public static final String BLUE = "\u001B[34m";
@@ -36,7 +39,7 @@ public class CliView implements Observer  {
      * Constructor of CLiView
      */
 
-    public CliView(ClientStatus client) {
+    public CliView(clientStatus client) {
         this.client = client;
         board.attach(this);
 
