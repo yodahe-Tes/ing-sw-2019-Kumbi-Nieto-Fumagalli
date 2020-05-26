@@ -11,8 +11,7 @@ package model;
  * Your Build: Your Worker may build one additional block (not dome)
  * on top of your first block.
  */
-
-public class Hephaestus implements Deity,BuildingPhase {/*
+class Hephaestus implements Deity,BuildingPhase {/*
     int[] newPosition;
     int[] myPosition;
     int[] oppWorkerPosition1;

@@ -1,5 +1,7 @@
 package model;
 
+import View.CliView;
+
 import java.util.ArrayList;
 
 /**
@@ -33,6 +35,9 @@ public class BoardWorker implements Subject{
         oldPosition = position;
 
         wasMoved=false;
+    }
+
+    public static void addObs(CliView player1View) {
     }
 
 

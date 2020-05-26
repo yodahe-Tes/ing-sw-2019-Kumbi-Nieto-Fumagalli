@@ -5,14 +5,11 @@ package model;
  * Implements a square
  */
 
-public class Square {
+public class
+Square {
 
     private int floor;
-
     private boolean dome;
-
-
-
 
     /**
      * Class constructor

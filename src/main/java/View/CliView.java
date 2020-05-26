@@ -1,6 +1,7 @@
 package View;
+import Network.Observer;
 import model.*;
-import controller.*;
+
 import java.util.Scanner;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Scanner;
  * Class for the CLI View
  */
 
-public class CliView implements Observer {
+public class CliView implements Observer<O> {
 
 
     private Scanner scanner;
@@ -26,8 +27,8 @@ public class CliView implements Observer {
         this.board = board;
         this.player = player;
         scanner = new Scanner(System.in);
-        board.attach(this);
-        boardWorker.attach(this);
+        board.addObs(this);
+        boardWorker.addObs(this);
     }
 
 
@@ -41,7 +42,7 @@ public class CliView implements Observer {
     public void update() {
         imageBuilder.buildFloors();
         imageBuilder.addPlayers();
-        imageBuilder.displayboardView();
+        imageBuilder.displayBoardView();
 
     }
 

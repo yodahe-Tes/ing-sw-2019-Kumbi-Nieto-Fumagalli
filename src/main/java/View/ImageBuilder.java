@@ -98,7 +98,7 @@ public class ImageBuilder {
      * displays the boardView
      */
 
-    public void displayboardView(){
+    public void displayBoardView(){
 
         for (int i = 0; i < 5; i ++) {
 

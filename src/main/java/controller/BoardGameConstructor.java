@@ -37,7 +37,7 @@ public class BoardGameConstructor {
     /**
      * a debug method that allows to start the game with chosen gods
      * @param playerName the nickname of the players
-     * @param playerGods the IDs of the chosen gods
+     * @param playerGods the IDs of the chosen god5
      * @return the Turn manager class that manages the turns of the initialized board game
      */
     public static TurnManager construct(String[] playerName, int[] playerGods){

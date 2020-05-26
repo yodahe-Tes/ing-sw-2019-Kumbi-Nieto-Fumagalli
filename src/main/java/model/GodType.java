@@ -1,4 +1,5 @@
 package model;
 
-public enum GodType {PLAYER, OPPONENT
-}
+
+
+public enum GodType {PLAYER, OPPONENT}

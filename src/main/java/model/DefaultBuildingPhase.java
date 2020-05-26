@@ -33,7 +33,7 @@ class DefaultBuildingPhase implements BuildingPhase{
             return PhaseResult.DEFEAT;
 
         do {
-            action = //gets from view
+            action = //gets from client
         }while (!checker.doCheckRules(worker, action));
 
         if (action.isForceBuildDome())
