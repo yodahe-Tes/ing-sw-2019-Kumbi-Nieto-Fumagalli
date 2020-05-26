@@ -1,21 +1,22 @@
 package View;
 import model.*;
 
-import java.util.Scanner;
+import java.io.Serializable;
+
 
 /**
  * @author   Kumbi
  * Class for the CLI View
  */
 
-public class CliView implements Observer {
+public class CliView implements Observer  {
 
 
-    private Scanner scanner;
+
     private Board board;
     private BoardWorker[] worker;
     private Player[] player;
-    private Client client;
+    private ClientStatus client;
     public static final String GREEN = "\u001B[32m";
     public static final String RED = "\u001B[31m";
     public static final String BLUE = "\u001B[34m";
@@ -25,6 +26,8 @@ public class CliView implements Observer {
     public static final String DOME ="D";
     public static final String WORKER ="\uD83D\uDC68";
     public static final String BORDER ="\u2591";
+    public static final String IDTAG1 ="\u00B9";
+    public static final String IDTAG2 ="\u00B2";
     public String[][] boardView = new String[5][5];
 
 
@@ -33,9 +36,8 @@ public class CliView implements Observer {
      * Constructor of CLiView
      */
 
-    public CliView(Client client) {
+    public CliView(ClientStatus client) {
         this.client = client;
-        scanner = new Scanner(System.in);
         board.attach(this);
 
         for (Player playerIdx : player) {
@@ -52,7 +54,7 @@ public class CliView implements Observer {
      * and saves it in the array of strings boardView.
      */
 
-    public void buildFloors(){
+    private void buildFloors(){
 
         for (int i = 0; i < 5; i ++) {
 
@@ -78,7 +80,7 @@ public class CliView implements Observer {
      * the right square
      */
 
-    public void addWorkers(){
+    private void addWorkers(){
 
         int[] workerPosition ;
 
@@ -109,52 +111,8 @@ public class CliView implements Observer {
      * @param myString string
      */
 
-    public String indent(String myString,int n) {
+    private String indent(String myString, int n) {
         return String.format("%-"+n+"s",myString);
-    }
-
-
-    /**
-     * @author   Kumbi
-     * used to provide a number tag to identify
-     * each worker
-     * @param n number
-     */
-
-    public String idTag(int n) {
-        if (n==1){return "\u00B9";}
-        else {return "\u00B2"; }
-
-    }
-
-
-    /**
-     * @author   Kumbi
-     * used to construct the visual representation of
-     * the floors
-     * @param num number of floors to build
-     */
-
-    public String floorBuilder(int num){
-        StringBuilder strFlr = new StringBuilder();
-        for(int i=0;i<num;i++) {
-            strFlr.append(FLOOR);
-        }
-        return String.valueOf(strFlr);
-    }
-
-
-    /**
-     * @author   Kumbi
-     * used to append the visual representation of
-     * a dome to the floors
-     * @param str string representing the UNICODE REPRESENTATION OF FLOORS
-     */
-
-    public String domeBuilder(String str){
-        StringBuilder strBld = new StringBuilder(str);
-        strBld.append(DOME);
-        return String.valueOf(strBld);
     }
 
 
@@ -210,6 +168,51 @@ public class CliView implements Observer {
 
 
     /**
+     * @author   Kumbi
+     * used to provide a number tag to identify
+     * each worker
+     * @param n number
+     */
+
+    private String idTag(int n) {
+        if (n==1){return IDTAG1;}
+        else {return IDTAG2; }
+
+    }
+
+
+    /**
+     * @author   Kumbi
+     * used to construct the visual representation of
+     * the floors
+     * @param num number of floors to build
+     */
+
+    private String floorBuilder(int num){
+        StringBuilder strFlr = new StringBuilder();
+        for(int i=0;i<num;i++) {
+            strFlr.append(FLOOR);
+        }
+        return String.valueOf(strFlr);
+    }
+
+
+    /**
+     * @author   Kumbi
+     * used to append the visual representation of
+     * a dome to the floors
+     * @param str string representing the UNICODE REPRESENTATION OF FLOORS
+     */
+
+    private String domeBuilder(String str){
+        StringBuilder strBld = new StringBuilder(str);
+        strBld.append(DOME);
+        return String.valueOf(strBld);
+    }
+
+
+
+    /**
      * @author Kumbi
      * updates board after notification from Model
      */
@@ -219,171 +222,6 @@ public class CliView implements Observer {
         buildFloors();
         addWorkers();
         displayBoardView();
-    }
-
-
-    /**
-     * @author Kumbi
-     * Asks the player if he wants to move or build and calls the respective Querymethods
-     */
-
-    public void IntentionQuery() {
-        System.out.print("Do You want to  : \n  [1] move    or\n [2] build  \n (input 1 or 2) ");
-        if (scanner.hasNextInt()) {
-
-            int choice = scanner.nextInt();
-            if (choice == 1) {
-                workerChoiceQuery();
-            } else if (choice == 2) {
-                buildLocationAndTypeQuery();
-            } else {
-                System.out.print("input [1] or [2]");
-                workerChoiceQuery();
-            }
-        } else {
-            System.out.print("wrong input \n");
-            workerChoiceQuery();
-        }
-
-    }
-
-
-    /**
-     * @author Kumbi
-     * Asks the player which worker he wants to move and calls the  MoveLOcationQuerymethod by passing the workerId parameter
-     */
-
-    public int workerChoiceQuery() {
-        System.out.print("Which worker do you want to move?[1] or [2] \n");
-        if (scanner.hasNextInt()) {
-            int choice = scanner.nextInt();
-
-            if (choice == 1 || choice == 2) {
-                return choice;
-
-            } else {
-                System.out.print("input [1] or [2]");
-                workerChoiceQuery();
-            }
-        } else {
-            System.out.print("wrong input \n");
-            workerChoiceQuery();
-        }
-
-    }
-
-
-    /**
-     * @author Kumbi
-     * Asks the player wher he wants to move the worker and passes move action to Controller
-     */
-
-    public int[] moveLocationQuery() {
-
-        int workerId = workerChoiceQuery();
-        System.out.print("Where do you want to move it to? (row,column)\n");
-        if (scanner.hasNext()) {
-            {
-                String s = scanner.next();
-                try {
-                    String[] input = s.split(",");
-
-                    int[] destination = {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
-
-                        return new int[] { workerId,destination[0],destination[1]};   // MANDALO COME FLUSSO SCANNER
-
-                } catch (NumberFormatException e) {
-                    System.out.println("Please provide integer values as coordinates");
-                }
-            }
-        }
-        else {
-
-        }
-    }
-
-    /**
-     * @author Kumbi
-     * Asks the player where he wants to build and passes build action to Controller
-     * @return
-     */
-
-    public BuildingAction buildLocationQuery() {
-
-        System.out.print("Where do you want to build ? (row,column)\n");
-        if (scanner.hasNext()) {
-
-            String str = scanner.next();
-            try {
-                String[] input = str.split(",");
-                int[] buildLocation = {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
-
-                return new BuildingAction(buildLocation, true);
-
-
-            } catch (NumberFormatException e) {
-                System.out.println("Please provide integer values as coordinates");
-            }
-        }
-        return null;
-    }
-
-
-
-
-
-    /**
-     * @author Kumbi
-     * Asks the player where he wants to build  and what he wants to build and passes build action to Controller
-     */
-
-    public BuildingAction buildLocationAndTypeQuery() {
-
-            System.out.print("Where do you want to build ? (row,column)\n");
-            if (scanner.hasNext()) {
-
-                    String str = scanner.next();
-                    try {
-                        String[] input = str.split(",");
-
-                        int[] buildLocation = {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
-
-                        System.out.print("Do you want to build a [1]Block or a [2]Dome ? input [1] or[2]\n");
-                        if (scanner.hasNext()) {
-
-                                int choice = scanner.nextInt();
-
-                                if (choice == 1) {
-                                    return new BuildingAction(buildLocation);
-                                } else if (choice == 2) {
-                                    return  new BuildingAction(buildLocation, true);
-                                } else {
-                                    System.out.print("input [1] or [2]");
-                                    workerChoiceQuery();
-                                    return null;
-
-                                }
-                            }
-
-                    } catch (NumberFormatException e) {
-                        System.out.println("Please provide integer values as coordinates");
-                    }
-            }
-        return null;
-    }
-
-
-
-    public void notYourTUrnMessage() {
-        System.out.print("It's not your turn");
-
-    }
-
-
-    public void yourTUrnMessage() {
-
-        System.out.print("It's your turn to make a move");
-
     }
 
 }
