@@ -1,10 +1,11 @@
 package View;
+
 import model.*;
 import Network.*;
 import model.Observer;
+import java.io.ObjectInputStream;
+import java.util.Scanner;
 
-
-import java.io.Serializable;
 
 
 /**
@@ -14,37 +15,33 @@ import java.io.Serializable;
 
 public class CliView implements Observer {
 
-
-
     private Board board;
-    private BoardWorker[] worker;
-    private Player[] player;
+        private Player[] player;
     private clientStatus client;
-    public static final String GREEN = "\u001B[32m";
-    public static final String RED = "\u001B[31m";
-    public static final String BLUE = "\u001B[34m";
-    public static final String PURPLE ="\u001B[35m";
-    public static final String RESET = "\u001B[0m";
-    public static final String FLOOR ="\u2589";
-    public static final String DOME ="D";
-    public static final String WORKER ="\uD83D\uDC68";
-    public static final String BORDER ="\u2591";
-    public static final String IDTAG1 ="\u00B9";
-    public static final String IDTAG2 ="\u00B2";
-    public String[][] boardView = new String[5][5];
 
+    public static final String FLOOR = "\u2589";
+    public static final String DOME = "D";
+    public static final String WORKER = "\uD83D\uDC68";
+    public static final String IDTAG1 = "\u00B9";
+    public static final String IDTAG2 = "\u00B2";
+    public String[][] boardImage ;
+    private final ObjectInputStream inFromClient;
+    private final Scanner in;
 
     /**
      * @author Kumbi
      * Constructor of CLiView
      */
 
-    public CliView(clientStatus client) {
+    public CliView(clientStatus client,Board board) {
         this.client = client;
+        this.board = board;
+        this.player = board.player;
+        inFromClient = client.getInputStream();
         board.attach(this);
-
+        in = new Scanner(inFromClient);
         for (Player playerIdx : player) {
-            for (int j = 0; j < worker.length; j++) {
+            for (int j = 0; j < 2; j++) {
                 playerIdx.getWorker(j).attach(this);
             }
         }
@@ -52,25 +49,22 @@ public class CliView implements Observer {
 
 
     /**
-     * @author   Kumbi
+     * @author Kumbi
      * gets floor height and enquires presence of dome from each square
      * and saves it in the array of strings boardView.
      */
 
-    private void buildFloors(){
+    private void buildFloors() {
 
-        for (int i = 0; i < 5; i ++) {
-
-            for (int j = 0; j <5 ; j ++) {
-
-                int[] pos = {i+1,j+1};
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                int[] pos = {i + 1, j + 1};
 
                 String floor = floorBuilder(board.getFloorFrom(pos));
-
-                if(board.squareHasDome(pos))
+                if (board.squareHasDome(pos))
                     floor = domeBuilder(floor);
 
-                boardView[i][j]= floor;
+                boardImage[i][j] = floor;
             }
 
         }
@@ -78,122 +72,56 @@ public class CliView implements Observer {
 
 
     /**
-     * @author   Kumbi
+     * @author Kumbi
      * gets position of each player's workers and adds their workerId in
      * the right square
      */
 
-    private void addWorkers(){
+    private void addWorkers() {
 
-        int[] workerPosition ;
+        int[] workerPosition;
 
         String workerIdentifierStr;
 
         for (int i = 0; i < 2; i++) {
-
-            for (int j= 0; j <2; j++){
-
-                workerPosition = player[i].getWorker(j+1).getPosition();
-
-                int row = workerPosition[0]-1,column = workerPosition[1]-1;
-
-                workerIdentifierStr = WORKER+idTag(i+1)+idTag(j+1);
-
-                boardView[row][column] = boardView[row][column].concat(workerIdentifierStr);
+            for (int j = 0; j < 2; j++) {
+                workerPosition = player[i].getWorker(j + 1).getPosition();
+                int row = workerPosition[0] - 1, column = workerPosition[1] - 1;
+                workerIdentifierStr = WORKER + idTag(i + 1) + idTag(j + 1);
+                boardImage[row][column] = boardImage[row][column].concat(workerIdentifierStr);
             }
 
         }
 
     }
 
-
     /**
-     * @author   Kumbi
-     * used to provide the right indentation for the clear representation
-     * of each square
-     * @param myString string
-     */
-
-    private String indent(String myString, int n) {
-        return String.format("%-"+n+"s",myString);
-    }
-
-
-    /**
-     * @author   Kumbi
-     * displays the board
-     */
-
-    public void displayBoardView(){
-
-        for (int i = 0; i < 5; i ++) {
-
-            for (int j = 0; j <5 ; j ++) {
-
-                for(j = 0; j<5; j ++) {
-
-                    System.out.print(GREEN +"\u2587" + BLUE+BORDER + BORDER + BORDER + BORDER + RED + (j + 1)
-                            + RESET + BLUE + BORDER + BORDER + BORDER + BORDER + BORDER + RESET);     // shows top border of board
-                }
-
-                System.out.print( GREEN +"\u2587"+RESET+"\n");
-
-                for(j = 0; j<5; j++) {
-                    System.out.print(BLUE +BORDER+RESET+"          ");                             // shows top layer of first row squares
-                }
-
-                System.out.print(BLUE +BORDER+RESET+"  "+"\n");                                        // shows last wall of top layer of first row of square
-
-                for(j = 0; j<5; j++) {
-                    System.out.print("   " + indent(boardView[i][j], 8));                        // shows blocks and players row
-                }
-
-                System.out.print(RED+(i+1)+RESET+"\n");                                                         //shows row identifier number
-
-                for(j = 0; j<5; j++)
-                    System.out.print(BLUE +BORDER+RESET+"          ");                            // shows bottom layer of row
-
-                System.out.print(BLUE +BORDER+RESET+"\n");                                        // shows last wall of bottom layer of row
-
-            }
-
-        }
-        for(int j = 0 ; j<5 ;j++) {
-            System.out.print(GREEN +"\u2587" + BLUE+BORDER + BORDER + BORDER + BORDER + RED + (j + 1)
-                    + RESET + BLUE + BORDER + BORDER + BORDER + BORDER + BORDER + RESET);
-        }                                                                                            // shows bottom layer of each row
-
-
-        System.out.print( "\u001B[32m\u2587\u001B[0m");                                             //shows last wall of bottom layer of row
-        System.out.print("\n");
-
-    }
-
-
-    /**
-     * @author   Kumbi
+     * @param n number
+     * @author Kumbi
      * used to provide a number tag to identify
      * each worker
-     * @param n number
      */
 
     private String idTag(int n) {
-        if (n==1){return IDTAG1;}
-        else {return IDTAG2; }
+        if (n == 1) {
+            return IDTAG1;
+        } else {
+            return IDTAG2;
+        }
 
     }
 
 
     /**
-     * @author   Kumbi
+     * @param num number of floors to build
+     * @author Kumbi
      * used to construct the visual representation of
      * the floors
-     * @param num number of floors to build
      */
 
-    private String floorBuilder(int num){
+    private String floorBuilder(int num) {
         StringBuilder strFlr = new StringBuilder();
-        for(int i=0;i<num;i++) {
+        for (int i = 0; i < num; i++) {
             strFlr.append(FLOOR);
         }
         return String.valueOf(strFlr);
@@ -201,18 +129,17 @@ public class CliView implements Observer {
 
 
     /**
-     * @author   Kumbi
+     * @param str string representing the UNICODE REPRESENTATION OF FLOORS
+     * @author Kumbi
      * used to append the visual representation of
      * a dome to the floors
-     * @param str string representing the UNICODE REPRESENTATION OF FLOORS
      */
 
-    private String domeBuilder(String str){
+    private String domeBuilder(String str) {
         StringBuilder strBld = new StringBuilder(str);
         strBld.append(DOME);
         return String.valueOf(strBld);
     }
-
 
 
     /**
@@ -224,9 +151,207 @@ public class CliView implements Observer {
     public void update() {
         buildFloors();
         addWorkers();
-        displayBoardView();
+        client.asyncSend(new BoardView(boardImage));
     }
 
+
+    /**
+     * @author Kumbi
+     * Asks the player if he wants to move or build and calls the respective Querymethods
+     */
+
+    public void intentionQuery() {
+        ask("Do You want to  : \n  [1] move    or\n [2] build  \n (input 1 or 2) ");
+
+            int choice = in.nextInt();
+
+            if (choice == 1) {
+                workerChoiceQuery();
+            } else if (choice == 2) {
+                buildLocationAndTypeQuery();
+            } else {
+                ask("input [1] or [2]");
+                workerChoiceQuery();
+            }
+
+    }
+
+
+    /**
+     * Asks the player which worker he wants to move and returns choice
+     */
+
+    public int workerChoiceQuery() {
+        ask("Which worker do you want to move?[1] or [2] \n");
+        Integer choice = in.nextInt();
+            if (choice.equals(1) || choice.equals(2)) {
+                return choice;
+            } else {
+                ask("input [1] or [2]");
+                workerChoiceQuery();
+            }
+        return 0;
+    }
+
+
+    /**
+     * Asks the player where he wants to move the worker and passes move action to Controller
+     */
+
+    public int[] moveLocationQuery() {
+
+        int workerId = workerChoiceQuery();
+
+        ask("Where do you want to move it to? (row,column)\n");
+
+        String str = in.next();
+        try {
+            String[] input = str.split(",");
+            int[] destination = {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
+            return new int[]{workerId, destination[0], destination[1]};   // MANDALO COME FLUSSO SCANNER
+
+        } catch (NumberFormatException e) {
+            ask("Please provide integer values as coordinates");
+        }
+        return new int[6];
+
+    }
+
+    /**
+     * Asks the player where he wants to build and passes build action to Controller
+     * @return building action
+     */
+
+    public BuildingAction buildLocationQuery() {
+        ask("Where do you want to build ? (row,column)\n");
+
+            String str = in.next();
+            try {
+                String[] input = str.split(",");
+                int[] buildLocation = {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
+                return new BuildingAction(buildLocation, true);
+
+            } catch (NumberFormatException e) {
+                ask("Please provide integer values as coordinates");
+            }
+
+        return null;
+    }
+
+
+    /**
+     * Asks the player where he wants to build  and what he wants to build and passes build action to Controller
+     */
+
+    public BuildingAction buildLocationAndTypeQuery() {
+
+        ask("Where do you want to build ? (row,column)\n");
+            String str = in.next();
+            try {
+                String[] input = str.split(",");
+                int[] buildLocation = {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
+                ask("Do you want to build a [1]Block or a [2]Dome ? input [1] or[2]\n");
+                int choice = in.nextInt();
+
+                if (choice == 1) {
+                    return new BuildingAction(buildLocation);
+                } else if (choice == 2) {
+                    return new BuildingAction(buildLocation, true);
+                } else {
+                    ask("input [1] or [2]");
+                    workerChoiceQuery();
+                }
+            } catch (NumberFormatException e) {
+                ask("Please provide integer values as coordinates");
+            }
+
+        return null;
+    }
+
+
+    /**
+     * Informs the player that It's not his turn
+     */
+
+    public void notYourTUrnMessage() {
+        ask("It's not your turn");
+
+    }
+
+
+    /**
+     * Informs the player that It is his turn to make a move
+     */
+
+    public void yourTUrnMessage() {
+
+        ask("It's your turn to make a move");
+
+    }
+
+
+    /**
+     * Asks the player if he wants to build again
+     *
+     * @return
+     */
+
+    public boolean buildAgainQuery() {
+
+        ask("Do you want to build again ? (true, false)\n");
+        return in.nextBoolean();
+
+    }
+
+    /**
+     * Asks the player if he wants to move again
+     *
+     * @return
+     */
+
+    public boolean moveAgainQuery() {
+
+        ask("Do you want to move again ? (true, false)\n");
+        return in.nextBoolean();
+
+    }
+
+    /**
+     * Informs player that he has won
+     *
+     * @return
+     */
+
+    public void winnerMessage() {
+        ask("Congratulations!!! YOU HAVE WON");
+    }
+
+    /**
+     * Informs player that he has lost because he has no moves left
+     *
+     * @return
+     */
+
+    public void noMovesLeftMessage() {
+        ask("Sorry,you have no moves left .You have lost");
+    }
+
+
+    /**
+     * Informs player that he has lost
+     *
+     * @return
+     */
+
+    public void loserMessage() {
+        ask("Sorry, you have lost");
+    }
+
+
+    protected void ask(String QueryForClient){
+           client.asyncSend(QueryForClient);
+    }
+
+
+
 }
-
-
