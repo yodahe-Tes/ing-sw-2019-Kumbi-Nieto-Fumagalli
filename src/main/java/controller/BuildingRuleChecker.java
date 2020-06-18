@@ -32,6 +32,8 @@ public class BuildingRuleChecker {
      * @return true if every condition is fulfilled
      */
     public boolean doCheckRules(BoardWorker worker, BuildingAction action){
+        if (action==null)
+            return false;
         for (BuildingRule check : rule){
             if(!check.doCheckRule(worker,action))
                 return false;

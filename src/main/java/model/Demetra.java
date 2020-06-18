@@ -16,9 +16,9 @@ import controller.PhaseResult;
 
 public class Demetra implements Deity, BuildingPhase {
 
-    DefaultBuildingLosingCondition loose;
-    BuildingRuleChecker checker;
-    Board board;
+    private final DefaultBuildingLosingCondition loose;
+    private final BuildingRuleChecker checker;
+    private final Board board;
 
     public Demetra(Board board, DefaultBuildingLosingCondition loose, BuildingRuleChecker checker) {
         this.checker = checker;
@@ -46,15 +46,17 @@ public class Demetra implements Deity, BuildingPhase {
     public PhaseResult doBuild(BoardWorker worker) {
 
         //checks if defeated
-        if (loose.doCheckRule(checker, worker))
+        if (loose.doCheckRule(checker, worker)) {
+            getOwner().getView().loserMessage();
             return PhaseResult.DEFEAT;
+        }
 
         //first build
 
         BuildingAction action;
 
         do {
-            action = getFromPlayer(); //TODO gets from view
+            action = getOwner().getView().buildLocationQuery();
         } while (!checker.doCheckRules(worker, action));
 
         board.build(action);
@@ -62,14 +64,15 @@ public class Demetra implements Deity, BuildingPhase {
         //second building action
 
         if (canBuildFurther(worker, action.getDestination())) {
-            if (getBoolFromPlayer()) {
+            if (getOwner().getView().buildAgainQuery()) {
                 do {
-                    action = getFromPlayer();//TODO gets from view
+                    action = getOwner().getView().buildLocationQuery();
                 } while (!checker.doCheckRules(worker, action));
                 board.build(action);
             }
         }
 
+        getOwner().getView().notYourTUrnMessage();
         return PhaseResult.NEXT;
     }
 

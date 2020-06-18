@@ -1,7 +1,5 @@
 package model;
 
-import controller.MovementRuleChecker;
-
 import java.util.Arrays;
 
 import static java.lang.Math.abs;
@@ -13,8 +11,8 @@ import static java.lang.Math.abs;
 
 public class Apollo implements Deity, MovementRule {
 
-    Board board;
-    Player owner;
+    private final Board board;
+    private final Player owner;
 
     public Apollo(Board board, Player owner) {
         this.board = board;
@@ -93,7 +91,7 @@ public class Apollo implements Deity, MovementRule {
     private boolean destinationIsEmpty(int[] destination) {
         if (board.squareHasDome(destination))
             return false;
-        for (int i=1;i<=2;i++){
+        for (int i=1;i<=board.numberPlayers();i++){
             if (owner.getWorker(i).getPosition()[0] == destination[0] && owner.getWorker(i).getPosition()[1] == destination[1]){
                 return false;
             }
@@ -110,8 +108,8 @@ public class Apollo implements Deity, MovementRule {
         BoardWorker worker = action.getWorker();
         int[] destination = action.getDestination();
 
-        for(Player player : board.getPlayer()){
-            for(BoardWorker opponentWorker : player.getWorker()){
+        for(int i=0; i<board.numberPlayers();i++){
+            for(BoardWorker opponentWorker : board.getPlayer(i).getWorker()){
                 if(Arrays.equals(opponentWorker.getPosition(),destination)){
                     opponentWorker.forced(worker.getPosition());
                     return;

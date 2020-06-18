@@ -3,17 +3,15 @@ package model;
 import controller.MovementRuleChecker;
 import controller.PhaseResult;
 
-import java.util.Scanner;
-
 /**
  * a class that implements the default movement phase
  * @author Fumagalli
  */
 public class DefaultMovementPhase implements MovementPhase{
 
-    MovementRuleChecker check;
-    DefaultMovingLosingCondition loose;
-    DefaultVictoryCondition win;
+    private final MovementRuleChecker check;
+    private final DefaultMovingLosingCondition loose;
+    private final DefaultVictoryCondition win;
 
     /**
      * constructor
@@ -39,16 +37,18 @@ public class DefaultMovementPhase implements MovementPhase{
         //checks loosing condition
 
         if(loose.DoCheckRule(check)){
+            getOwner().getView().noMovesLeftMessage();
             return new MovementPhaseResult(check.getOwner().getWorker(1), PhaseResult.DEFEAT );
         }
 
         //moves worker
 
+        getOwner().getView().yourTUrnMessage();
         int[] action;
         MovementAction destination;
 
         do {
-            action = getFromPlayer(); //TODO get from view
+            action = getOwner().getView().moveLocationQuery();
             destination = interpretAction(action);
 
         }while(!check.doCheckRule(destination));
@@ -80,6 +80,10 @@ public class DefaultMovementPhase implements MovementPhase{
         int[] destination = new int[]{action[1],action[2]};
         return new MovementAction(worker, destination);
     }
+
+
+    public Player getOwner(){return check.getOwner();}
+
 
     /**
      * a testing method for getting the input for phase

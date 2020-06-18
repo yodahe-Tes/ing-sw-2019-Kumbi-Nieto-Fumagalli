@@ -12,7 +12,7 @@ import static java.lang.Math.abs;
  */
 public class Atlas implements Deity, BuildingRule{
 
-    Board board;
+    private final Board board;
 
     public Atlas (Board board){
         this.board = board;
@@ -74,7 +74,7 @@ public class Atlas implements Deity, BuildingRule{
     private boolean destinationIsEmpty(int[] destination){
         if(board.squareHasDome(destination))
             return false;
-        for(int i=1;i<3;i++){
+        for(int i=1;i<= board.numberPlayers();i++){
             for(int j=1; j<3; j++){
                 if((board.getPlayer(i).workerPosition(j)[0]==destination[0])&&(board.getPlayer(i).workerPosition(j)[1]==destination[1]))
                     return false;

@@ -31,17 +31,20 @@ public class DefaultBuildingPhase implements BuildingPhase{
     public PhaseResult doBuild(BoardWorker worker) {
         BuildingAction action;
 
-        if(loose.doCheckRule(checker, worker))
+        if(loose.doCheckRule(checker, worker)) {
+            getOwner().getView().loserMessage();
             return PhaseResult.DEFEAT;
+        }
 
         do {
-            action = getFromPlayer();//TODO gets from view
+            action = getOwner().getView().buildLocationAndTypeQuery();
         }while (!checker.doCheckRules(worker, action));
 
         if (action.isForceBuildDome())
             board.addDomeTo(action.getDestination());
         else
             board.addFloorTo(action.getDestination());
+        getOwner().getView().notYourTUrnMessage();
         return PhaseResult.NEXT;
     }
 

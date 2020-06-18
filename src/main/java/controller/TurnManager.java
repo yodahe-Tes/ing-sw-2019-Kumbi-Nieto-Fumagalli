@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class TurnManager {
 
-    private final Turn[] turn;
+    private Turn[] turn;
 
     /**
      * constructor
@@ -31,12 +31,25 @@ public class TurnManager {
         int i=0;
         do{
             currentResult=turn[i].doTurn();
+
+            if(currentResult==PhaseResult.DEFEAT){
+                if(turn.length>2){
+                    getBoard().removePlayerFromList(turn[i].getOwner());
+                    removeTurnFromList(turn[i]);
+                    if (getPlayer().length==1){
+                        getPlayer()[0].getView().winnerMessage();
+                        break;
+                    }
+                }
+            }
+
             if(i<turn.length-1)
                 i++;
             else
                 i=0;
         }while(currentResult == PhaseResult.NEXT);
-    }
+}
+
 
     /**
      * method for debug use
@@ -58,5 +71,22 @@ public class TurnManager {
     }
 
     public Turn[] getTurn(){return turn;}
+
+
+    /**
+     * removes selected turn from turn list when the associated player looses
+     * @param deleteMe is the turn of the looser
+     */
+    private void removeTurnFromList(Turn deleteMe) {
+
+        ArrayList<Turn> result = new ArrayList<>();
+
+        for(Turn item : turn)
+            if(!deleteMe.equals(item))
+                result.add(item);
+
+        Turn[] updatedTurn = new Turn[1];
+        turn = result.toArray(updatedTurn);
+    }
 }
 

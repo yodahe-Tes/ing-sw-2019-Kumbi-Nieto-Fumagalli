@@ -45,16 +45,19 @@ public class Artemis implements Deity, MovementPhase{
     public MovementPhaseResult doMovement() {
 
         //checking if the player can move
-        if(defeated.DoCheckRule(checker))
+        if(defeated.DoCheckRule(checker)){
+            getOwner().getView().noMovesLeftMessage();
             return new MovementPhaseResult(checker.getOwner().getWorker(1),PhaseResult.DEFEAT);
+        }
 
         //gets and validates the first move
 
+        getOwner().getView().yourTUrnMessage();
         int[] action;
         MovementAction destination;
 
         do {
-            action = getFromPlayer(); //TODO get from view
+            action = getOwner().getView().moveLocationQuery();
             destination = interpretAction(action);
 
         }while(!checker.doCheckRule(destination));
@@ -76,12 +79,12 @@ public class Artemis implements Deity, MovementPhase{
         //second movement
         if(canMoveFurther(destination.getWorker(), startingSquare)){
 
-            if(getBoolFromPlayer()/*TODO gets from player*/){
+            if(getOwner().getView().moveAgainQuery()){
 
                 MovementAction secondDestination;
 
                 do{
-                    action = getFromPlayer(); //TODO insert here player input
+                    action = getOwner().getView().moveLocationQuery();
                     secondDestination = interpretAction(action);
                 }while(!checker.doCheckRule(secondDestination) || Arrays.equals(secondDestination.getDestination(), startingSquare));
 
@@ -127,6 +130,8 @@ public class Artemis implements Deity, MovementPhase{
         int[] destination = new int[]{action[1],action[2]};
         return new MovementAction(worker, destination);
     }
+
+    public Player getOwner(){return checker.getOwner();}
 
     /**
      * a testing method for getting the input for phase

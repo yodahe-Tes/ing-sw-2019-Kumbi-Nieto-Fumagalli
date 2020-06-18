@@ -1,6 +1,8 @@
 package model;
 
 
+import controller.Turn;
+
 import java.util.ArrayList;
 
 /**
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 public class Board {
 
     private final Square[][] checkerboard;
-    private final Player[] player;
+    private Player[] player;
 
     private final int rowNumber = 5;
     private final int columnNumber = 5;
@@ -130,8 +132,28 @@ public class Board {
         }
     }
 
+    /**
+     * @return the number of players on the board
+     */
+    public int numberPlayers(){
+        return player.length;
+    }
 
+    /**
+     * removes selected player from player list when the associated player looses
+     * @param deleteMe is the looser
+     */
+    public void removePlayerFromList(Player deleteMe) {
 
+        ArrayList<Player> result = new ArrayList<>();
+
+        for(Player item : player)
+            if(!deleteMe.equals(item))
+                result.add(item);
+
+        Player[] updatedPlayers = new Player[1];
+        player = result.toArray(updatedPlayers);
+    }
 
 }
 

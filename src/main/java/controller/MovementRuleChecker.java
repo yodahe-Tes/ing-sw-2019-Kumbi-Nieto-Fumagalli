@@ -30,6 +30,8 @@ public class MovementRuleChecker {
      * @return true if every condition is fulfilled
      */
     public boolean doCheckRule(MovementAction action){
+        if (action==null)
+            return false;
         for(MovementRule check : rule){
             if(!check.doCheckRule(action))
                 return false;

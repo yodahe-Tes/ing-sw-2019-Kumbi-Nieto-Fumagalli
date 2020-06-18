@@ -11,4 +11,10 @@ public interface MovementPhase {
      * @return VICTORY if the player won, DEFEAT if he/she loose, NEXT otherwise
      */
     MovementPhaseResult doMovement();
+
+    /**
+     * getter for the plwyer owner of this phase
+     * @return the player that has this building phase as its
+     */
+    Player getOwner();
 }

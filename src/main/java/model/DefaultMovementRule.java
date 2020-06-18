@@ -82,7 +82,7 @@ public class DefaultMovementRule implements MovementRule {
     private boolean destinationIsEmpty(int[] destination){
         if(board.squareHasDome(destination))
             return false;
-        for(int i=1;i<3;i++){
+        for(int i=1;i<=board.numberPlayers();i++){
             for(int j=1; j<3; j++){
                 if(Arrays.equals(board.getPlayer(i).workerPosition(j), destination))
                     return false;
