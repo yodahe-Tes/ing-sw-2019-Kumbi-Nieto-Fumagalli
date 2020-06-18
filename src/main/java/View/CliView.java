@@ -17,7 +17,7 @@ public class CliView implements Observer {
 
     private Board board;
         private Player[] player;
-    private clientStatus client;
+    private ClientStatus client;
 
     public static final String FLOOR = "\u2589";
     public static final String DOME = "D";
@@ -33,10 +33,13 @@ public class CliView implements Observer {
      * Constructor of CLiView
      */
 
-    public CliView(clientStatus client,Board board) {
+    public CliView(ClientStatus client, Board board) {
         this.client = client;
         this.board = board;
-        this.player = board.player;
+        player= new Player[board.numberPlayers()];
+        for (int i=1; i<=(board.numberPlayers());i++){
+            player[i] = board.getPlayer(i);
+        }
         inFromClient = client.getInputStream();
         board.attach(this);
         in = new Scanner(inFromClient);
