@@ -16,13 +16,13 @@ import java.util.Scanner;
  * @author Nieto
  */
 
-public class clientSide {
+public class ClientSide {
 
 
         private String ip;
         private int port;
 
-        public clientSide(String ip, int port){
+        public ClientSide(String ip, int port){
             this.ip = ip;
             this.port = port;
         }
@@ -46,8 +46,8 @@ public class clientSide {
                             Object inputObject = socketIn.readObject();
                             if (inputObject instanceof String) {
                                 System.out.println((String) inputObject);
-                            } else if(inputObject instanceof CliView){
-                                (CliView)inputObject.update();
+                            } else if(inputObject instanceof BoardView){
+                                ((BoardView) inputObject).displayBoardView();
                             } else {
                                 throw new IllegalArgumentException();
                             }

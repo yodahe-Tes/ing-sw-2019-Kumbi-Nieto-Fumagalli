@@ -1,8 +1,12 @@
 package Network;
 
-import jdk.internal.event.Event;
+import View.CliView;
+import model.Observer;
+import model.Subject;
+
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -10,16 +14,19 @@ import java.util.Scanner;
  * A class that handles the input from the clients
  * @author Nieto
  */
-public class clientHandler extends Observable<String> implements clientStatus, Runnable {
-    private Socket socket;
+public class ClientHandler extends Observable<String> implements ClientStatus, Runnable {
+    private final Socket socket;
     private ObjectOutputStream out;
-    private serverSide server;
+    private final ServerSide server;
+
 
     private boolean active = true;
 
-    public clientHandler(Socket socket, serverSide server) {
+    public ClientHandler(Socket socket, ServerSide server)  {
         this.socket = socket;
         this.server = server;
+
+
 
     }
 
@@ -50,8 +57,11 @@ public class clientHandler extends Observable<String> implements clientStatus, R
     }
 
 
+
+
     @Override
-    public void asyncSend(final Event message) {
+    public void asyncSend(final Object message) {
+        System.out.println("Dentro asyncSend");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -60,6 +70,7 @@ public class clientHandler extends Observable<String> implements clientStatus, R
         }).start();
 
     }
+
 
     private void close() {
         closeConnection();
@@ -73,21 +84,47 @@ public class clientHandler extends Observable<String> implements clientStatus, R
     public void run() {
         Scanner in;
         String name;
+
+        int numberOfPlayers;
         try{
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
+            //Ask to the new connected player what kind of game he wants to play
+            //  send("Choose if 2 or 3 players");
+            //    String pick = in.nextLine();
+            //    System.out.println(pick);
+         /*    numberOfPlayers = Integer.parseInt(pick);
+            if (numberOfPlayers == 3) {
+                send("Welcome!\nWhat is your name?");
+                String read = in.nextLine();
+                name = read;
+                server.room2(this, name);
+                while (isActive()) {
+                    read = in.nextLine();
+                    notify(read);
+                }
+            } else {*/
             send("Welcome!\nWhat is your name?");
             String read = in.nextLine();
             name = read;
-            server.room (this, name);
-            while(isActive()){
-                read = in.nextLine();
-                notify(read);
+            System.out.println("");
+
+
+
+            server.room(this, name, socket);
+
+            System.out.println("Dopo Room");
+            while (isActive()) {
+                //        read = in.nextLine();
+//              notify(read);
+                //          System.err.println("notified" + read);
             }
-        } catch (IOException | NoSuchElementException e) {
+            //   }
+
+        } catch (NoSuchElementException | InterruptedException | IOException e) {
             System.err.println("Error!" + e.getMessage());
-        }finally{
-            close();
+        } finally {
+
         }
     }
 

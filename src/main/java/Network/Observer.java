@@ -1,6 +1,10 @@
 package Network;
 
-public interface Observer<O> {
+public interface Observer<T> {
 
-    void update(O message);
+    /**
+     *
+     * updates boardimage after notification from Model
+     */
+    void updateCli(T message);
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * A class that implements the Santorini boardgame's board status
  */
 
-public class Board {
+public class Board implements Subject {
 
     private final Square[][] checkerboard;
     private Player[] player;

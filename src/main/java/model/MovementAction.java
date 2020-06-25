@@ -29,3 +29,4 @@ public class MovementAction {
     public int[] getDestination() { return destination; }
 
 }
+
