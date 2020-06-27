@@ -21,6 +21,7 @@ public class BuildingAction {
      * @param destination is the destination where the worker is going to build
      * @param forceBuildDome represents if the player wants to build a dome
      */
+
     public BuildingAction(int[] destination, boolean forceBuildDome) {
         this.destination = destination;
         this.forceBuildDome = forceBuildDome;

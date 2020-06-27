@@ -4,26 +4,26 @@ package Network;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Observable<O> {
+public class Observable<T> {
 
-    private final List<Observer<O>> obss = new ArrayList<>();
+    private final List<Observer<T>> obss = new ArrayList<>();
 
-    public void addObs(Observer<O> observer){
+    public void addObs(Observer<T> observer){
         synchronized (obss){
-           obss.add(observer);
+            obss.add(observer);
         }
     }
 
-    public void removeObs(Observer<O> observer){
+    public void removeObs(Observer<T> observer){
         synchronized (obss){
             obss.remove(observer);
         }
     }
 
-    public void notify(O message){
+    public void notify(T message){
         synchronized (obss){
-            for (Observer<O> observer : obss){
-                observer.update(message);
+            for (Observer<T> observer : obss){
+                observer.updateCli(message);
             }
         }
     }

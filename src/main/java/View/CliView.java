@@ -1,9 +1,11 @@
 package View;
 
+import Network.Observer;
 import model.*;
 import Network.*;
-import model.Observer;
-import java.io.ObjectInputStream;
+
+import java.io.InputStream;
+
 import java.util.Scanner;
 
 
@@ -11,40 +13,70 @@ import java.util.Scanner;
 /**
  * @author   Kumbi
  * Class for the CLI View
-j */
+ */
 
-public class CliView implements Observer {
+public class CliView extends Observable implements model.Observer, Observer<String> {
 
     private Board board;
-        private Player[] player;
-    private clientStatus client;
+    private Player[] player;
+    private ClientStatus client;
 
     public static final String FLOOR = "\u2589";
     public static final String DOME = "D";
     public static final String WORKER = "\uD83D\uDC68";
     public static final String IDTAG1 = "\u00B9";
     public static final String IDTAG2 = "\u00B2";
-    public String[][] boardImage ;
-    //private final ObjectInputStream inFromClient;
-    //private final Scanner in;
+    public String[][] boardImage = new String[5][5] ;
+    private final InputStream inFromClient;
+    private final Scanner in;
+    public String readInput = null;
 
     /**
+     *
      * @author Kumbi
      * Constructor of CLiView
      */
 
-    public CliView(clientStatus client,Board board) {
-        this.client = client;
+    public CliView(ClientStatus client, InputStream inputStream, Board board) {
+        System.out.println("Dentro CliView");
+
+        this.inFromClient = inputStream;
         this.board = board;
-        //this.player = board.getPlayer();
-        //inFromClient = client.getInputStream();
-        //board.attach(this);
-        //in = new Scanner(inFromClient);
+        this.client = client;
+        player= new Player[board.numberPlayers()];
+        System.out.println("PreFor "+ board.numberPlayers());
+
+        for (int i=1; i<=(board.numberPlayers()); i++){
+            player[i-1] = board.getPlayer(i);
+        }
+        System.out.println("PostFor");
+        client.addObs(this);
+        System.out.println("inFromClient");
+
+        board.attach(this);
+        System.out.println("Dopo Attach");
+
+        in = new Scanner(inFromClient);
         for (Player playerIdx : player) {
-            for (int j = 0; j < 2; j++) {
+            for (int j = 1; j <=2 ; j++) {
                 playerIdx.getWorker(j).attach(this);
             }
         }
+        System.out.println("Chiusura CliView");
+
+    }
+
+
+    /**
+     * @author Kumbi
+     * displays Board
+     */
+
+
+    public void displayBoard() {
+        buildFloors();
+        addWorkers();
+        client.asyncSend(new BoardView(boardImage));
     }
 
 
@@ -144,26 +176,36 @@ public class CliView implements Observer {
 
     /**
      * @author Kumbi
-     * updates board after notification from Model
+     * updates boardimage after notification from Model
      */
 
     @Override
     public void update() {
         buildFloors();
         addWorkers();
-        //client.asyncSend(new BoardView(boardImage));
+        client.asyncSend(new BoardView(boardImage));
     }
 
+    @Override
+    /**
+     * @author Kumbi
+     * updates boardimage after notification from Model
+     */
+    public void updateCli(String message) {
+        this.readInput = message;
+    }
 
     /**
      * @author Kumbi
      * Asks the player if he wants to move or build and calls the respective Querymethods
      */
 
-    public void intentionQuery() {
+    public void intentionQuery(boolean waitingFor) {
         ask("Do You want to  : \n  [1] move    or\n [2] build  \n (input 1 or 2) ");
-/*
-            int choice = in.nextInt();
+        int choice;
+
+        if(readInput !=null) {
+            choice = Integer.parseInt(readInput);
 
             if (choice == 1) {
                 workerChoiceQuery();
@@ -172,8 +214,8 @@ public class CliView implements Observer {
             } else {
                 ask("input [1] or [2]");
                 workerChoiceQuery();
-            }*/
-
+            }
+        }
     }
 
 
@@ -181,15 +223,16 @@ public class CliView implements Observer {
      * Asks the player which worker he wants to move and returns choice
      */
 
-    public int workerChoiceQuery() {/*
+    public int workerChoiceQuery() {
         ask("Which worker do you want to move?[1] or [2] \n");
+
         Integer choice = in.nextInt();
-            if (choice.equals(1) || choice.equals(2)) {
-                return choice;
-            } else {
-                ask("input [1] or [2]");
-                workerChoiceQuery();
-            }*/
+        if (choice.equals(1) || choice.equals(2)) {
+            return choice;
+        } else {
+            ask("input [1] or [2]");
+            workerChoiceQuery();
+        }
         return 0;
     }
 
@@ -199,35 +242,32 @@ public class CliView implements Observer {
      */
 
     public int[] moveLocationQuery() {
+        System.out.println("Dentro MoveLocation");
+        // int workerId = workerChoiceQuery();
+        ask("Where do you want to move the worker to? (row,column)");
+        //
+        //   while(readInput==null){                   //TODO  ALTERNATIVA PER LEGGERE INPUT DA CLIENTE
+        //      try {
+        //          Thread.sleep( 1000);
+        //         wait++;
+        //     } catch (InterruptedException ie) {
+        //           Thread.currentThread().interrupt();
+        //       }System.out.println("Dentro wait per:" + wait);
 
-        int workerId = workerChoiceQuery();
+        //  }
+        //  String str = readInput;
 
-        ask("Where do you want to move it to? (row,column)\n");
-/*
-        String str = in.next();
+        String str = in.nextLine();
         try {
             String[] input = str.split(",");
             int[] destination = {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
-            return new int[]{workerId, destination[0], destination[1]};
+            System.out.println(destination[0]+""+destination[1]);
+            System.out.println(destination.toString());
+            return new int[]{ destination[0], destination[1]};   // MANDALO COME FLUSSO SCANNER
 
         } catch (NumberFormatException e) {
             ask("Please provide integer values as coordinates");
-        }*/
-        return new int[6];
-
-    }
-
-    public int[] startingPositionQuery(){
-        ask("Where do you want to place your worker to? (row,column)\n");/*
-        String str = in.next();
-        try {
-            String[] input = str.split(",");
-            int[] destination = {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
-            return new int[]{destination[0], destination[1]};
-
-        } catch (NumberFormatException e) {
-            ask("Please provide integer values as coordinates");
-        }*/
+        }
         return new int[6];
     }
 
@@ -238,16 +278,16 @@ public class CliView implements Observer {
 
     public BuildingAction buildLocationQuery() {
         ask("Where do you want to build ? (row,column)\n");
-/*
-            String str = in.next();
-            try {
-                String[] input = str.split(",");
-                int[] buildLocation = {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
-                return new BuildingAction(buildLocation, true);
 
-            } catch (NumberFormatException e) {
-                ask("Please provide integer values as coordinates");
-            }*/
+        String str = in.next();
+        try {
+            String[] input = str.split(",");
+            int[] buildLocation = {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
+            return new BuildingAction(buildLocation, true);
+
+        } catch (NumberFormatException e) {
+            ask("Please provide integer values as coordinates");
+        }
 
         return null;
     }
@@ -259,25 +299,25 @@ public class CliView implements Observer {
 
     public BuildingAction buildLocationAndTypeQuery() {
 
-        ask("Where do you want to build ? (row,column)\n");/*
-            String str = in.next();
-            try {
-                String[] input = str.split(",");
-                int[] buildLocation = {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
-                ask("Do you want to build a [1]Block or a [2]Dome ? input [1] or[2]\n");
-                int choice = in.nextInt();
+        ask("Where do you want to build ? (row,column)\n");
+        String str = in.next();
+        try {
+            String[] input = str.split(",");
+            int[] buildLocation = {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
+            ask("Do you want to build a [1]Block or a [2]Dome ? input [1] or[2]\n");
+            int choice = in.nextInt();
 
-                if (choice == 1) {
-                    return new BuildingAction(buildLocation);
-                } else if (choice == 2) {
-                    return new BuildingAction(buildLocation, true);
-                } else {
-                    ask("input [1] or [2]");
-                    workerChoiceQuery();
-                }
-            } catch (NumberFormatException e) {
-                ask("Please provide integer values as coordinates");
-            }*/
+            if (choice == 1) {
+                return new BuildingAction(buildLocation);
+            } else if (choice == 2) {
+                return new BuildingAction(buildLocation, true);
+            } else {
+                ask("input [1] or [2]");
+                workerChoiceQuery();
+            }
+        } catch (NumberFormatException e) {
+            ask("Please provide integer values as coordinates");
+        }
 
         return null;
     }
@@ -303,6 +343,7 @@ public class CliView implements Observer {
 
     }
 
+
     /**
      * Asks the player if he wants to build again
      *
@@ -312,7 +353,7 @@ public class CliView implements Observer {
     public boolean buildAgainQuery() {
 
         ask("Do you want to build again ? (true, false)\n");
-        return true;
+        return in.nextBoolean();
 
     }
 
@@ -325,7 +366,7 @@ public class CliView implements Observer {
     public boolean moveAgainQuery() {
 
         ask("Do you want to move again ? (true, false)\n");
-        return true;
+        return in.nextBoolean();
 
     }
 
@@ -362,7 +403,10 @@ public class CliView implements Observer {
 
 
     protected void ask(String QueryForClient){
-           /*client.asyncSend(QueryForClient);*/
+        System.out.println("son dentro ask");
+        client.asyncSend(QueryForClient);
+        System.out.println("ho fatto ask");
+
     }
 
 

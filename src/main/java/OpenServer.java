@@ -1,4 +1,5 @@
-import Network.serverSide;
+import Network.ServerSide;
+
 
 import java.io.IOException;
 
@@ -10,9 +11,9 @@ public class OpenServer
 {
     public static void main( String[] args )
     {
-        serverSide server;
+        ServerSide server;
         try {
-            server = new serverSide();
+            server = new ServerSide();
             System.out.println("SERVER waiting");
             server.run();
         } catch (IOException e) {
