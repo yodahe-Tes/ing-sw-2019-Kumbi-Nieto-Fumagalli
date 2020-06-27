@@ -13,7 +13,7 @@ import model.Player;
 
 public class BuildingRuleChecker {
 
-    private final BuildingRule[] rule;
+    private BuildingRule[] rule;
     private final Player owner;
 
     /**
@@ -39,6 +39,22 @@ public class BuildingRuleChecker {
                 return false;
         }
         return true;
+    }
+
+    public void removeLooser(BuildingRule looserGod){
+        if(rule.length>1){
+            int len = rule.length;
+            BuildingRule[] newRules = new BuildingRule[len];
+            int j=0;
+            for(int i=0;i<len;i++){
+                if(rule[i]!=looserGod){
+                    newRules[j]=rule[i];
+                    j++;
+                }
+            }
+            rule=newRules;
+
+        }
     }
 
     public Player getOwner() {

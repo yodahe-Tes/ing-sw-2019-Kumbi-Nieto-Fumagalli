@@ -1,5 +1,6 @@
 package model;
 
+import controller.BuildingRuleChecker;
 import controller.PhaseResult;
 
 /**
@@ -27,4 +28,7 @@ public interface BuildingPhase {
      * @return the board where the game is played
      */
     Board getBoard();
+
+
+    BuildingRuleChecker getChecker();
 }

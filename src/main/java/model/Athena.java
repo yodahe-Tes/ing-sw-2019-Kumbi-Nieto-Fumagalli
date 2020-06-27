@@ -28,11 +28,11 @@ public class Athena implements Deity, MovementRule, Observer {
     }
 
     /**
-     * represents if the god activates during player or opponent's phase
-     * @return OPPONENT phase
+     * a method that gives the description of the god
+     * @return a string that represents the god's name and a short description of its power
      */
     @Override
-    public GodType type(){ return GodType.OPPONENT; }
+    public String desc(){ return "ATHENA"+System.lineSeparator()+"Opponent’s Turn: If one of your Workers moved up on your last turn, opponent Workers cannot move up this turn.";}
 
     /**
      * checks if Athena's restrictions are fulfilled
@@ -80,4 +80,7 @@ public class Athena implements Deity, MovementRule, Observer {
      */
     @Override
     public void doForced(MovementAction action){}
+
+    @Override
+    public boolean isOpponent(){return true;}
 }

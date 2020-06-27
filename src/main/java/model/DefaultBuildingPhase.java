@@ -3,7 +3,7 @@ package model;
 import controller.BuildingRuleChecker;
 import controller.PhaseResult;
 
-import java.util.Scanner;
+import java.util.Arrays;
 
 public class DefaultBuildingPhase implements BuildingPhase{
 
@@ -44,13 +44,42 @@ public class DefaultBuildingPhase implements BuildingPhase{
             board.addDomeTo(action.getDestination());
         else
             board.addFloorTo(action.getDestination());
-        getOwner().getView().notYourTUrnMessage();
+        return PhaseResult.NEXT;
+    }
+
+    /**
+     * a method that models a default building phase where the player can't build on a square
+     * @param worker is the worker that must build
+     * @param here is the square where the player can't build for a specific reason
+     * @return VICTORY if the player won, DEFEAT if was defeated, NEXT otherwise
+     */
+
+    public PhaseResult doBuildNotHere(BoardWorker worker, int[] here) {
+        BuildingAction action;
+
+        if(loose.doCheckRule(checker, worker)) {
+            getOwner().getView().loserMessage();
+            return PhaseResult.DEFEAT;
+        }
+
+        do {
+            action = getOwner().getView().buildLocationAndTypeQuery();
+        }while (!checker.doCheckRules(worker, action)|| Arrays.equals(action.getDestination(),here));
+
+        if (action.isForceBuildDome())
+            board.addDomeTo(action.getDestination());
+        else
+            board.addFloorTo(action.getDestination());
         return PhaseResult.NEXT;
     }
 
 
+
     @Override
     public Player getOwner(){return checker.getOwner();}
+
+    @Override
+    public BuildingRuleChecker getChecker(){return checker;}
 
     @Override
     public Board getBoard(){return board;}

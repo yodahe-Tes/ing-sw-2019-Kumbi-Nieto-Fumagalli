@@ -6,5 +6,5 @@ package model;
  */
 
 public interface Deity{
-    GodType type();
+    public String desc();
 }

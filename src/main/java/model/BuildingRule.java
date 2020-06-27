@@ -14,4 +14,6 @@ public interface BuildingRule {
      * @return true if the condition is fulfilled
      */
     boolean doCheckRule(BoardWorker worker, BuildingAction action);
+
+    boolean isOpponent();
 }

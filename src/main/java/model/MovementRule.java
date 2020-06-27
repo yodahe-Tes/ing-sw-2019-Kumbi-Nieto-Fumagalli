@@ -21,4 +21,5 @@ public interface MovementRule {
      */
     void doForced(MovementAction action);
 
+    boolean isOpponent();
 }

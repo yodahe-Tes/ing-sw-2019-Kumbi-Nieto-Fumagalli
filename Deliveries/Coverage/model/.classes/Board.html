@@ -1,0 +1,180 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Board</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Board (model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Board</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95,2%
+  </span>
+  <span class="absValue">
+    (20/ 21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;
+<i>4</i>&nbsp;import org.junit.BeforeClass;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;/**
+<i>7</i>&nbsp; * @author Fumagalli
+<i>8</i>&nbsp; * A class that implements the Santorini boardgame&#39;s board status
+<i>9</i>&nbsp; */
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;public class Board {
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;    private final Square[][] checkerboard;
+<i>14</i>&nbsp;    private final Player[] player;
+<i>15</i>&nbsp;
+<b class="fc"><i>16</i>&nbsp;    private final int rowNumber = 5;</b>
+<b class="fc"><i>17</i>&nbsp;    private final int columnNumber = 5;</b>
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    /**
+<i>21</i>&nbsp;     * Class constructor
+<i>22</i>&nbsp;     * @param player are the players involved in the game
+<i>23</i>&nbsp;     */
+<b class="fc"><i>24</i>&nbsp;    public Board(Player[] player){</b>
+<i>25</i>&nbsp;
+<b class="fc"><i>26</i>&nbsp;        checkerboard = new Square[rowNumber][columnNumber];</b>
+<i>27</i>&nbsp;
+<b class="fc"><i>28</i>&nbsp;        for(int i=0; i&lt;rowNumber;i++){</b>
+<b class="fc"><i>29</i>&nbsp;            for(int j=0; j&lt;columnNumber; j++){</b>
+<b class="fc"><i>30</i>&nbsp;                checkerboard[i][j] = new Square();</b>
+<i>31</i>&nbsp;            }
+<i>32</i>&nbsp;        }
+<i>33</i>&nbsp;
+<b class="fc"><i>34</i>&nbsp;        this.player = player;</b>
+<b class="fc"><i>35</i>&nbsp;    }</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * the building action
+<i>40</i>&nbsp;     * @param action the desired action
+<i>41</i>&nbsp;     */
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    public void build(BuildingAction action){
+<b class="fc"><i>44</i>&nbsp;        if (action.isForceBuildDome())</b>
+<b class="nc"><i>45</i>&nbsp;            addDomeTo(action.getDestination());</b>
+<b class="fc"><i>46</i>&nbsp;        else addFloorTo(action.getDestination());</b>
+<b class="fc"><i>47</i>&nbsp;    }</b>
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    /**
+<i>51</i>&nbsp;     * Adds a floor on the square specified
+<i>52</i>&nbsp;     * @param position is the array that identifies the coordinates
+<i>53</i>&nbsp;     */
+<i>54</i>&nbsp;    public void addFloorTo(int[] position){
+<b class="fc"><i>55</i>&nbsp;            checkerboard[position[0] - 1][position[1] - 1].addFloor();</b>
+<b class="fc"><i>56</i>&nbsp;    }</b>
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * Adds a dome on the square specified
+<i>61</i>&nbsp;     * @param position is the array that identifies the coordinates
+<i>62</i>&nbsp;     */
+<i>63</i>&nbsp;    public void addDomeTo(int[] position){
+<b class="fc"><i>64</i>&nbsp;            checkerboard[position[0] - 1][position[1] - 1].addDome();</b>
+<b class="fc"><i>65</i>&nbsp;    }</b>
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * check the floor of a chosen square inside the gameboard
+<i>70</i>&nbsp;     * @param position is the array that identifies the coordinates
+<i>71</i>&nbsp;     * @return the floor of the chosen square
+<i>72</i>&nbsp;     */
+<i>73</i>&nbsp;    public int getFloorFrom(int[] position){
+<b class="fc"><i>74</i>&nbsp;            return checkerboard[position[0] - 1][position[1] - 1].getFloor();</b>
+<i>75</i>&nbsp;    }
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    /**
+<i>79</i>&nbsp;     * check if the square has a dome
+<i>80</i>&nbsp;     * @param position is the array of int that identifies the coordinates
+<i>81</i>&nbsp;     * @return true if the chosen square has a dome
+<i>82</i>&nbsp;     */
+<i>83</i>&nbsp;    public boolean squareHasDome(int[] position){
+<b class="fc"><i>84</i>&nbsp;            return checkerboard[position[0]-1][position[1]-1].hasDome();</b>
+<i>85</i>&nbsp;    }
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    /**
+<i>89</i>&nbsp;     * simple getter for player
+<i>90</i>&nbsp;     * @param playerNumber player&#39;s number ID (1 or 2 in a normal 2 players game)
+<i>91</i>&nbsp;     */
+<i>92</i>&nbsp;    public Player getPlayer(int playerNumber) {
+<b class="fc"><i>93</i>&nbsp;            return player[playerNumber - 1];</b>
+<i>94</i>&nbsp;    }
+<i>95</i>&nbsp;
+<b class="fc"><i>96</i>&nbsp;    public Player[] getPlayer(){return player;}</b>
+<i>97</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 13:09</div>
+</div>
+</body>
+</html>

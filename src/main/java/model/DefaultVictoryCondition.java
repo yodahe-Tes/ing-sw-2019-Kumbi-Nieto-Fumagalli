@@ -8,7 +8,7 @@ import model.BoardWorker;
  * a class that models the default victory condition
  */
 
-public class DefaultVictoryCondition {
+public class DefaultVictoryCondition implements VictoryCondition{
 
     private final Board board;
 
@@ -22,7 +22,8 @@ public class DefaultVictoryCondition {
      * @param justMoved the square where the worker last moved
      * @return true if the victory condition is satisfied
      */
-    public boolean doCheckCondition(int[] justMoved){
-        return(board.getFloorFrom(justMoved) == 3);
+    @Override
+    public boolean doCheckCondition(BoardWorker worker){
+        return( (board.getFloorFrom(worker.getPosition()) == 3) && (board.getFloorFrom(worker.getOldPosition())==2));
     }
 }

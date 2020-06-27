@@ -8,11 +8,8 @@ package model;
 import controller.BuildingRuleChecker;
 import controller.PhaseResult;
 
-/*
- *Your Build: Your Worker may
- * build one additional time, but not
- * on the same space.
- */
+import java.util.Arrays;
+
 
 public class Demetra implements Deity, BuildingPhase {
 
@@ -27,13 +24,12 @@ public class Demetra implements Deity, BuildingPhase {
     }
 
     /**
-     * represents if the god activates during player or opponent's phase
-     *
-     * @return PLAYER phase
+     * a method that gives the description of the god
+     * @return a string that represents the god's name and a short description of its power
      */
     @Override
-    public GodType type() {
-        return GodType.PLAYER;
+    public String desc() {
+        return "DEMETRA"+System.lineSeparator()+"Your Build: Your Worker may build one additional time, but not on the same space.";
     }
 
     /**
@@ -65,14 +61,14 @@ public class Demetra implements Deity, BuildingPhase {
 
         if (canBuildFurther(worker, action.getDestination())) {
             if (getOwner().getView().buildAgainQuery()) {
+                BuildingAction actionTwo;
                 do {
-                    action = getOwner().getView().buildLocationQuery();
-                } while (!checker.doCheckRules(worker, action));
+                    actionTwo = getOwner().getView().buildLocationQuery();
+                } while (!checker.doCheckRules(worker, actionTwo) || Arrays.equals(action.getDestination(),actionTwo.getDestination()));
                 board.build(action);
             }
         }
 
-        getOwner().getView().notYourTUrnMessage();
         return PhaseResult.NEXT;
     }
 
@@ -111,6 +107,9 @@ public class Demetra implements Deity, BuildingPhase {
     private BuildingAction getFromPlayer() {
         return TestActionProvider.getProvider().getNextBuild();
     }
+
+    @Override
+    public BuildingRuleChecker getChecker(){return checker;}
 
     @Deprecated
     private boolean getBoolFromPlayer(){

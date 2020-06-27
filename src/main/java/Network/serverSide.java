@@ -44,7 +44,7 @@ public class serverSide {
     }
 
 
-    public synchronized void room (clientStatus s, String name){
+    public synchronized void room (clientStatus s, String name){/*
         queue.put(name,s);
         if (queue.size()==2){
             List<String> keys = new ArrayList<>(queue.keySet());
@@ -54,6 +54,7 @@ public class serverSide {
             Set ss = queue.keySet ();
             Object[] a = ss.toArray ();
             String[] players = new String[a.length];
+
             for (int i = 0; i < players.length; i++){
                 players[i] = a[i].toString ();
             }
@@ -78,7 +79,7 @@ public class serverSide {
                 c1.asyncSend(CliQuery.notYourTurnMessage());
             }
 
-        }
+        }*/
     }
 
     public serverSide() throws IOException {
@@ -97,4 +98,3 @@ public class serverSide {
         }
     }
 }
-

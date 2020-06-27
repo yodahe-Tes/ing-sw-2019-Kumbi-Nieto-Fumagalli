@@ -12,8 +12,8 @@ public class BoardGameConstructorTest {
     TurnManager manager;
 
     @Before
-    public void setUpEveryPlayerHasAGOd(){
-        manager = BoardGameConstructor.construct(new String[]{"alpha","beta"});
+    public void setUpEveryPlayerHasAGod(){
+        manager = BoardGameConstructor.construct(new String[]{"alpha","beta","gamma1"});
     }
 
     @Test

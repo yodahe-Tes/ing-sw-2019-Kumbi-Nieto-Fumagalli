@@ -1,5 +1,7 @@
 package model;
 
+import controller.MovementRuleChecker;
+
 /**
  * interface that define the movement phase
  */
@@ -17,4 +19,6 @@ public interface MovementPhase {
      * @return the player that has this building phase as its
      */
     Player getOwner();
+
+    MovementRuleChecker getChecker();
 }

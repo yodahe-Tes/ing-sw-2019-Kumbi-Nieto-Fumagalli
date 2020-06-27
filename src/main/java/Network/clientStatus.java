@@ -1,6 +1,5 @@
 package Network;
 
-import jdk.internal.event.Event;
 
 public interface clientStatus {
     void closeConnection();

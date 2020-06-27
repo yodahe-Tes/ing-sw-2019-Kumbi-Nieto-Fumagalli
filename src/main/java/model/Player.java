@@ -99,4 +99,6 @@ public class Player {
     }
 
     public CliView getView(){return view;}
+
+    public String godDesc(){return deity.desc();}
 }

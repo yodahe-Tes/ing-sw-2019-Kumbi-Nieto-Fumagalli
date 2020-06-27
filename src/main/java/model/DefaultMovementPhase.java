@@ -2,6 +2,7 @@ package model;
 
 import controller.MovementRuleChecker;
 import controller.PhaseResult;
+import controller.VictoryConditionChecker;
 
 /**
  * a class that implements the default movement phase
@@ -11,7 +12,7 @@ public class DefaultMovementPhase implements MovementPhase{
 
     private final MovementRuleChecker check;
     private final DefaultMovingLosingCondition loose;
-    private final DefaultVictoryCondition win;
+    private final VictoryConditionChecker win;
 
     /**
      * constructor
@@ -19,7 +20,7 @@ public class DefaultMovementPhase implements MovementPhase{
      * @param loose is the loosing condition
      */
 
-    public DefaultMovementPhase(MovementRuleChecker check, DefaultMovingLosingCondition loose, DefaultVictoryCondition win){
+    public DefaultMovementPhase(MovementRuleChecker check, DefaultMovingLosingCondition loose, VictoryConditionChecker win){
         this.check = check;
         this.loose = loose;
         this.win = win;
@@ -43,7 +44,6 @@ public class DefaultMovementPhase implements MovementPhase{
 
         //moves worker
 
-        getOwner().getView().yourTUrnMessage();
         int[] action;
         MovementAction destination;
 
@@ -60,7 +60,7 @@ public class DefaultMovementPhase implements MovementPhase{
         destination.getWorker().move(destination.getDestination());
 
         //Checks victory condition
-        if(win.doCheckCondition(destination.getDestination())){
+        if(win.doCheckRule(destination.getWorker())){
             return new MovementPhaseResult(destination.getWorker(), PhaseResult.VICTORY);
         }
 
@@ -94,4 +94,6 @@ public class DefaultMovementPhase implements MovementPhase{
         return TestActionProvider.getProvider().getNextMove();
     }
 
+    @Override
+    public MovementRuleChecker getChecker(){return check;}
 }

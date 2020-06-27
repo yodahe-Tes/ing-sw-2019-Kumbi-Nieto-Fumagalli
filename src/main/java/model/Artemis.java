@@ -1,7 +1,9 @@
 package model;
 
+import controller.BuildingRuleChecker;
 import controller.MovementRuleChecker;
 import controller.PhaseResult;
+import controller.VictoryConditionChecker;
 
 import java.util.Arrays;
 
@@ -20,21 +22,21 @@ public class Artemis implements Deity, MovementPhase{
 
     private final MovementRuleChecker checker;
     private final DefaultMovingLosingCondition defeated;
-    private final DefaultVictoryCondition win;
+    private final VictoryConditionChecker win;
 
-    public Artemis(MovementRuleChecker checker, DefaultMovingLosingCondition condition, DefaultVictoryCondition win){
+    public Artemis(MovementRuleChecker checker, DefaultMovingLosingCondition condition, VictoryConditionChecker win){
         this.checker = checker;
         defeated = condition;
         this.win = win;
     }
 
     /**
-     * represents if the god activates during player or opponent's phase
-     * @return PLAYER phase
+     * a method that gives the description of the god
+     * @return a string that represents the god's name and a short description of its power
      */
     @Override
-    public  GodType type(){
-        return GodType.PLAYER;
+    public  String desc(){
+        return "ARTEMIS"+System.lineSeparator()+"Your Move: Your Worker may move one additional time, but not back to its initial space.";
     }
 
     /**
@@ -52,7 +54,6 @@ public class Artemis implements Deity, MovementPhase{
 
         //gets and validates the first move
 
-        getOwner().getView().yourTUrnMessage();
         int[] action;
         MovementAction destination;
 
@@ -72,7 +73,7 @@ public class Artemis implements Deity, MovementPhase{
 
         //checks if won
 
-        if(win.doCheckCondition(destination.getDestination()))
+        if(win.doCheckRule(destination.getWorker()))
             return new MovementPhaseResult(destination.getWorker(), PhaseResult.VICTORY);
 
 
@@ -91,7 +92,7 @@ public class Artemis implements Deity, MovementPhase{
                 checker.checkForcedMove(secondDestination);
                 destination.getWorker().move(secondDestination.getDestination());
 
-                if(win.doCheckCondition(secondDestination.getDestination())){
+                if(win.doCheckRule(secondDestination.getWorker())){
                     return new MovementPhaseResult(destination.getWorker(), PhaseResult.VICTORY);
                 }
             }
@@ -141,6 +142,9 @@ public class Artemis implements Deity, MovementPhase{
     private int[] getFromPlayer(){
         return TestActionProvider.getProvider().getNextMove();
     }
+
+    @Override
+    public MovementRuleChecker getChecker(){return checker;}
 
     @Deprecated
     private boolean getBoolFromPlayer(){

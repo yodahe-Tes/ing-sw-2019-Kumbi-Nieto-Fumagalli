@@ -1,7 +1,5 @@
 package model;
 
-//TODO: Javadoc
-
 /**
  * a class used during tests to simulate the user's input
  */
@@ -29,8 +27,8 @@ public class TestActionProvider {
     }
 
     /**
-     * public getter for the singleton
-     * @return
+     * public getter for this singleton class
+     * @return the singleton
      */
     public static TestActionProvider getProvider(){
         return singleton;

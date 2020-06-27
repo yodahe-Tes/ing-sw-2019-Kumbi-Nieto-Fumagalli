@@ -20,13 +20,12 @@ public class Apollo implements Deity, MovementRule {
     }
 
     /**
-     * informs that the god takes action in the player phase
-     *
-     * @return the instance PLAYER
+     * a method that gives the description of the god
+     * @return a string that represents the god's name and a short description of its power
      */
     @Override
-    public GodType type() {
-        return GodType.PLAYER;
+    public String desc() {
+        return "APOLLO"+System.lineSeparator()+"Your Move: Your Worker may move into an opponent Worker’s space by forcing their Worker to the space yours just vacated.";
     }
 
     /**
@@ -44,7 +43,7 @@ public class Apollo implements Deity, MovementRule {
         if(destination[0]<=5 && destination[0]>=1 && destination[1]<=5 && destination[1]>=1) {
             if (oneSquareDistance(worker, destination)) {
                 if (isNotTooHigh(worker, destination)) {
-                    if (destinationIsEmpty(destination))
+                    if (board.isEmpty(destination))
                         return true;
                 }
             }
@@ -84,22 +83,6 @@ public class Apollo implements Deity, MovementRule {
     }
 
     /**
-     * checks if the destination square is empty, i.e. there are no domes or friendly workers
-     * @param destination represents the coordinates of the destination
-     * @return true if on the destination square there aren't any domes or any friendly workers
-     */
-    private boolean destinationIsEmpty(int[] destination) {
-        if (board.squareHasDome(destination))
-            return false;
-        for (int i=1;i<=board.numberPlayers();i++){
-            if (owner.getWorker(i).getPosition()[0] == destination[0] && owner.getWorker(i).getPosition()[1] == destination[1]){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * if needed force the opponent's worker to the will-be former worker's square
      * @param action is the action that would cause the forced move
      */
@@ -117,5 +100,8 @@ public class Apollo implements Deity, MovementRule {
             }
         }
     }
+
+    @Override
+    public boolean isOpponent(){return false;}
 
 }

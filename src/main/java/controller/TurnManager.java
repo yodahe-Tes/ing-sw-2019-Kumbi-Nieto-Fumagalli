@@ -1,6 +1,8 @@
 package controller;
 
 import model.Board;
+import model.BuildingRule;
+import model.MovementRule;
 import model.Player;
 
 import java.util.ArrayList;
@@ -28,12 +30,47 @@ public class TurnManager {
      */
     public void startGame(){
         PhaseResult currentResult = PhaseResult.DEFEAT;
+
+        for (int j=1;j<=2; j++) {
+            for (int i = 1; i <= getBoard().numberPlayers(); i++){
+                int[] newPosition;
+                do{
+                    newPosition = getBoard().getPlayer(i).getView().startingPositionQuery();
+                }while(!(getBoard().isEmpty(newPosition)));
+                getBoard().getPlayer(i).getWorker()[j-1].forced(newPosition);
+            }
+        }
+
+        //TODO: aggiungere messaggio "è morto tizio"
+        //TODO: aggiungere possibilità di richiedere la descrizione
+        //TODO: aggiornare il TurnConstruction di conseguenza
+        //TODO: classe VictoryConditionChecker
+        //TODO: test di gods e modalità a 3 giocatori
+        //TODO: controllare javadoc
+        //TODO: controllare come ho usato le parti della cliview
+
         int i=0;
         do{
             currentResult=turn[i].doTurn();
 
             if(currentResult==PhaseResult.DEFEAT){
                 if(turn.length>2){
+                    //delete god's power on other players
+                    if(turn[i].getOwner().getDeity() instanceof MovementRule){
+                        for(Turn opponentTurn : turn){
+                            if(opponentTurn!=turn[i]){
+                                opponentTurn.getMove().getChecker().removeLooser((MovementRule) turn[i].getOwner().getDeity());
+                            }
+                        }
+                    }
+                    if(turn[i].getOwner().getDeity() instanceof BuildingRule){
+                        for(Turn opponentTurn : turn){
+                            if(opponentTurn!=turn[i]){
+                                opponentTurn.getBuild().getChecker().removeLooser((BuildingRule) turn[i].getOwner().getDeity());
+                            }
+                        }
+                    }
+                    //delete player
                     getBoard().removePlayerFromList(turn[i].getOwner());
                     removeTurnFromList(turn[i]);
                     if (getPlayer().length==1){
@@ -75,7 +112,7 @@ public class TurnManager {
 
     /**
      * removes selected turn from turn list when the associated player looses
-     * @param deleteMe is the turn of the looser
+     * @param deleteMe is the turn of the looser00
      */
     private void removeTurnFromList(Turn deleteMe) {
 

@@ -1,6 +1,5 @@
 package Network;
 
-import model.*;
 import View.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -47,7 +46,7 @@ public class clientSide {
                             if (inputObject instanceof String) {
                                 System.out.println((String) inputObject);
                             } else if(inputObject instanceof CliView){
-                                (CliView)inputObject.update();
+                                //(CliView)inputObject.update();
                             } else {
                                 throw new IllegalArgumentException();
                             }
