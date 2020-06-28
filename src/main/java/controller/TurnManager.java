@@ -26,6 +26,7 @@ public class TurnManager {
      * a method that handle the turns' cycle
      */
     public void startGame(){
+
         PhaseResult currentResult = PhaseResult.DEFEAT;
 
         for (int j=1;j<=2; j++) {
@@ -48,9 +49,6 @@ public class TurnManager {
         int i=0;
         do{
             currentResult=turn[i].doTurn();
-
-            if(currentResult==PhaseResult.VICTORY)
-                return;
 
             if(currentResult==PhaseResult.DEFEAT){
                 if(turn.length>2){
@@ -111,7 +109,7 @@ public class TurnManager {
 
     /**
      * removes selected turn from turn list when the associated player looses
-     * @param deleteMe is the turn of the looser00
+     * @param deleteMe is the turn of the looser
      */
     private void removeTurnFromList(Turn deleteMe) {
 
