@@ -1,10 +1,6 @@
 package Network;
 
 
-
-import Network.Observer;
-
-
 public interface ClientStatus  {
 
     void closeConnection();

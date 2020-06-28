@@ -146,8 +146,6 @@ public class TurnConstruction {
             newCheckers[i] = new MovementRuleChecker(rul, player[i]);
         }
 
-
-
         return newCheckers;
     }
 
