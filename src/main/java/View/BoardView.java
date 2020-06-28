@@ -1,13 +1,15 @@
 package View;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Kumbi
- * CLASS used to prepare the Board's  images
- * that are then sent to client side for display purposes.
+ * CLASS for visual representation of the Board
+ *
  */
 
-public class BoardView {
+public class BoardView implements Serializable {
     public BoardView(String[][] board) {
         this.boardView = board;
     }
@@ -69,6 +71,7 @@ public class BoardView {
 
         System.out.print("\u001B[32m\u2587\u001B[0m");                                             //shows last wall of bottom layer of row
         System.out.print("\n");
+        System.out.print("---+---   ---+---   ---+---   ---+---   ---+---  ---+---\n");
 
     }
 

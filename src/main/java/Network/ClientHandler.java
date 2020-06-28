@@ -1,12 +1,7 @@
 package Network;
 
-import View.CliView;
-import model.Observer;
-import model.Subject;
-
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -25,9 +20,6 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
     public ClientHandler(Socket socket, ServerSide server)  {
         this.socket = socket;
         this.server = server;
-
-
-
     }
 
     private synchronized boolean isActive(){
@@ -42,7 +34,6 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
         } catch(IOException e){
             System.err.println(e.getMessage());
         }
-
     }
 
     @Override
@@ -57,11 +48,9 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
     }
 
 
-
-
     @Override
     public void asyncSend(final Object message) {
-        System.out.println("Dentro asyncSend");
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -107,24 +96,18 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
             send("Welcome!\nWhat is your name?");
             String read = in.nextLine();
             name = read;
-            System.out.println("");
+            server.room(this,name, socket);
 
-
-
-            server.room(this, name, socket);
-
-            System.out.println("Dopo Room");
             while (isActive()) {
-                //        read = in.nextLine();
-//              notify(read);
-                //          System.err.println("notified" + read);
+                read = in.nextLine();
+                notify(read);
+                System.err.println("notified" + read);
             }
-            //   }
 
-        } catch (NoSuchElementException | InterruptedException | IOException e) {
+        } catch (NoSuchElementException | IOException e) {
             System.err.println("Error!" + e.getMessage());
         } finally {
-
+                close();
         }
     }
 

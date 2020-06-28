@@ -27,7 +27,14 @@ public class TurnManager {
      * a method that handle the turns' cycle
      */
     public void startGame(){
+
         PhaseResult currentResult = PhaseResult.DEFEAT;
+        for (int j=1;j<=2; j++) {
+            for (int i = 1; i <= getBoard().numberPlayers(); i++){
+                getBoard().getPlayer(i).getWorker()[j-1].forced(getBoard().getPlayer(i).getView().initialPositionQuery(i,j));
+            }
+        }
+
         int i=0;
         do{
             currentResult=turn[i].doTurn();

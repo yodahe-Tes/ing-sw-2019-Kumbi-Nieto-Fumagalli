@@ -1,6 +1,5 @@
 package Network;
 
-import model.*;
 import View.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -8,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+
 
 /***
  * This class implements java socket class

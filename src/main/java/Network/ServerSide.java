@@ -1,20 +1,18 @@
 
 package Network;
 
+
+import View.CliView;
 import controller.BoardGameConstructor;
 import controller.TurnManager;
+import model.Player;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLOutput;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import View.*;
-
-import model.Player;
 
 /***
  * This class implements java server class
@@ -27,9 +25,9 @@ public class ServerSide {
     //socket server port on which it will listen
     private static int port = 12345;
     //A store fo all the threads and a pool to execute them
-    private  Map<String, ClientStatus> queue = new HashMap<>();
-    private  ArrayList<Socket> clientSocket = new ArrayList();
-    private  ArrayList<InputStream> InputStr = new ArrayList();
+    public Map<String, ClientStatus> queue = new HashMap<>();
+    public ArrayList<Socket> clientSocket = new ArrayList();
+    private ArrayList<InputStream> InputStr = new ArrayList();
     private Map<ClientStatus, ClientStatus> gameConnection = new HashMap<>();
     private static ExecutorService pool = Executors.newFixedThreadPool(128);
 
@@ -37,26 +35,48 @@ public class ServerSide {
     /**
      * A method to deregister the client connection and set free the spot to start
      * a new game
+     *
      * @param s client socket
      */
 
-    public synchronized void deregisterConnection(ClientStatus s){
+    public synchronized void deregisterConnection(ClientStatus s) {
         ClientStatus opponent = gameConnection.get(s);
         if (opponent != null) opponent.closeConnection();
         gameConnection.remove(s);
         gameConnection.remove(opponent);
         Iterator<String> iterator = queue.keySet().iterator();
-        while(iterator.hasNext()){
-            if (queue.get(iterator.next())==s) iterator.remove();
+        while (iterator.hasNext()) {
+            if (queue.get(iterator.next()) == s) iterator.remove();
         }
     }
 
+    //  public synchronized void login (ClientHandler s, Socket socket) throws InterruptedException {
 
-    public synchronized void room (ClientStatus s, String name, Socket socket) throws IOException, InterruptedException {
-        System.out.println("Room di SAntorini");
+    //      s.send("Welcome!\nWhat is your name?");
+
+    //      String name = s.in.nextLine();
+
+    //     clientSocket.add(socket);
+    //     queue.put(name,s);
+    //   if (queue.size()==2){
+    //     Thread t = new Thread(new Runnable() {
+    //        @Override
+    //         public void run() {
+    //            try {
+    //                  room();
+    //             } catch (InterruptedException e) {
+    //                e.printStackTrace();
+    //             }
+    //        }
+    //      });
+    //      t.start();
+    //      }
+    // }
+
+    public synchronized void room(ClientHandler s, String name, Socket socket) {
         clientSocket.add(socket);
-        queue.put(name,s);
-        if (queue.size()==2){
+        queue.put(name, s);
+        if (queue.size() == 2) {
 
             List<String> keys = new ArrayList<>(queue.keySet());
             ClientStatus c1 = queue.get(keys.get(0));
@@ -64,48 +84,35 @@ public class ServerSide {
 
             ClientStatus[] ListaC = {c1, c2};
 
-            Set ss = queue.keySet ();
-            Object[] a = ss.toArray ();
+            Set ss = queue.keySet();
+            Object[] a = ss.toArray();
             String[] players = new String[a.length];
-            for (int i = 0; i < players.length; i++){
-                players[i] = a[i].toString ();
+            for (int i = 0; i < players.length; i++) {
+                players[i] = a[i].toString();
             }
-
-            TurnManager newTurnManager = BoardGameConstructor.construct(players);
-            System.out.println("Turn creato");
-
+            final TurnManager newTurnManager = BoardGameConstructor.construct(players);
             Player[] player = newTurnManager.getPlayer();
             CliView jj;
-            for (int i = 0; i < newTurnManager.getPlayer().length; i++) {
-                InputStr.add((clientSocket.get(i)).getInputStream());
-            }
-            System.out.println("Lista socket creato");
-
-
-            for(int i=0; i< (newTurnManager.getPlayer()).length; i++){
-
-                System.out.println("Player collegato");
-
-                queue.clear();
-
-                jj = new CliView(ListaC[i],InputStr.get(i), newTurnManager.getBoard() );
-
-                System.out.println("Creato:"+jj.toString());
-
+            for (int i = 0; i < (newTurnManager.getPlayer()).length; i++) {
+                jj = new CliView(ListaC[i], newTurnManager.getBoard());
                 (player[i]).addCliView(jj);
-
-
-                System.out.println("Dopo CliView");
-
             }
             gameConnection.put(c1, c2);
             gameConnection.put(c2, c1);
+            queue.clear();
 
-            newTurnManager.startGame();
 
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    newTurnManager.startGame();
+                }
+            });
+            t.start();
 
         }
     }
+
 
   /*  public  synchronized void room2 (ClientStatus s, String name){
         queue.put(name, s);
@@ -144,11 +151,10 @@ public class ServerSide {
         this.listener = new ServerSocket(port);
     }
 
-    public void run(){
-        while(true){
+    public void run() {
+        while (true) {
             try {
                 Socket newSocket = listener.accept();
-                System.out.println("accettato socket");
                 ClientHandler clHandler = new ClientHandler(newSocket, this);
                 pool.submit(clHandler);
             } catch (IOException e) {
