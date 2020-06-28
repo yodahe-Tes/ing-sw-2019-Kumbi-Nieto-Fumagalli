@@ -27,5 +27,4 @@ public class Observable<T> {
             }
         }
     }
-
 }
