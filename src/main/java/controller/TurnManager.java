@@ -1,9 +1,6 @@
 package controller;
 
-import model.Board;
-import model.BuildingRule;
-import model.MovementRule;
-import model.Player;
+import model.*;
 
 import java.util.ArrayList;
 
@@ -35,7 +32,7 @@ public class TurnManager {
             for (int i = 1; i <= getBoard().numberPlayers(); i++){
                 int[] newPosition;
                 do{
-                    newPosition = getBoard().getPlayer(i).getView().startingPositionQuery();
+                     newPosition = getFromPlayer();
                 }while(!(getBoard().isEmpty(newPosition)));
                 getBoard().getPlayer(i).getWorker()[j-1].forced(newPosition);
             }
@@ -43,15 +40,17 @@ public class TurnManager {
 
         //TODO: aggiungere messaggio "è morto tizio"
         //TODO: aggiungere possibilità di richiedere la descrizione
-        //TODO: aggiornare il TurnConstruction di conseguenza
-        //TODO: classe VictoryConditionChecker
-        //TODO: test di gods e modalità a 3 giocatori
+        //TODO: ricontrollare i worker nel caso di più move nella stessa phase
+        //TODO: modalità a 3 giocatori, test della sconfitta di un giocatore (con god di tipo opponent rule e senza)
         //TODO: controllare javadoc
         //TODO: controllare come ho usato le parti della cliview
 
         int i=0;
         do{
             currentResult=turn[i].doTurn();
+
+            if(currentResult==PhaseResult.VICTORY)
+                return;
 
             if(currentResult==PhaseResult.DEFEAT){
                 if(turn.length>2){
@@ -73,10 +72,10 @@ public class TurnManager {
                     //delete player
                     getBoard().removePlayerFromList(turn[i].getOwner());
                     removeTurnFromList(turn[i]);
-                    if (getPlayer().length==1){
-                        getPlayer()[0].getView().winnerMessage();
-                        break;
-                    }
+                }
+                else{
+                    //getPlayer()[i].getView().loosingMessage();
+                    currentResult=PhaseResult.VICTORY;
                 }
             }
 
@@ -84,7 +83,7 @@ public class TurnManager {
                 i++;
             else
                 i=0;
-        }while(currentResult == PhaseResult.NEXT);
+        }while(currentResult != PhaseResult.VICTORY);
 }
 
 
@@ -124,6 +123,11 @@ public class TurnManager {
 
         Turn[] updatedTurn = new Turn[1];
         turn = result.toArray(updatedTurn);
+    }
+
+    @Deprecated
+    private int[] getFromPlayer(){
+        return TestActionProvider.getProvider().getNextMove();
     }
 }
 

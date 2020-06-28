@@ -40,7 +40,7 @@ public class Hestia implements Deity, BuildingPhase {
 
         //checks if defeated
         if (loose.doCheckRule(checker, worker)) {
-            getOwner().getView().loserMessage();
+            //getOwner().getView().loserMessage();
             return PhaseResult.DEFEAT;
         }
 
@@ -49,7 +49,7 @@ public class Hestia implements Deity, BuildingPhase {
         BuildingAction action;
 
         do {
-            action = getOwner().getView().buildLocationQuery();
+            action = getFromPlayer();
         } while (!checker.doCheckRules(worker, action));
 
         board.build(action);
@@ -57,9 +57,9 @@ public class Hestia implements Deity, BuildingPhase {
         //second building action
 
         if (canBuildFurther(worker)) {
-            if (getOwner().getView().buildAgainQuery()) {
+            if (getBoolFromPlayer()) {
                 do {
-                    action = getOwner().getView().buildLocationQuery();
+                    action = getFromPlayer();
                 } while (!checker.doCheckRules(worker, action) || action.getDestination()[0]==1 || action.getDestination()[0]==5 || action.getDestination()[1]==1 || action.getDestination()[1]==5);
                 board.build(action);
             }

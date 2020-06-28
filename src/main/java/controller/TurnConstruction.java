@@ -266,6 +266,8 @@ public class TurnConstruction {
             if(pickedGods.get(i)==pan){
                 condition = new VictoryCondition[2];
                 condition[1] = new Pan(board);
+                player[i].setDeity((Deity) condition[1]);
+
             }
             else
                 condition = new VictoryCondition[1];

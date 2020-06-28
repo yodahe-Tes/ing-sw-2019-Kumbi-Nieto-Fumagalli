@@ -34,7 +34,7 @@ public class Limus implements Deity, BuildingRule {
      */
     @Override
     public boolean doCheckRule(BoardWorker worker, BuildingAction action) {
-        return (completeTower(action) && !nextToOwnerWorker(action));
+        return (completeTower(action) || !nextToOwnerWorker(action));
     }
 
     private boolean completeTower(BuildingAction action){

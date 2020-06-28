@@ -43,7 +43,7 @@ public class Demetra implements Deity, BuildingPhase {
 
         //checks if defeated
         if (loose.doCheckRule(checker, worker)) {
-            getOwner().getView().loserMessage();
+            //getOwner().getView().loserMessage();
             return PhaseResult.DEFEAT;
         }
 
@@ -52,7 +52,7 @@ public class Demetra implements Deity, BuildingPhase {
         BuildingAction action;
 
         do {
-            action = getOwner().getView().buildLocationQuery();
+            action = getFromPlayer();
         } while (!checker.doCheckRules(worker, action));
 
         board.build(action);
@@ -60,12 +60,12 @@ public class Demetra implements Deity, BuildingPhase {
         //second building action
 
         if (canBuildFurther(worker, action.getDestination())) {
-            if (getOwner().getView().buildAgainQuery()) {
+            if (getBoolFromPlayer()) {
                 BuildingAction actionTwo;
                 do {
-                    actionTwo = getOwner().getView().buildLocationQuery();
+                    actionTwo = getFromPlayer();
                 } while (!checker.doCheckRules(worker, actionTwo) || Arrays.equals(action.getDestination(),actionTwo.getDestination()));
-                board.build(action);
+                board.build(actionTwo);
             }
         }
 

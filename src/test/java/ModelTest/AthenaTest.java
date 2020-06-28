@@ -20,7 +20,7 @@ public class AthenaTest {
         turnManager = BoardGameConstructor.construct(new String[]{"Alpha","Beta"}, new int[]{4,-1});
         turnManager.getPlayer()[0].getWorker(1).forced(new int[]{3,3});
         turnManager.getPlayer()[0].getWorker(2).forced(new int[]{3,2});
-        turnManager.getPlayer()[1].getWorker(1).forced(new int[]{4,3});
+        turnManager.getPlayer()[1].getWorker(1).forced(new int[]{1,4});
         turnManager.getPlayer()[1].getWorker(2).forced(new int[]{4,4});
 
         for(int i = 0; i<4; i++)

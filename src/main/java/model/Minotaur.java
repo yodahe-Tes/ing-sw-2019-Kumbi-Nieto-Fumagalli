@@ -112,7 +112,7 @@ public class Minotaur implements Deity, MovementRule {
         BoardWorker worker = action.getWorker();
         int[] destination = action.getDestination();
 
-        for(int i=0; i<board.numberPlayers();i++){
+        for(int i=1; i<=board.numberPlayers();i++){
             for(BoardWorker opponentWorker : board.getPlayer(i).getWorker()){
                 if(Arrays.equals(opponentWorker.getPosition(),destination)){
                     opponentWorker.forced(new int[]{2*destination[0]-worker.getPosition()[0], 2*destination[1]-worker.getPosition()[1]});

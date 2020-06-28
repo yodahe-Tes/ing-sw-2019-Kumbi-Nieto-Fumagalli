@@ -43,7 +43,7 @@ public class Apollo implements Deity, MovementRule {
         if(destination[0]<=5 && destination[0]>=1 && destination[1]<=5 && destination[1]>=1) {
             if (oneSquareDistance(worker, destination)) {
                 if (isNotTooHigh(worker, destination)) {
-                    if (board.isEmpty(destination))
+                    if (isEmpty(destination))
                         return true;
                 }
             }
@@ -82,6 +82,17 @@ public class Apollo implements Deity, MovementRule {
         return false;
     }
 
+    private boolean isEmpty(int[] destination){
+        if(board.squareHasDome(destination))
+            return false;
+        for(int j=1; j<3; j++){
+            if(Arrays.equals(owner.workerPosition(j), destination))
+                return false;
+        }
+        return true;
+    }
+
+
     /**
      * if needed force the opponent's worker to the will-be former worker's square
      * @param action is the action that would cause the forced move
@@ -91,7 +102,7 @@ public class Apollo implements Deity, MovementRule {
         BoardWorker worker = action.getWorker();
         int[] destination = action.getDestination();
 
-        for(int i=0; i<board.numberPlayers();i++){
+        for(int i=1; i<=board.numberPlayers();i++){
             for(BoardWorker opponentWorker : board.getPlayer(i).getWorker()){
                 if(Arrays.equals(opponentWorker.getPosition(),destination)){
                     opponentWorker.forced(worker.getPosition());

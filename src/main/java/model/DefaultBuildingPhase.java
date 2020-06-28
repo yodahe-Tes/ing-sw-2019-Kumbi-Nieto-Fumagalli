@@ -32,12 +32,12 @@ public class DefaultBuildingPhase implements BuildingPhase{
         BuildingAction action;
 
         if(loose.doCheckRule(checker, worker)) {
-            getOwner().getView().loserMessage();
+            //getOwner().getView().loserMessage();
             return PhaseResult.DEFEAT;
         }
 
         do {
-            action = getOwner().getView().buildLocationAndTypeQuery();
+            action = getFromPlayer();
         }while (!checker.doCheckRules(worker, action));
 
         if (action.isForceBuildDome())
@@ -58,12 +58,12 @@ public class DefaultBuildingPhase implements BuildingPhase{
         BuildingAction action;
 
         if(loose.doCheckRule(checker, worker)) {
-            getOwner().getView().loserMessage();
+            //getOwner().getView().loserMessage();
             return PhaseResult.DEFEAT;
         }
 
         do {
-            action = getOwner().getView().buildLocationAndTypeQuery();
+            action = getFromPlayer();
         }while (!checker.doCheckRules(worker, action)|| Arrays.equals(action.getDestination(),here));
 
         if (action.isForceBuildDome())

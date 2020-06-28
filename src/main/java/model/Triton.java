@@ -47,7 +47,7 @@ public class Triton implements Deity, MovementPhase{
 
         //checking if the player can move
         if(defeated.DoCheckRule(checker)){
-            getOwner().getView().noMovesLeftMessage();
+            //getOwner().getView().noMovesLeftMessage();
             return new MovementPhaseResult(checker.getOwner().getWorker(1),PhaseResult.DEFEAT);
         }
 
@@ -57,7 +57,7 @@ public class Triton implements Deity, MovementPhase{
         MovementAction destination;
 
         do {
-            action = getOwner().getView().moveLocationQuery();
+            action = getFromPlayer();
             destination = interpretAction(action);
 
         }while(!checker.doCheckRule(destination));
@@ -78,21 +78,20 @@ public class Triton implements Deity, MovementPhase{
 
         //next movements
 
-        while(canMoveFurther(destination.getWorker(), startingSquare) && getOwner().getView().moveAgainQuery() && (destination.getDestination()[0]==1 || destination.getDestination()[0]==5 || destination.getDestination()[1]==1 || destination.getDestination()[1]==5)){
+        BoardWorker movingWorker=destination.getWorker();
 
-            if(getOwner().getView().moveAgainQuery()){
+        while(canMoveFurther(destination.getWorker(), startingSquare) && (destination.getDestination()[0]==1 || destination.getDestination()[0]==5 || destination.getDestination()[1]==1 || destination.getDestination()[1]==5) && getBoolFromPlayer()){
 
-                do{
-                    action = getOwner().getView().moveLocationQuery();
-                    destination = interpretAction(action);
-                }while(!checker.doCheckRule(destination) || Arrays.equals(destination.getDestination(), startingSquare));
+            do{
+                action = getFromPlayer();
+                destination = new MovementAction(movingWorker, action);
+            }while(!checker.doCheckRule(destination));
 
-                checker.checkForcedMove(destination);
-                destination.getWorker().move(destination.getDestination());
+            checker.checkForcedMove(destination);
+            destination.getWorker().move(destination.getDestination());
 
-                if(win.doCheckRule(destination.getWorker())){
-                    return new MovementPhaseResult(destination.getWorker(), PhaseResult.VICTORY);
-                }
+            if(win.doCheckRule(destination.getWorker())){
+                return new MovementPhaseResult(destination.getWorker(), PhaseResult.VICTORY);
             }
         }
         return new MovementPhaseResult(destination.getWorker(), PhaseResult.NEXT);
@@ -108,11 +107,8 @@ public class Triton implements Deity, MovementPhase{
         MovementAction action;
         for(int i=1; i<=5; i++){
             for(int j=1; j<=5; j++){
-                if(previousAction[0]!=i || previousAction[1]!=j){
-                    action = new MovementAction(worker, new int[]{i,j});
-                    if(checker.doCheckRule(action))
-                        return true;
-                }
+                if(checker.doCheckRule(new MovementAction(worker,new int[]{i,j})))
+                    return true;
             }
         }
         return false;

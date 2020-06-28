@@ -38,13 +38,28 @@ public class Hypnus implements Deity, MovementRule {
      */
     @Override
     public boolean doCheckRule(MovementAction action) {
-        if(!(board.getFloorFrom(owner.workerPosition(1))==board.getFloorFrom(owner.workerPosition(2)))){
-            if(board.getFloorFrom(owner.workerPosition(1))>board.getFloorFrom(owner.workerPosition(2)))
-                return(!(action.getWorker()==owner.getWorker(1)));
+        BoardWorker movingWorker = action.getWorker();
+        Player movingPlayer=activePlayer(movingWorker);
+
+
+
+        if(!(board.getFloorFrom(movingPlayer.workerPosition(1))==board.getFloorFrom(movingPlayer.workerPosition(2)))){
+            if(board.getFloorFrom(movingPlayer.workerPosition(1))>board.getFloorFrom(movingPlayer.workerPosition(2)))
+                return(!(movingWorker==movingPlayer.getWorker(1)));
             else
-                return(!(action.getWorker()==owner.getWorker(2)));
+                return(!(movingWorker==movingPlayer.getWorker(2)));
         }
         return true;
+    }
+
+    private Player activePlayer(BoardWorker worker){
+        for(int i=1; i<=board.numberPlayers();i++){
+            for(int j=1;i<=2;j++){
+                if(board.getPlayer(i).getWorker(j)==worker)
+                    return board.getPlayer(i);
+            }
+        }
+        return null;
     }
 
     /**

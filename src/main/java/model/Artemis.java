@@ -48,7 +48,7 @@ public class Artemis implements Deity, MovementPhase{
 
         //checking if the player can move
         if(defeated.DoCheckRule(checker)){
-            getOwner().getView().noMovesLeftMessage();
+     //       getOwner().getView().noMovesLeftMessage();
             return new MovementPhaseResult(checker.getOwner().getWorker(1),PhaseResult.DEFEAT);
         }
 
@@ -58,7 +58,7 @@ public class Artemis implements Deity, MovementPhase{
         MovementAction destination;
 
         do {
-            action = getOwner().getView().moveLocationQuery();
+            action = getFromPlayer();
             destination = interpretAction(action);
 
         }while(!checker.doCheckRule(destination));
@@ -80,13 +80,13 @@ public class Artemis implements Deity, MovementPhase{
         //second movement
         if(canMoveFurther(destination.getWorker(), startingSquare)){
 
-            if(getOwner().getView().moveAgainQuery()){
+            if(getBoolFromPlayer()){
 
                 MovementAction secondDestination;
 
                 do{
-                    action = getOwner().getView().moveLocationQuery();
-                    secondDestination = interpretAction(action);
+                    action = getFromPlayer();
+                    secondDestination = new MovementAction(destination.getWorker(),action);
                 }while(!checker.doCheckRule(secondDestination) || Arrays.equals(secondDestination.getDestination(), startingSquare));
 
                 checker.checkForcedMove(secondDestination);

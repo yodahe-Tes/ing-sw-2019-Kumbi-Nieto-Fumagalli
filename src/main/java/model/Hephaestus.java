@@ -39,7 +39,7 @@ public class Hephaestus implements BuildingPhase, Deity{
             return PhaseResult.DEFEAT;
 
         do {
-            action = getOwner().getView().buildLocationQuery();
+            action = getFromPlayer();
         }while (!checker.doCheckRules(worker, action));
 
         if (action.isForceBuildDome())
@@ -50,7 +50,7 @@ public class Hephaestus implements BuildingPhase, Deity{
         //second construction
 
         if(!(board.getFloorFrom(action.getDestination())>=3) && (!board.squareHasDome(action.getDestination()))){
-            if(getOwner().getView().buildAgainQuery()){
+            if(getBoolFromPlayer()){
                 board.addFloorTo(action.getDestination());
             }
         }
@@ -79,5 +79,10 @@ public class Hephaestus implements BuildingPhase, Deity{
     @Deprecated
     private BuildingAction getFromPlayer(){
         return TestActionProvider.getProvider().getNextBuild();
+    }
+
+    @Deprecated
+    private boolean getBoolFromPlayer(){
+        return TestActionProvider.getProvider().getNextAnswer();
     }
 }

@@ -45,24 +45,24 @@ public class Prometheus implements Deity, MovementPhase{
 
         //checking if the player can move
         if(defeated.DoCheckRule(checker)){
-            getOwner().getView().noMovesLeftMessage();
+            //getOwner().getView().noMovesLeftMessage();
             return new MovementPhaseResult(checker.getOwner().getWorker(1),PhaseResult.DEFEAT);
         }
 
         //gets and validates move
 
-        getOwner().getView().yourTUrnMessage();
+        //getOwner().getView().yourTUrnMessage();
         int[] action;
         MovementAction destination;
 
         do {
-            action = getOwner().getView().moveLocationQuery();
+            action = getFromPlayer();
             destination = interpretAction(action);
 
         }while(!checker.doCheckRule(destination));
 
         //builds if the worker doesn't go up before moving
-        if(!workerGoesUp(destination) && getOwner().getView().buildAgainQuery()){
+        if(!workerGoesUp(destination) && getBoolFromPlayer()){
             buildingPhase.doBuildNotHere(destination.getWorker(),destination.destination);
         }
 
