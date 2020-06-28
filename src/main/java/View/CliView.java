@@ -347,6 +347,28 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
     }
 
     /**
+     * Informs player which God card he has
+     *
+     */
+
+    public void assignedGodMessage(String godName) {
+        inform("Your God Card is "+ godName);
+    }
+
+
+
+    /**
+     * Informs player that he can't move the worker to the chosen destination
+     *
+     */
+
+    public void squareIsOccupiedMessage() {
+        inform("You can't move worker there.");
+    }
+
+
+
+    /**
      * Informs player that he has won
      *
      */
@@ -392,15 +414,18 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
         client.asyncSend(QueryForClient);
         String str = null;
         try {
+            System.out.println("prima di wait");
             while (!flag) {
                 try {
                     sleep(200);
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
                 }
-                System.out.println("Dentro wait");
+               //
 
-            }str = readInput;
+            }
+            System.out.println("finito wait");
+            str = readInput;
             flag=false;
             System.out.println("ho fatto ask");
         } catch (Exception e) {
