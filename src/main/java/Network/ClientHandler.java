@@ -1,7 +1,12 @@
 package Network;
 
+import View.CliView;
+import model.Observer;
+import model.Subject;
+
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -10,15 +15,18 @@ import java.util.Scanner;
  * @author Nieto
  */
 public class ClientHandler extends Observable<String> implements ClientStatus, Runnable {
-    private Socket socket;
+    private final Socket socket;
     private ObjectOutputStream out;
-    private ServerSide server;
+    private final ServerSide server;
+
 
     private boolean active = true;
 
-    public ClientHandler(Socket socket, ServerSide server) {
+    public ClientHandler(Socket socket, ServerSide server)  {
         this.socket = socket;
         this.server = server;
+
+
 
     }
 
@@ -49,8 +57,11 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
     }
 
 
+
+
     @Override
     public void asyncSend(final Object message) {
+        System.out.println("Dentro asyncSend");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -60,15 +71,6 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
 
     }
 
-    @Override
-    public ObjectInputStream getInputStream() {
-        try{
-            return(ObjectInputStream)socket.getInputStream();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }return null;
-    }
 
     private void close() {
         closeConnection();
@@ -82,15 +84,16 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
     public void run() {
         Scanner in;
         String name;
+
         int numberOfPlayers;
         try{
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
             //Ask to the new connected player what kind of game he wants to play
-       /*     send("Choose if 2 or 3 players");
-            String pick = in.nextLine();
-            numberOfPlayers = Integer.parseInt(pick);
-
+            //  send("Choose if 2 or 3 players");
+            //    String pick = in.nextLine();
+            //    System.out.println(pick);
+         /*    numberOfPlayers = Integer.parseInt(pick);
             if (numberOfPlayers == 3) {
                 send("Welcome!\nWhat is your name?");
                 String read = in.nextLine();
@@ -101,20 +104,27 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
                     notify(read);
                 }
             } else {*/
-                send("Welcome!\nWhat is your name?");
-                String read = in.nextLine();
-                name = read;
-                server.room(this, name);
-                while (isActive()) {
-                    read = in.nextLine();
-                    notify(read);
-                }
-            //}
+            send("Welcome!\nWhat is your name?");
+            String read = in.nextLine();
+            name = read;
+            System.out.println("");
 
-        } catch (IOException | NumberFormatException e) {
+
+
+            server.room(this, name, socket);
+
+            System.out.println("Dopo Room");
+            while (isActive()) {
+                //        read = in.nextLine();
+//              notify(read);
+                //          System.err.println("notified" + read);
+            }
+            //   }
+
+        } catch (NoSuchElementException | InterruptedException | IOException e) {
             System.err.println("Error!" + e.getMessage());
         } finally {
-            close();
+
         }
     }
 

@@ -47,7 +47,7 @@ public class ClientSide {
                             if (inputObject instanceof String) {
                                 System.out.println((String) inputObject);
                             } else if(inputObject instanceof BoardView){
-                                ((BoardView)inputObject).displayBoardView();
+                                ((BoardView) inputObject).displayBoardView();
                             } else {
                                 throw new IllegalArgumentException();
                             }
