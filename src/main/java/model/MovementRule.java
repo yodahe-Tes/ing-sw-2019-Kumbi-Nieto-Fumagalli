@@ -21,5 +21,9 @@ public interface MovementRule {
      */
     void doForced(MovementAction action);
 
+    /**
+     * states for initialization purpose if this rule will affect owner's phase or opponents' phases
+     * @return true if the rule will affect only opponents' phases
+     */
     boolean isOpponent();
 }

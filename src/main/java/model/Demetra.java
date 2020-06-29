@@ -52,7 +52,7 @@ public class Demetra implements Deity, BuildingPhase {
         BuildingAction action;
 
         do {
-            action = getFromPlayer();
+            action = getOwner().getView().buildLocationQuery();
         } while (!checker.doCheckRules(worker, action));
 
         board.build(action);
@@ -60,10 +60,10 @@ public class Demetra implements Deity, BuildingPhase {
         //second building action
 
         if (canBuildFurther(worker, action.getDestination())) {
-            if (getBoolFromPlayer()) {
+            if (getOwner().getView().buildAgainQuery()) {
                 BuildingAction actionTwo;
                 do {
-                    actionTwo = getFromPlayer();
+                    actionTwo = getOwner().getView().buildLocationQuery();
                 } while (!checker.doCheckRules(worker, actionTwo) || Arrays.equals(action.getDestination(),actionTwo.getDestination()));
                 board.build(actionTwo);
             }
@@ -73,7 +73,7 @@ public class Demetra implements Deity, BuildingPhase {
     }
 
     /**
-     * a side method that checks if the player can build more with the chosen worker
+     * a private method that checks if the player can build more with the chosen worker
      *
      * @param worker         the worker that is going to build
      * @param previousAction the last built square, where the worker can't build anymore for this turn
@@ -111,6 +111,10 @@ public class Demetra implements Deity, BuildingPhase {
     @Override
     public BuildingRuleChecker getChecker(){return checker;}
 
+    /**
+     * a testing method for getting a simulated user's input for phase
+     * @return the move
+     */
     @Deprecated
     private boolean getBoolFromPlayer(){
         return TestActionProvider.getProvider().getNextAnswer();

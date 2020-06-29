@@ -12,12 +12,6 @@ import java.util.Arrays;
  * @author Fumagalli
  */
 
-/*POWER
- *Your Move: Your Worker may
- * move one additional time, but not
- * back to its initial space.
- */
-
 public class Artemis implements Deity, MovementPhase{
 
     private final MovementRuleChecker checker;
@@ -48,7 +42,7 @@ public class Artemis implements Deity, MovementPhase{
 
         //checking if the player can move
         if(defeated.DoCheckRule(checker)){
-     //       getOwner().getView().noMovesLeftMessage();
+            getOwner().getView().noMovesLeftMessage();
             return new MovementPhaseResult(checker.getOwner().getWorker(1),PhaseResult.DEFEAT);
         }
 
@@ -58,7 +52,7 @@ public class Artemis implements Deity, MovementPhase{
         MovementAction destination;
 
         do {
-            action = getFromPlayer();
+            action = getOwner().getView().moveLocationQuery();
             destination = interpretAction(action);
 
         }while(!checker.doCheckRule(destination));
@@ -80,12 +74,12 @@ public class Artemis implements Deity, MovementPhase{
         //second movement
         if(canMoveFurther(destination.getWorker(), startingSquare)){
 
-            if(getBoolFromPlayer()){
+            if(getOwner().getView().moveAgainQuery()){
 
                 MovementAction secondDestination;
 
                 do{
-                    action = getFromPlayer();
+                    action = getOwner().getView().moveLocationQuery();
                     secondDestination = new MovementAction(destination.getWorker(),action);
                 }while(!checker.doCheckRule(secondDestination) || Arrays.equals(secondDestination.getDestination(), startingSquare));
 
@@ -146,6 +140,10 @@ public class Artemis implements Deity, MovementPhase{
     @Override
     public MovementRuleChecker getChecker(){return checker;}
 
+    /**
+     * a method intended for testing that simulates the input from users
+     * @return a boolean
+     */
     @Deprecated
     private boolean getBoolFromPlayer(){
         return TestActionProvider.getProvider().getNextAnswer();

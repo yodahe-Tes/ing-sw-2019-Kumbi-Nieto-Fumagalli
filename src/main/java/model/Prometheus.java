@@ -19,6 +19,14 @@ public class Prometheus implements Deity, MovementPhase{
     private final DefaultBuildingPhase buildingPhase;
     private final Board board;
 
+    /**
+     * constructor that initializes this class and an inner DefaultBuildingPhase for simulate the optional build
+     * @param checker is the movement rule checker used for check if the move is legal
+     * @param condition is the default loosing condition in the movement phase
+     * @param win is the victory condition checker
+     * @param buildCheck is the building rule chacker used by the inner DefaultBuildingPhase
+     * @param board is the board where the game is played
+     */
     public Prometheus(MovementRuleChecker checker, DefaultMovingLosingCondition condition, VictoryConditionChecker win, BuildingRuleChecker buildCheck,Board board){
         this.checker = checker;
         defeated = condition;
@@ -45,24 +53,24 @@ public class Prometheus implements Deity, MovementPhase{
 
         //checking if the player can move
         if(defeated.DoCheckRule(checker)){
-            //getOwner().getView().noMovesLeftMessage();
+            getOwner().getView().noMovesLeftMessage();
             return new MovementPhaseResult(checker.getOwner().getWorker(1),PhaseResult.DEFEAT);
         }
 
         //gets and validates move
 
-        //getOwner().getView().yourTUrnMessage();
+        getOwner().getView().yourTUrnMessage();
         int[] action;
         MovementAction destination;
 
         do {
-            action = getFromPlayer();
+            action = getOwner().getView().moveLocationQuery();
             destination = interpretAction(action);
 
         }while(!checker.doCheckRule(destination));
 
         //builds if the worker doesn't go up before moving
-        if(!workerGoesUp(destination) && getBoolFromPlayer()){
+        if(!workerGoesUp(destination) && getOwner().getView().buildAgainQuery()){
             buildingPhase.doBuildNotHere(destination.getWorker(),destination.destination);
         }
 
@@ -119,6 +127,10 @@ public class Prometheus implements Deity, MovementPhase{
     @Override
     public MovementRuleChecker getChecker(){return checker;}
 
+    /**
+     * a testing method for getting a simulated user's input for phase
+     * @return a boolean
+     */
     @Deprecated
     private boolean getBoolFromPlayer(){
         return TestActionProvider.getProvider().getNextAnswer();

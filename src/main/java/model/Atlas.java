@@ -66,6 +66,10 @@ public class Atlas implements Deity, BuildingRule {
         return false;
     }
 
+    /**
+     * states for initialization purpose that Atlas is a rule that affects only owner's turns
+     * @return false
+     */
     @Override
     public boolean isOpponent(){return false;}
 }

@@ -1,9 +1,7 @@
 package model;
 
-import static java.lang.Math.abs;
-
 /**
- * a class that implements the usual building rules
+ * a class that implements the god Limus
  * @author Fumagalli
  */
 public class Limus implements Deity, BuildingRule {
@@ -11,6 +9,9 @@ public class Limus implements Deity, BuildingRule {
     private final Board board;
     private final Player owner;
 
+    /**
+     * @return the god description in a string form
+     */
     @Override
     public String desc(){
         return ("LIMUS"+System.lineSeparator()+"Opponent’s Turn: Opponent Workers cannot build on spaces neighboring your Workers, unless building a dome to create a Complete Tower.");
@@ -37,10 +38,20 @@ public class Limus implements Deity, BuildingRule {
         return (completeTower(action) || !nextToOwnerWorker(action));
     }
 
+    /**a private method that checks if the action will build a complete tower
+     *
+     * @param action is the building action to check
+     * @return true if the action will complete a tower
+     */
     private boolean completeTower(BuildingAction action){
         return(board.getFloorFrom(action.getDestination())==3);
     }
 
+    /**checks if the action will target a square next to the owner's workers
+     *
+     * @param action is the action to check
+     * @return true if the target square is next to an owner's worker
+     */
     private boolean nextToOwnerWorker(BuildingAction action){
         for(int i=1;i<=2;i++){
             if(Math.abs(action.getDestination()[0] - owner.getWorker(i).getPosition()[0]) <= 1  &&  Math.abs(action.getDestination()[1] - owner.getWorker(i).getPosition()[1]) <= 1)
@@ -49,6 +60,10 @@ public class Limus implements Deity, BuildingRule {
         return false;
     }
 
+    /**
+     * for initialization purpose states that this is a rule that affects only opponents' phases
+     * @return true
+     */
     @Override
     public boolean isOpponent(){return true;}
 }

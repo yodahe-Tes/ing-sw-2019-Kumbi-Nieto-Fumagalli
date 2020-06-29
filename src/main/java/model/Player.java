@@ -1,5 +1,6 @@
 package model;
 
+import View.CliView;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -18,7 +19,7 @@ public class Player {
 
     private final BoardWorker[] worker;
 
-    //private CliView view;
+    private CliView view;
 
 
     /**
@@ -38,7 +39,7 @@ public class Player {
         worker = initWorker;
 
         deity=null;
-        //view = null;
+        view = null;
     }
 
 
@@ -93,11 +94,15 @@ public class Player {
      * establish a reference to the player's client
      * @param
      */
-    /*public void addCliView(CliView view){
+    public void addCliView(CliView view){
         this.view=view;
     }
 
-    public CliView getView(){return view;}*/
+    public CliView getView(){return view;}
 
+    /**
+     * get the desc from the player's god
+     * @return the desc of the player's god
+     */
     public String godDesc(){return deity.desc();}
 }

@@ -29,65 +29,66 @@ public class TurnManager {
 
         PhaseResult currentResult = PhaseResult.DEFEAT;
 
+        //gets the workers' starting positions for every player
         for (int j=1;j<=2; j++) {
             for (int i = 1; i <= getBoard().numberPlayers(); i++){
                 int[] newPosition;
                 do{
-                     newPosition = getFromPlayer();
+                     newPosition = turn[i].getOwner().getView().initialPositionQuery(j);
                 }while(!(getBoard().isEmpty(newPosition)));
                 getBoard().getPlayer(i).getWorker()[j-1].forced(newPosition);
             }
         }
 
-        //TODO: aggiungere messaggio "è morto tizio"
-        //TODO: aggiungere possibilità di richiedere la descrizione
-        //TODO: ricontrollare i worker nel caso di più move nella stessa phase
-        //TODO: modalità a 3 giocatori, test della sconfitta di un giocatore (con god di tipo opponent rule e senza)
-        //TODO: controllare javadoc
-        //TODO: controllare come ho usato le parti della cliview
-
-        int i=0;
+        //starts the turn cycle
+        int turnNumber=0;
         do{
-            currentResult=turn[i].doTurn();
+            // does the actual turn
+            currentResult=turn[turnNumber].doTurn();
 
             if(currentResult==PhaseResult.DEFEAT){
+                //if someone loose
                 if(turn.length>2){
                     //delete god's power on other players
-                    if(turn[i].getOwner().getDeity() instanceof MovementRule){
+                    if(turn[turnNumber].getOwner().getDeity() instanceof MovementRule){
                         for(Turn opponentTurn : turn){
-                            if(opponentTurn!=turn[i]){
-                                opponentTurn.getMove().getChecker().removeLooser((MovementRule) turn[i].getOwner().getDeity());
+                            if(opponentTurn!=turn[turnNumber]){
+                                opponentTurn.getMove().getChecker().removeLooser((MovementRule) turn[turnNumber].getOwner().getDeity());
                             }
                         }
                     }
-                    if(turn[i].getOwner().getDeity() instanceof BuildingRule){
+                    if(turn[turnNumber].getOwner().getDeity() instanceof BuildingRule){
                         for(Turn opponentTurn : turn){
-                            if(opponentTurn!=turn[i]){
-                                opponentTurn.getBuild().getChecker().removeLooser((BuildingRule) turn[i].getOwner().getDeity());
+                            if(opponentTurn!=turn[turnNumber]){
+                                opponentTurn.getBuild().getChecker().removeLooser((BuildingRule) turn[turnNumber].getOwner().getDeity());
                             }
                         }
                     }
                     //delete player
-                    getBoard().removePlayerFromList(turn[i].getOwner());
-                    removeTurnFromList(turn[i]);
+                    getBoard().removePlayerFromList(turn[turnNumber].getOwner());
+                    removeTurnFromList(turn[turnNumber]);
+                    turnNumber--;
                 }
                 else{
-                    //getPlayer()[i].getView().loosingMessage();
+                    //the only remaining player wins
+                    getPlayer()[turnNumber].getView().loserMessage();
                     currentResult=PhaseResult.VICTORY;
                 }
             }
 
-            if(i<turn.length-1)
-                i++;
+            //restarts the cycle if every user did the turn
+            if(turnNumber<turn.length-1)
+                turnNumber++;
             else
-                i=0;
+                turnNumber=0;
+            //until someone wins
         }while(currentResult != PhaseResult.VICTORY);
 }
 
 
     /**
-     * method for debug use
-     * @return the players involved in the game
+     * method for getting the players
+     * @return the players involved in the game in an array form
      */
     public Player[] getPlayer(){
         ArrayList<Player> players = new ArrayList<Player>();
@@ -115,14 +116,18 @@ public class TurnManager {
 
         ArrayList<Turn> result = new ArrayList<>();
 
-        for(Turn item : turn)
-            if(!deleteMe.equals(item))
-                result.add(item);
+        for(int i=0;i<turn.length;i++)
+            if(!deleteMe.equals(turn[i]))
+                result.add(turn[i]);
 
         Turn[] updatedTurn = new Turn[1];
         turn = result.toArray(updatedTurn);
     }
 
+    /**
+     * simulates user's input in tests cases
+     * @return an user's action
+     */
     @Deprecated
     private int[] getFromPlayer(){
         return TestActionProvider.getProvider().getNextMove();

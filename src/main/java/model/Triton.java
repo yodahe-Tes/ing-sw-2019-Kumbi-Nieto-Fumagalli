@@ -7,14 +7,8 @@ import controller.VictoryConditionChecker;
 import java.util.Arrays;
 
 /**
- * A class implementing the deity Artemis
+ * A class implementing the deity Triton
  * @author Fumagalli
- */
-
-/*POWER
- *Your Move: Your Worker may
- * move one additional time, but not
- * back to its initial space.
  */
 
 public class Triton implements Deity, MovementPhase{
@@ -47,7 +41,7 @@ public class Triton implements Deity, MovementPhase{
 
         //checking if the player can move
         if(defeated.DoCheckRule(checker)){
-            //getOwner().getView().noMovesLeftMessage();
+            getOwner().getView().noMovesLeftMessage();
             return new MovementPhaseResult(checker.getOwner().getWorker(1),PhaseResult.DEFEAT);
         }
 
@@ -57,7 +51,7 @@ public class Triton implements Deity, MovementPhase{
         MovementAction destination;
 
         do {
-            action = getFromPlayer();
+            action = getOwner().getView().moveLocationQuery();
             destination = interpretAction(action);
 
         }while(!checker.doCheckRule(destination));
@@ -80,10 +74,10 @@ public class Triton implements Deity, MovementPhase{
 
         BoardWorker movingWorker=destination.getWorker();
 
-        while(canMoveFurther(destination.getWorker(), startingSquare) && (destination.getDestination()[0]==1 || destination.getDestination()[0]==5 || destination.getDestination()[1]==1 || destination.getDestination()[1]==5) && getBoolFromPlayer()){
+        while(canMoveFurther(destination.getWorker(), startingSquare) && (destination.getDestination()[0]==1 || destination.getDestination()[0]==5 || destination.getDestination()[1]==1 || destination.getDestination()[1]==5) && getOwner().getView().moveAgainQuery()){
 
             do{
-                action = getFromPlayer();
+                action = getOwner().getView().moveLocationQuery();
                 destination = new MovementAction(movingWorker, action);
             }while(!checker.doCheckRule(destination));
 
@@ -140,6 +134,10 @@ public class Triton implements Deity, MovementPhase{
     @Override
     public MovementRuleChecker getChecker(){return checker;}
 
+    /**
+     * a testing method for getting a simulated user's input for phase
+     * @return a boolean
+     */
     @Deprecated
     private boolean getBoolFromPlayer(){
         return TestActionProvider.getProvider().getNextAnswer();

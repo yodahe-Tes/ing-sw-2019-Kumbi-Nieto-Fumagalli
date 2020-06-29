@@ -61,7 +61,7 @@
     100%
   </span>
   <span class="absValue">
-    (29/ 29)
+    (23/ 23)
   </span>
 </td>
 </tr>
@@ -110,7 +110,7 @@
 <b class="fc"><i>36</i>&nbsp;        if(destination[0]&lt;=5 &amp;&amp; destination[0]&gt;=1 &amp;&amp; destination[1]&lt;=5 &amp;&amp; destination[1]&gt;=1) {</b>
 <b class="fc"><i>37</i>&nbsp;            if (oneSquareDistance(worker, destination)) {</b>
 <b class="fc"><i>38</i>&nbsp;                if (isNotTooHigh(worker, destination)) {</b>
-<b class="fc"><i>39</i>&nbsp;                    if (destinationIsEmpty(destination))</b>
+<b class="fc"><i>39</i>&nbsp;                    if (board.isEmpty(destination))</b>
 <b class="fc"><i>40</i>&nbsp;                        return true;</b>
 <i>41</i>&nbsp;                }
 <i>42</i>&nbsp;            }
@@ -149,35 +149,21 @@
 <i>75</i>&nbsp;    }
 <i>76</i>&nbsp;
 <i>77</i>&nbsp;    /**
-<i>78</i>&nbsp;     * checks if the destination square is empty
-<i>79</i>&nbsp;     * @param destination represents the coordinates of the destination
-<i>80</i>&nbsp;     * @return true if on the destination square there aren&#39;t any workers or domes
-<i>81</i>&nbsp;     */
-<i>82</i>&nbsp;    private boolean destinationIsEmpty(int[] destination){
-<b class="fc"><i>83</i>&nbsp;        if(board.squareHasDome(destination))</b>
-<b class="fc"><i>84</i>&nbsp;            return false;</b>
-<b class="fc"><i>85</i>&nbsp;        for(int i=1;i&lt;3;i++){</b>
-<b class="fc"><i>86</i>&nbsp;            for(int j=1; j&lt;3; j++){</b>
-<b class="fc"><i>87</i>&nbsp;                if(Arrays.equals(board.getPlayer(i).workerPosition(j), destination))</b>
-<b class="fc"><i>88</i>&nbsp;                    return false;</b>
-<i>89</i>&nbsp;            }
-<i>90</i>&nbsp;        }
-<b class="fc"><i>91</i>&nbsp;        return true;</b>
-<i>92</i>&nbsp;    }
-<i>93</i>&nbsp;
-<i>94</i>&nbsp;    /**
-<i>95</i>&nbsp;     * The default movement phase doesn&#39;t force-move any worker, so this method does nothing
-<i>96</i>&nbsp;     * @param action is the action that would cause the forced move
-<i>97</i>&nbsp;     */
-<i>98</i>&nbsp;    @Override
-<b class="fc"><i>99</i>&nbsp;    public void doForced(MovementAction action) {}</b>
-<i>100</i>&nbsp;}
+<i>78</i>&nbsp;     * The default movement phase doesn&#39;t force-move any worker, so this method does nothing
+<i>79</i>&nbsp;     * @param action is the action that would cause the forced move
+<i>80</i>&nbsp;     */
+<i>81</i>&nbsp;    @Override
+<b class="fc"><i>82</i>&nbsp;    public void doForced(MovementAction action) {}</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    @Override
+<b class="fc"><i>85</i>&nbsp;    public boolean isOpponent(){return false;}</b>
+<i>86</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-05-26 13:09</div>
+    <div style="float:right;">generated on 2020-06-29 12:33</div>
 </div>
 </body>
 </html>

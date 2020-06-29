@@ -3,16 +3,10 @@ package model;
 import java.util.Arrays;
 
 /**
- * A class for the deity Athena
+ * A class for the deity Hypnus
  * @author Fumagalli
  */
 
-/*
- *Opponent’s Turn: If one of your
- * Workers moved up on your last
- * turn, opponent Workers cannot
- * move up this turn
- */
 
 public class Hypnus implements Deity, MovementRule {
 
@@ -69,6 +63,10 @@ public class Hypnus implements Deity, MovementRule {
     @Override
     public void doForced(MovementAction action){}
 
+    /**
+     * states for initialization purpose that this god will affect only opponent's phases
+     * @return
+     */
     @Override
     public boolean isOpponent(){return true;}
 }

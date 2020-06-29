@@ -210,11 +210,12 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
 
     /**
      * Asks the player where he wants to move the worker and passes move action to Controller
+     * @param i is the number of the worker that will be positioned
      */
 
-    public int[] initialPositionQuery(int i,int j) {
+    public int[] initialPositionQuery(int i) {
 
-        String str = ask("Choose initial position of player "+i+",worker"+j+"(row,column)");
+        String str = ask("Choose initial position of your worker number"+i+"(row,column)");
         try{
    String[] input = str.split(",");
             int[] destination = {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
@@ -257,15 +258,19 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
 
     public BuildingAction buildLocationQuery() {
         String str = ask("Where do you want to build ? (row,column)\n");
-        try {
-            String[] input = str.split(",");
-            int[] buildLocation = {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
-            return new BuildingAction(buildLocation);
-        } catch(  NumberFormatException e){
-            inform("Please provide integer values as coordinates");
-            buildLocationAndTypeQuery();
+        String[] input=null;
+        int[] buildLocation=null;
+        while(buildLocation==null) {
+            try {
+                input = str.split(",");
+                buildLocation = new int[]{Integer.parseInt(input[0]), Integer.parseInt(input[1])};
+                return new BuildingAction(buildLocation);
+            } catch (NumberFormatException e) {
+                inform("Please provide integer values as coordinates");
+                buildLocation=null;
+            }
         }
-        return null;
+        return(new BuildingAction(buildLocation));
     }
 
 

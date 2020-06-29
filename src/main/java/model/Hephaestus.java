@@ -35,13 +35,16 @@ public class Hephaestus implements BuildingPhase, Deity{
     public PhaseResult doBuild(BoardWorker worker) {
         BuildingAction action;
 
+        //checks if the player can't build
         if(loose.doCheckRule(checker, worker))
             return PhaseResult.DEFEAT;
 
+        //gets the action from the user
         do {
-            action = getFromPlayer();
+            action = getOwner().getView().buildLocationQuery();
         }while (!checker.doCheckRules(worker, action));
 
+        //does the actual build
         if (action.isForceBuildDome())
             board.addDomeTo(action.getDestination());
         else
@@ -50,7 +53,7 @@ public class Hephaestus implements BuildingPhase, Deity{
         //second construction
 
         if(!(board.getFloorFrom(action.getDestination())>=3) && (!board.squareHasDome(action.getDestination()))){
-            if(getBoolFromPlayer()){
+            if(getOwner().getView().buildAgainQuery()){
                 board.addFloorTo(action.getDestination());
             }
         }
@@ -76,11 +79,19 @@ public class Hephaestus implements BuildingPhase, Deity{
     @Override
     public BuildingRuleChecker getChecker(){return checker;}
 
+    /**
+     * a testing method for getting a simulated user's input for phase
+     * @return the build
+     */
     @Deprecated
     private BuildingAction getFromPlayer(){
         return TestActionProvider.getProvider().getNextBuild();
     }
 
+    /**
+     * a testing method for getting a simulated user's input for phase
+     * @return a boolean
+     */
     @Deprecated
     private boolean getBoolFromPlayer(){
         return TestActionProvider.getProvider().getNextAnswer();

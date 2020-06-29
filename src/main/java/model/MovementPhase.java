@@ -20,5 +20,8 @@ public interface MovementPhase {
      */
     Player getOwner();
 
+    /**
+     * @return the checker used by the phase
+     */
     MovementRuleChecker getChecker();
 }

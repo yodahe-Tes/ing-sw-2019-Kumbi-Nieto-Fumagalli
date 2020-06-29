@@ -5,6 +5,11 @@ import controller.PhaseResult;
 
 import java.util.Arrays;
 
+/**
+ * a class that simulates a default building phases, i.e. the player build only one time
+ * @author Fumagalli
+ */
+
 public class DefaultBuildingPhase implements BuildingPhase{
 
     Board board;
@@ -31,15 +36,18 @@ public class DefaultBuildingPhase implements BuildingPhase{
     public PhaseResult doBuild(BoardWorker worker) {
         BuildingAction action;
 
+        //checks if the worker can build
         if(loose.doCheckRule(checker, worker)) {
-            //getOwner().getView().loserMessage();
+            getOwner().getView().loserMessage();
             return PhaseResult.DEFEAT;
         }
 
+        //gets the action from the player
         do {
-            action = getFromPlayer();
+            action = getOwner().getView().buildLocationQuery();
         }while (!checker.doCheckRules(worker, action));
 
+        //does the actual build
         if (action.isForceBuildDome())
             board.addDomeTo(action.getDestination());
         else
@@ -48,7 +56,7 @@ public class DefaultBuildingPhase implements BuildingPhase{
     }
 
     /**
-     * a method that models a default building phase where the player can't build on a square
+     * a method that simulate a default building phase where the player can't build on a square
      * @param worker is the worker that must build
      * @param here is the square where the player can't build for a specific reason
      * @return VICTORY if the player won, DEFEAT if was defeated, NEXT otherwise
@@ -57,19 +65,24 @@ public class DefaultBuildingPhase implements BuildingPhase{
     public PhaseResult doBuildNotHere(BoardWorker worker, int[] here) {
         BuildingAction action;
 
+        //checks if the player can build with the chosen worker
         if(loose.doCheckRule(checker, worker)) {
             //getOwner().getView().loserMessage();
             return PhaseResult.DEFEAT;
         }
 
+        //gets a legal action from the player
         do {
             action = getFromPlayer();
         }while (!checker.doCheckRules(worker, action)|| Arrays.equals(action.getDestination(),here));
 
+        //does the actual build
         if (action.isForceBuildDome())
             board.addDomeTo(action.getDestination());
         else
             board.addFloorTo(action.getDestination());
+
+
         return PhaseResult.NEXT;
     }
 
@@ -78,12 +91,19 @@ public class DefaultBuildingPhase implements BuildingPhase{
     @Override
     public Player getOwner(){return checker.getOwner();}
 
+    /**
+     * @return the building rule checker used by this phase
+     */
     @Override
     public BuildingRuleChecker getChecker(){return checker;}
 
     @Override
     public Board getBoard(){return board;}
 
+    /**
+     * a method intended for testing that simulates the input from users
+     * @return a building action
+     */
     @Deprecated
     private BuildingAction getFromPlayer(){
         return TestActionProvider.getProvider().getNextBuild();

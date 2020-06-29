@@ -40,7 +40,7 @@ public class Hestia implements Deity, BuildingPhase {
 
         //checks if defeated
         if (loose.doCheckRule(checker, worker)) {
-            //getOwner().getView().loserMessage();
+            getOwner().getView().loserMessage();
             return PhaseResult.DEFEAT;
         }
 
@@ -49,7 +49,7 @@ public class Hestia implements Deity, BuildingPhase {
         BuildingAction action;
 
         do {
-            action = getFromPlayer();
+            action = getOwner().getView().buildLocationQuery();
         } while (!checker.doCheckRules(worker, action));
 
         board.build(action);
@@ -57,7 +57,7 @@ public class Hestia implements Deity, BuildingPhase {
         //second building action
 
         if (canBuildFurther(worker)) {
-            if (getBoolFromPlayer()) {
+            if (getOwner().getView().buildAgainQuery()) {
                 do {
                     action = getFromPlayer();
                 } while (!checker.doCheckRules(worker, action) || action.getDestination()[0]==1 || action.getDestination()[0]==5 || action.getDestination()[1]==1 || action.getDestination()[1]==5);
@@ -69,7 +69,7 @@ public class Hestia implements Deity, BuildingPhase {
     }
 
     /**
-     * a side method that checks if the player can build more with the chosen worker
+     * a private method that checks if the player can build more with the chosen worker
      * @param worker the worker that is going to build
      * @return true if the condition is fulfilled
      */
@@ -96,11 +96,19 @@ public class Hestia implements Deity, BuildingPhase {
     @Override
     public BuildingRuleChecker getChecker(){return checker;}
 
+    /**
+     * a testing method for getting a simulated user's input for phase
+     * @return the build
+     */
     @Deprecated
     private BuildingAction getFromPlayer() {
         return TestActionProvider.getProvider().getNextBuild();
     }
 
+    /**
+     * a testing method for getting a simulated user's input for phase
+     * @return a boolean
+     */
     @Deprecated
     private boolean getBoolFromPlayer(){
         return TestActionProvider.getProvider().getNextAnswer();

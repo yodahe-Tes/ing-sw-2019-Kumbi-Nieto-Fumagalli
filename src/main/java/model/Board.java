@@ -21,7 +21,8 @@ public class Board implements Subject {
     private ArrayList<Observer> observer;
 
     /**
-     * Class constructor
+     * Class constructor, initializes a blank board
+     * @param player is the array of players that will play the game
      */
     public Board(Player[] player){
 
@@ -39,7 +40,7 @@ public class Board implements Subject {
 
 
     /**
-     * the building action
+     * simulates the actual building action
      * @param action the desired action
      */
 
@@ -126,8 +127,6 @@ public class Board implements Subject {
 
     }
 
-
-
     /**
      *Deletes reference to o in the observer arraylist
      * @param o is an observer that doesn't need anymore updates
@@ -136,8 +135,6 @@ public class Board implements Subject {
     public void detach(Observer o) {
         observer.remove(o);
     }
-
-
 
     /**
      *notifies every observer that position is change
@@ -164,9 +161,9 @@ public class Board implements Subject {
 
         ArrayList<Player> result = new ArrayList<>();
 
-        for(Player item : player)
-            if(!deleteMe.equals(item))
-                result.add(item);
+        for(int i=0;i<player.length;i++)
+            if(!deleteMe.equals(player[i]))
+                result.add(player[i]);
 
         Player[] updatedPlayers = new Player[1];
         player = result.toArray(updatedPlayers);

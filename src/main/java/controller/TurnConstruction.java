@@ -7,7 +7,7 @@ import java.util.Random;
 
 /**
  * @author Fumagalli
- * a class that at the game's start choose a random god and initialize all of turn gods-related parts
+ * a class that at the game's start chooses random gods and initializes all turn-related parts
  */
 
 public class TurnConstruction {
@@ -130,6 +130,8 @@ public class TurnConstruction {
 
         MovementRule rule;
 
+        //chooses the correct movement rule for each player
+
         for(int i=0; i<pickedGods.size();i++) {
 
             switch (pickedGods.get(i)) {
@@ -165,8 +167,7 @@ public class TurnConstruction {
                 }
             }
 
-
-
+            //apples it to the owner or to the opponents if required
 
             if(rule instanceof Deity){
                 player[i].setDeity((Deity) rule);
@@ -183,6 +184,7 @@ public class TurnConstruction {
                 playerRules[i].add(rule);
         }
 
+        //creates the rule checkers
         MovementRuleChecker[] newCheckers = new MovementRuleChecker[pickedGods.size()];
         MovementRule[] rul;
 
@@ -207,6 +209,7 @@ public class TurnConstruction {
         for (int i = 0; i < playerRules.length; i++)
             playerRules[i] = new ArrayList<>();
 
+        //chooses the correct building rule for each player
         for (int i = 0; i < player.length; i++) {
 
             BuildingRule rule;
@@ -229,6 +232,7 @@ public class TurnConstruction {
                 }
             }
 
+            //applies it to the owner, or to the opponents if required
 
             if (rule instanceof Deity) {
                 player[i].setDeity((Deity) rule);
@@ -255,19 +259,26 @@ public class TurnConstruction {
         return newCheckers;
     }
 
+    /**
+     * creates the player-specific victory condition checker
+     * @return an array of VictoryConditionChecker which indexes are consistent with the array pickedGods.
+     */
     private VictoryConditionChecker[] createVictoryChecker(){
 
         VictoryConditionChecker[] checkers = new VictoryConditionChecker[player.length];
         VictoryCondition[] condition;
 
+        //for every player
         for(int i=0;i<player.length;i++){
             if(pickedGods.get(i)==pan){
+                //if player's god is Pan add it to the conditions
                 condition = new VictoryCondition[2];
                 condition[1] = new Pan(board);
                 player[i].setDeity((Deity) condition[1]);
 
             }
             else
+                //else add only the DefaultVictoryCondition
                 condition = new VictoryCondition[1];
 
             condition[0]=new DefaultVictoryCondition(board);
@@ -278,19 +289,25 @@ public class TurnConstruction {
     }
 
     /**
-     * this method creates the movement phases for every player.
-     * @return the array, which indexes are consistent with pickedGod's, that contains initialized movement phases
+     * this method creates the turn for every player.
+     * @return the array of turns, which indexes are consistent with pickedGod's, that contains initialized movement phases
      */
 
     public Turn[] createTurns(){
+
+        //create the building phases for each player
         BuildingPhase[] buildingPhases=createBuildingPhase();
+        //creates the movement rule checkers used by the movements phases
         MovementRuleChecker[] movementCheckers = createMovementRuleChecker();
+
+        //creates the movement phases
         ArrayList<MovementPhase> phases= new ArrayList<MovementPhase>();
         DefaultMovingLosingCondition loose = new DefaultMovingLosingCondition(board);
         VictoryConditionChecker[] win = createVictoryChecker();
 
         MovementPhase phase;
 
+        //chooses the correct movement phase for each player
         for(int i = 0; i<player.length;i++){
             switch(pickedGods.get(i)) {
 
@@ -321,9 +338,12 @@ public class TurnConstruction {
 
         }
 
+        //creates the array of movement phase
+
         MovementPhase[] movementPhases = new MovementPhase[1];
         movementPhases = phases.toArray(movementPhases);
 
+        //creates the turns
         ArrayList<Turn> turns = new ArrayList<Turn>();
         for (int i = 0; i < buildingPhases.length; i++) {
             turns.add(new Turn(movementPhases[i], buildingPhases[i]));
@@ -345,6 +365,7 @@ public class TurnConstruction {
         DefaultBuildingLosingCondition loose = new DefaultBuildingLosingCondition(board);
         BuildingPhase phase;
 
+        //chooses the correct building phase for each player
         for(int i=0; i<player.length; i++){
             switch (pickedGods.get(i)){
                 case (demetra):{
@@ -370,6 +391,8 @@ public class TurnConstruction {
 
             phases.add(phase);
         }
+
+        //creates the array
         BuildingPhase[] returnPhases = new BuildingPhase[1];
         returnPhases = phases.toArray(returnPhases);
         return returnPhases;

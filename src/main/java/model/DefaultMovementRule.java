@@ -81,6 +81,10 @@ public class DefaultMovementRule implements MovementRule {
     @Override
     public void doForced(MovementAction action) {}
 
+    /**
+     * states that this rule is for owner's phase
+     * @return false
+     */
     @Override
     public boolean isOpponent(){return false;}
 }

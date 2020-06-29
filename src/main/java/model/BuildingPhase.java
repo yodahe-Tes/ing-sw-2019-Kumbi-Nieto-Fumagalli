@@ -29,6 +29,9 @@ public interface BuildingPhase {
      */
     Board getBoard();
 
-
+    /**
+     * getter for the checker that this phase uses
+     * @return the checker
+     */
     BuildingRuleChecker getChecker();
 }

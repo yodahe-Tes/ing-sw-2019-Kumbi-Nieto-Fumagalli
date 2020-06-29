@@ -15,5 +15,9 @@ public interface BuildingRule {
      */
     boolean doCheckRule(BoardWorker worker, BuildingAction action);
 
+    /**
+     * a method that states for initialization purpose if the rule will act in the player phases or in opponents'phases
+     * @return true if the rule will act in player's phase
+     */
     boolean isOpponent();
 }

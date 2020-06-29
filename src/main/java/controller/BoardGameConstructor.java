@@ -62,13 +62,10 @@ public class BoardGameConstructor {
 
     /**
      * inner method that initializes the turns
-     *
      * @param construct the constructor that has memorized the game's gods and players
      * @return the Turn Manager of the completed game
      */
-
     private static TurnManager turnConstruct(TurnConstruction construct) {
-
         return new TurnManager(construct.createTurns());
     }
 }

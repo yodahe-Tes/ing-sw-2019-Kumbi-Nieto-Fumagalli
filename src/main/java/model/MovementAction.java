@@ -1,7 +1,5 @@
 package model;
 
-import model.BoardWorker;
-
 /**
  * a class that models a movement worker action
  * @Author Fumagalli

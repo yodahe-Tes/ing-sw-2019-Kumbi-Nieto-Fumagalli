@@ -43,7 +43,7 @@ public class DefaultBuildingRule implements BuildingRule {
     }
 
     /**
-     * a side-method that checks if the worker and the destination of building action are one next to another
+     * a private method that checks if the worker and the destination of building action are one next to another
      *
      * @param worker      the worker that is going to build
      * @param destination represents the destination's coordinates
@@ -61,6 +61,10 @@ public class DefaultBuildingRule implements BuildingRule {
         return false;
     }
 
+    /**
+     * for initialization purpose states that this rule acts only in player phase
+     * @return false
+     */
     @Override
     public boolean isOpponent(){return false;}
 }

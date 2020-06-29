@@ -19,7 +19,7 @@ public class DefaultVictoryCondition implements VictoryCondition{
 
     /**
      * check if the worker moved to a tier 3 square ad so won the game
-     * @param justMoved the square where the worker last moved
+     * @param worker the worker that last moved
      * @return true if the victory condition is satisfied
      */
     @Override

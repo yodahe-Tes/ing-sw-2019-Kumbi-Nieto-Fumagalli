@@ -38,7 +38,7 @@ public class DefaultMovementPhase implements MovementPhase{
         //checks loosing condition
 
         if(loose.DoCheckRule(check)){
-            //getOwner().getView().noMovesLeftMessage();
+            getOwner().getView().noMovesLeftMessage();
             return new MovementPhaseResult(check.getOwner().getWorker(1), PhaseResult.DEFEAT );
         }
 
@@ -48,7 +48,7 @@ public class DefaultMovementPhase implements MovementPhase{
         MovementAction destination;
 
         do {
-            action = getFromPlayer();
+            action = getOwner().getView().moveLocationQuery();
             destination = interpretAction(action);
 
         }while(!check.doCheckRule(destination));

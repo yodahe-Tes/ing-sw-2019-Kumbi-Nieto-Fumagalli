@@ -82,6 +82,11 @@ public class Apollo implements Deity, MovementRule {
         return false;
     }
 
+    /**
+     * checks if there are any domes or owner's workers in the destination
+     * @param destination are the coordinates of a square
+     * @return true if there aren't any domes or owner's workers
+     */
     private boolean isEmpty(int[] destination){
         if(board.squareHasDome(destination))
             return false;
@@ -112,6 +117,10 @@ public class Apollo implements Deity, MovementRule {
         }
     }
 
+    /**
+     * for initialization purpose, this method states that this god is a rule for the owner, not for the opponents
+     * @return false
+     */
     @Override
     public boolean isOpponent(){return false;}
 

@@ -55,7 +55,7 @@ public class Minotaur implements Deity, MovementRule {
     }
 
     /**
-     * a side-method that checks if the worker and the destination are one next to another
+     * a private method that checks if the worker and the destination are one next to another
      *
      * @param worker      the worker that is going to move
      * @param destination represents the coordinates of the destination
@@ -122,6 +122,10 @@ public class Minotaur implements Deity, MovementRule {
         }
     }
 
+    /**
+     * a method that states for initialization purpose that this rule affects only owner's phase
+     * @return false
+     */
     @Override
     public boolean isOpponent(){return false;}
 

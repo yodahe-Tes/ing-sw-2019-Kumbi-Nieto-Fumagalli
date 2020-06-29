@@ -18,6 +18,11 @@ public class Pan implements Deity,VictoryCondition{
         return "PAN"+System.lineSeparator()+"Win Condition: You also win if your Worker moves down two or more levels.";
     }
 
+    /**
+     * checks if the move fulfills the Pan's winning condition
+     * @param worker the worker that last moved
+     * @return true if the player won
+     */
     @Override
     public boolean doCheckCondition(BoardWorker worker){
         return(board.getFloorFrom(worker.getOldPosition())-board.getFloorFrom(worker.getPosition()) >=2);

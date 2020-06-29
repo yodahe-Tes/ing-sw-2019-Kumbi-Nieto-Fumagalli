@@ -5,12 +5,6 @@ package model;
  * @author Fumagalli
  */
 
-/*
- *Opponent’s Turn: If one of your
- * Workers moved up on your last
- * turn, opponent Workers cannot
- * move up this turn
- */
 
 public class Athena implements Deity, MovementRule, Observer {
 
@@ -18,6 +12,12 @@ public class Athena implements Deity, MovementRule, Observer {
     private final Board board;
     private final Player owner;
 
+    /**
+     * constructor, it initializes the board and the owner and subscribes to the movement of the owner's workers
+     * to checks if they moved up
+     * @param board the board  where the game is played
+     * @param owner the player owner
+     */
     public Athena (Board board, Player owner){
         this.owner=owner;
         this.board=board;
@@ -51,7 +51,7 @@ public class Athena implements Deity, MovementRule, Observer {
     }
 
     /**
-     * updates if the condition for activating power are fulfilled
+     * updates the conditionFulfilled with TRUE if the condition for activating power are fulfilled
      */
     @Override
     public void update(){
@@ -66,7 +66,7 @@ public class Athena implements Deity, MovementRule, Observer {
     }
 
     /**
-     * a side method that checks if the worker moved up
+     * a private method that checks if the worker moved up
      * @param worker the last moved worker
      * @return true if waas moved up
      */
@@ -81,6 +81,10 @@ public class Athena implements Deity, MovementRule, Observer {
     @Override
     public void doForced(MovementAction action){}
 
+    /**
+     * states for initialization purpose that athena is a movement phase that acts in opponents' turns
+     * @return true
+     */
     @Override
     public boolean isOpponent(){return true;}
 }
