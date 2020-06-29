@@ -221,11 +221,11 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
 
     public int[] initialPositionQuery(int i,int j) {
 
-        String str = ask("Choose initial position of player "+i+",worker"+j+"(row,column)");
         String [] input = null;
         int[] destination=null;
         while(input==null) {
             try {
+                String str = ask("Choose initial position of player "+i+",worker"+j+"(row,column)");
                 input = str.split(",");
                 if (xTOychecker(Integer.parseInt(input[0]),1,5)&&xTOychecker(Integer.parseInt(input[1]),1,5))
                     destination = new int[]{Integer.parseInt(input[0]), Integer.parseInt(input[1])};
@@ -235,8 +235,6 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
                 inform("Please provide integer values as coordinates");
                 destination = null;
             }
-
-
         }return destination;
     }
 
@@ -247,11 +245,11 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
     public int[] moveLocationQuery() {
         System.out.println("Dentro MoveLocation");
         int workerId = workerChoiceQuery();
-        String str = ask("Where do you want to move the worker to? (row,column)");
         String [] input = null;
         int[] destination=null;
         while(input==null) {
             try {
+                String str = ask("Where do you want to move the worker to? (row,column)");
                 input = str.split(",");
                 destination = new int[]{workerId,Integer.parseInt(input[0]), Integer.parseInt(input[1])};
                 return destination;
@@ -348,9 +346,16 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
 
     public boolean buildAgainQuery() {
 
-        String answer = ask("Do you want to build again ? (true, false)\n");
-        return Boolean.parseBoolean(answer);
-
+        String answer = ask("Do you want to build again ? (y, n)");
+        if(answer== "y"){
+            return true;}
+        else if(answer=="n"){
+            return false;
+        }
+        else{
+            inform("Type y or n ");
+            return buildAgainQuery();
+        }
     }
 
     /**
@@ -361,20 +366,54 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
 
     public boolean moveAgainQuery() {
 
-        String answer = ask("Do you want to move again ? (true, false)\n");
-        return Boolean.parseBoolean(answer);
-
+        String answer = ask("Do you want to move again ? (y, n)");
+        if(answer == "y"){
+            return true;}
+        else if(answer =="n"){
+            return false;
+        }
+        else{
+            inform("Type y or n ");
+            return moveAgainQuery();
+        }
     }
 
     /**
-     * Informs player which God card he has
+     * used to inform a player about the opponent players' God
+     *
+     */
+    private void otherPlayersGod(){
+        for(Player players : player){
+            if (players != playerOwner()){
+                inform("The player "+players.getNickname()+" has God "+players.godDesc());
+            }
+        }
+    }
+
+
+    /**
+     * used to retrieve the player
+     *
+     */
+    private Player playerOwner(){
+        for(Player players : player){
+            if (players.getView()==this){
+                return players;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Informs player which God card he has and the description
      *
      */
 
-    public void assignedGodMessage(String godName) {
-        inform("Your God Card is "+ godName);
-    }
+    public void assignedGodMessage() {
 
+        inform("Your God Card is "+ playerOwner().godDesc());
+    }
 
 
     /**
@@ -383,9 +422,8 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      */
 
     public void squareIsOccupiedMessage() {
-        inform("You can't move worker there.");
+        inform("You can't move worker there. choose another destination");
     }
-
 
 
     /**
@@ -404,6 +442,15 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
 
     public void noMovesLeftMessage() {
         inform("Sorry,you have no moves left .You have lost");
+    }
+
+    /**
+     * Informs players that one of the players  has lost
+     *
+     */
+
+    public void aPlayerHasLostmessage(Player loser) {
+        inform("player "+ loser.getNickname()+" has lost.");
     }
 
 
@@ -441,8 +488,6 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
                 }
-                //
-
             }
             System.out.println("finito wait");
             str = readInput;

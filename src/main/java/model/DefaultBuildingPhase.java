@@ -73,7 +73,7 @@ public class DefaultBuildingPhase implements BuildingPhase{
 
         //gets a legal action from the player
         do {
-            action = getFromPlayer();
+            action = getOwner().getView().buildLocationAndTypeQuery();
         }while (!checker.doCheckRules(worker, action)|| Arrays.equals(action.getDestination(),here));
 
         //does the actual build
@@ -81,7 +81,6 @@ public class DefaultBuildingPhase implements BuildingPhase{
             board.addDomeTo(action.getDestination());
         else
             board.addFloorTo(action.getDestination());
-
 
         return PhaseResult.NEXT;
     }
