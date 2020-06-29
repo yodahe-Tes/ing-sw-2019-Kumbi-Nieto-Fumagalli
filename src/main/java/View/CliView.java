@@ -40,7 +40,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
         this.board = board;
         this.client = client;
         player = new Player[board.numberPlayers()];
-               for (int i = 1; i <= (board.numberPlayers()); i++) {
+        for (int i = 1; i <= (board.numberPlayers()); i++) {
             player[i - 1] = board.getPlayer(i);
         }
         client.addObs(this);
@@ -177,17 +177,24 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
 
     public void intentionQuery(boolean waitingFor) {
         String str = ask("Do You want to  : \n  [1] move    or\n [2] build  \n (input 1 or 2) ");
-            int choice = Integer.parseInt(str);
+        int choice = Integer.parseInt(str);
 
-            if (choice == 1) {
-                workerChoiceQuery();
-            } else if (choice == 2) {
-                buildLocationAndTypeQuery();
-            } else {
-                inform("input [1] or [2]");
-                workerChoiceQuery();
-            }
+        if (choice == 1) {
+            workerChoiceQuery();
+        } else if (choice == 2) {
+            buildLocationAndTypeQuery();
+        } else {
+            inform("input [1] or [2]");
+            workerChoiceQuery();
+        }
 
+    }
+    /**
+     * checks if input is within the range of x up to y
+     */
+
+    public boolean xTOychecker(int i,int x, int y) {
+        return (i>=x && i<=y);
     }
 
 
@@ -196,36 +203,41 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      */
 
     public int workerChoiceQuery() {
-        ask("Which worker do you want to move?[1] or [2] ");
+        String str = ask("Which worker do you want to move?[1] or [2] ");
 
-        Integer choice = Integer.valueOf(readInput);
-        if (choice.equals(1) || choice.equals(2)) {
+        Integer choice = Integer.valueOf(str);
+        if (xTOychecker(choice,1,2))
             return choice;
-        } else {
+        else {
             inform("input [1] or [2]");
-            workerChoiceQuery();
+            choice = workerChoiceQuery();
         }
-        return 0;
+        return choice;
     }
 
     /**
      * Asks the player where he wants to move the worker and passes move action to Controller
-     * @param i is the number of the worker that will be positioned
      */
 
-    public int[] initialPositionQuery(int i) {
+    public int[] initialPositionQuery(int i,int j) {
 
-        String str = ask("Choose initial position of your worker number"+i+"(row,column)");
-        try{
-   String[] input = str.split(",");
-            int[] destination = {Integer.parseInt(input[0]), Integer.parseInt(input[1])};
+        String str = ask("Choose initial position of player "+i+",worker"+j+"(row,column)");
+        String [] input = null;
+        int[] destination=null;
+        while(input==null) {
+            try {
+                input = str.split(",");
+                if (xTOychecker(Integer.parseInt(input[0]),1,5)&&xTOychecker(Integer.parseInt(input[1]),1,5))
+                    destination = new int[]{Integer.parseInt(input[0]), Integer.parseInt(input[1])};
 
-            return destination;
-        }
-        catch (NumberFormatException e) {
-            System.out.println("Please provide integer values as coordinates");
-        }
-        return new int[0];
+                return destination;
+            } catch (NumberFormatException e) {
+                inform("Please provide integer values as coordinates");
+                destination = null;
+            }
+
+
+        }return destination;
     }
 
     /**
@@ -236,16 +248,19 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
         System.out.println("Dentro MoveLocation");
         int workerId = workerChoiceQuery();
         String str = ask("Where do you want to move the worker to? (row,column)");
-        try {
+        String [] input = null;
+        int[] destination=null;
+        while(input==null) {
+            try {
+                input = str.split(",");
+                destination = new int[]{workerId,Integer.parseInt(input[0]), Integer.parseInt(input[1])};
+                return destination;
+            } catch (NumberFormatException e) {
+                inform("Please provide integer values as coordinates");
+                destination = null;
+            }
 
-            String[] input = str.split(",");
-            int[] destination = {workerId,Integer.parseInt(input[0]), Integer.parseInt(input[1])};
-
-            return destination;
-        } catch (NumberFormatException e) {
-            System.out.println("Please provide integer values as coordinates");
-        }
-        return new int[0];
+        }return destination;
     }
 
 
@@ -258,19 +273,19 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
 
     public BuildingAction buildLocationQuery() {
         String str = ask("Where do you want to build ? (row,column)\n");
-        String[] input=null;
+        String [] input = null;
         int[] buildLocation=null;
-        while(buildLocation==null) {
+        while(input==null) {
             try {
                 input = str.split(",");
                 buildLocation = new int[]{Integer.parseInt(input[0]), Integer.parseInt(input[1])};
                 return new BuildingAction(buildLocation);
             } catch (NumberFormatException e) {
                 inform("Please provide integer values as coordinates");
-                buildLocation=null;
+                buildLocation = null;
             }
         }
-        return(new BuildingAction(buildLocation));
+        return (new BuildingAction(buildLocation));
     }
 
 
@@ -426,7 +441,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
                 }
-               //
+                //
 
             }
             System.out.println("finito wait");
@@ -436,8 +451,6 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return str;
     }
-
 }
