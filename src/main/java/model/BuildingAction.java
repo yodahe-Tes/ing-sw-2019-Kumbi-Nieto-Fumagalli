@@ -17,7 +17,7 @@ public class BuildingAction {
     }
 
     /**
-     * a constructor that specify if the player wants to build a dome
+     * a constructor that specify if the player wants to force-build a dome
      * @param destination is the destination where the worker is going to build
      * @param forceBuildDome represents if the player wants to build a dome
      */

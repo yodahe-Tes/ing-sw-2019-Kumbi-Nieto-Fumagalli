@@ -1,0 +1,169 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Athena</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Athena (model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Athena</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85,7%
+  </span>
+  <span class="absValue">
+    (6/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    89,5%
+  </span>
+  <span class="absValue">
+    (17/ 19)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;/**
+<i>4</i>&nbsp; * A class for the deity Athena
+<i>5</i>&nbsp; * @author Fumagalli
+<i>6</i>&nbsp; */
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/*
+<i>9</i>&nbsp; *Opponent’s Turn: If one of your
+<i>10</i>&nbsp; * Workers moved up on your last
+<i>11</i>&nbsp; * turn, opponent Workers cannot
+<i>12</i>&nbsp; * move up this turn
+<i>13</i>&nbsp; */
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;public class Athena implements Deity, MovementRule, Observer {
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    private boolean conditionFulfilled;
+<i>18</i>&nbsp;    private final Board board;
+<i>19</i>&nbsp;    private final Player owner;
+<i>20</i>&nbsp;
+<b class="fc"><i>21</i>&nbsp;    public Athena (Board board, Player owner){</b>
+<b class="fc"><i>22</i>&nbsp;        this.owner=owner;</b>
+<b class="fc"><i>23</i>&nbsp;        this.board=board;</b>
+<i>24</i>&nbsp;
+<b class="fc"><i>25</i>&nbsp;        for(BoardWorker worker : owner.getWorker()){</b>
+<b class="fc"><i>26</i>&nbsp;            worker.attach(this);</b>
+<i>27</i>&nbsp;        }
+<b class="fc"><i>28</i>&nbsp;    }</b>
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    /**
+<i>31</i>&nbsp;     * a method that gives the description of the god
+<i>32</i>&nbsp;     * @return a string that represents the god&#39;s name and a short description of its power
+<i>33</i>&nbsp;     */
+<i>34</i>&nbsp;    @Override
+<b class="nc"><i>35</i>&nbsp;    public String desc(){ return &quot;ATHENA&quot;+System.lineSeparator()+&quot;Opponent’s Turn: If one of your Workers moved up on your last turn, opponent Workers cannot move up this turn.&quot;;}</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    /**
+<i>38</i>&nbsp;     * checks if Athena&#39;s restrictions are fulfilled
+<i>39</i>&nbsp;     * @param action is the movement action (worker + destination)
+<i>40</i>&nbsp;     * @return true if move is legal
+<i>41</i>&nbsp;     */
+<i>42</i>&nbsp;    @Override
+<i>43</i>&nbsp;    public boolean doCheckRule(MovementAction action) {
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;        //if owner condition not fulfilled opponents condition deactivated
+<b class="fc"><i>46</i>&nbsp;        if(!conditionFulfilled)</b>
+<b class="fc"><i>47</i>&nbsp;            return true;</b>
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;        //check condition
+<b class="fc"><i>50</i>&nbsp;        return(board.getFloorFrom(action.getWorker().getPosition())&gt;=board.getFloorFrom(action.getDestination()));</b>
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    /**
+<i>54</i>&nbsp;     * updates if the condition for activating power are fulfilled
+<i>55</i>&nbsp;     */
+<i>56</i>&nbsp;    @Override
+<i>57</i>&nbsp;    public void update(){
+<b class="fc"><i>58</i>&nbsp;        for(int i = 1; i&lt;=2;i++){</b>
+<b class="fc"><i>59</i>&nbsp;            if(owner.getWorker(i).isWasMoved()){</b>
+<b class="fc"><i>60</i>&nbsp;                conditionFulfilled=checkConditionFulfilled(owner.getWorker(i));</b>
+<b class="fc"><i>61</i>&nbsp;                break;</b>
+<i>62</i>&nbsp;            } else {
+<b class="nc"><i>63</i>&nbsp;                conditionFulfilled=false;</b>
+<i>64</i>&nbsp;            }
+<i>65</i>&nbsp;        }
+<b class="fc"><i>66</i>&nbsp;    }</b>
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * a side method that checks if the worker moved up
+<i>70</i>&nbsp;     * @param worker the last moved worker
+<i>71</i>&nbsp;     * @return true if waas moved up
+<i>72</i>&nbsp;     */
+<i>73</i>&nbsp;    private boolean checkConditionFulfilled(BoardWorker worker){
+<b class="fc"><i>74</i>&nbsp;        return (board.getFloorFrom(worker.getOldPosition())&lt;board.getFloorFrom(worker.getPosition()));</b>
+<i>75</i>&nbsp;    }
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    /**
+<i>78</i>&nbsp;     * Athena doesn&#39;t force move any worker, so this method does nothing
+<i>79</i>&nbsp;     * @param action is the action that would cause the forced move
+<i>80</i>&nbsp;     */
+<i>81</i>&nbsp;    @Override
+<b class="fc"><i>82</i>&nbsp;    public void doForced(MovementAction action){}</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    @Override
+<b class="fc"><i>85</i>&nbsp;    public boolean isOpponent(){return true;}</b>
+<i>86</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-29 12:33</div>
+</div>
+</body>
+</html>

@@ -8,11 +8,8 @@ package model;
 import controller.BuildingRuleChecker;
 import controller.PhaseResult;
 
-/*
- *Your Build: Your Worker may
- * build one additional time, but not
- * on the same space.
- */
+import java.util.Arrays;
+
 
 public class Demetra implements Deity, BuildingPhase {
 
@@ -27,13 +24,12 @@ public class Demetra implements Deity, BuildingPhase {
     }
 
     /**
-     * represents if the god activates during player or opponent's phase
-     *
-     * @return PLAYER phase
+     * a method that gives the description of the god
+     * @return a string that represents the god's name and a short description of its power
      */
     @Override
-    public GodType type() {
-        return GodType.PLAYER;
+    public String desc() {
+        return "DEMETRA"+System.lineSeparator()+"Your Build: Your Worker may build one additional time, but not on the same space.";
     }
 
     /**
@@ -47,7 +43,7 @@ public class Demetra implements Deity, BuildingPhase {
 
         //checks if defeated
         if (loose.doCheckRule(checker, worker)) {
-            getOwner().getView().loserMessage();
+            //getOwner().getView().loserMessage();
             return PhaseResult.DEFEAT;
         }
 
@@ -65,19 +61,19 @@ public class Demetra implements Deity, BuildingPhase {
 
         if (canBuildFurther(worker, action.getDestination())) {
             if (getOwner().getView().buildAgainQuery()) {
+                BuildingAction actionTwo;
                 do {
-                    action = getOwner().getView().buildLocationQuery();
-                } while (!checker.doCheckRules(worker, action));
-                board.build(action);
+                    actionTwo = getOwner().getView().buildLocationQuery();
+                } while (!checker.doCheckRules(worker, actionTwo) || Arrays.equals(action.getDestination(),actionTwo.getDestination()));
+                board.build(actionTwo);
             }
         }
 
-        getOwner().getView().notYourTUrnMessage();
         return PhaseResult.NEXT;
     }
 
     /**
-     * a side method that checks if the player can build more with the chosen worker
+     * a private method that checks if the player can build more with the chosen worker
      *
      * @param worker         the worker that is going to build
      * @param previousAction the last built square, where the worker can't build anymore for this turn
@@ -112,6 +108,13 @@ public class Demetra implements Deity, BuildingPhase {
         return TestActionProvider.getProvider().getNextBuild();
     }
 
+    @Override
+    public BuildingRuleChecker getChecker(){return checker;}
+
+    /**
+     * a testing method for getting a simulated user's input for phase
+     * @return the move
+     */
     @Deprecated
     private boolean getBoolFromPlayer(){
         return TestActionProvider.getProvider().getNextAnswer();

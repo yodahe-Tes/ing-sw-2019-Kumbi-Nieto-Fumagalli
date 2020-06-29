@@ -62,30 +62,10 @@ public class BoardGameConstructor {
 
     /**
      * inner method that initializes the turns
-     *
      * @param construct the constructor that has memorized the game's gods and players
      * @return the Turn Manager of the completed game
      */
-
     private static TurnManager turnConstruct(TurnConstruction construct) {
-
-        //initialises players' movement phase
-        MovementPhase[] mPhases = construct.createMovementPhase();
-
-        //initializes players' building phase
-        BuildingPhase[] bPhases = construct.createBuildingPhase();
-
-        //creates turns
-        ArrayList<Turn> turns = new ArrayList<Turn>();
-        for (int i = 0; i < bPhases.length; i++) {
-            turns.add(new Turn(mPhases[i], bPhases[i]));
-        }
-
-        //creates turn manager
-        Turn[] finishedTurns = new Turn[1];
-
-        finishedTurns = turns.toArray(finishedTurns);
-
-        return new TurnManager(finishedTurns);
+        return new TurnManager(construct.createTurns());
     }
 }

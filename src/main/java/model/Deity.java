@@ -1,10 +1,15 @@
 package model;
 
 /**
- * A simple enum that defines if the god will act in the player's turn or in opponent's
+ * This interface is extended by classes that are a god
  * @author Fumagalli
  */
 
 public interface Deity{
-    GodType type();
+
+    /**
+     * is the description of the god for the users
+     * @return the string that describes the god's effect
+     */
+    public String desc();
 }

@@ -76,7 +76,7 @@ public class ArtemisTest {
     @Test
     public void testTwoMovement(){
 
-        int[][] actions = new int[][]{new int[]{1,2,2},new int[]{1,2,3}};
+        int[][] actions = new int[][]{new int[]{1,2,2},new int[]{2,3}};
         TestActionProvider.getProvider().setMovingActions(actions);
 
         boolean[] doOtherActions= new boolean[] {true};
@@ -94,7 +94,7 @@ public class ArtemisTest {
     @Test
     public void testTwoFailedMovement(){
 
-        int[][] actions = new int[][]{new int[]{1,3,2},new int[]{1,2,2},new int[]{1,3,3}, new int[]{1,2,3}};
+        int[][] actions = new int[][]{new int[]{1,3,2},new int[]{1,2,2},new int[]{3,3}, new int[]{2,3}};
         TestActionProvider.getProvider().setMovingActions(actions);
 
 
@@ -106,4 +106,6 @@ public class ArtemisTest {
 
         Assert.assertTrue(Arrays.equals(turnManager.getPlayer()[0].getWorker(1).getPosition(), new int[]{2,3}));
     }
+
+
 }

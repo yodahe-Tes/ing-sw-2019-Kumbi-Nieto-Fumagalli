@@ -20,13 +20,12 @@ public class Apollo implements Deity, MovementRule {
     }
 
     /**
-     * informs that the god takes action in the player phase
-     *
-     * @return the instance PLAYER
+     * a method that gives the description of the god
+     * @return a string that represents the god's name and a short description of its power
      */
     @Override
-    public GodType type() {
-        return GodType.PLAYER;
+    public String desc() {
+        return "APOLLO"+System.lineSeparator()+"Your Move: Your Worker may move into an opponent Worker’s space by forcing their Worker to the space yours just vacated.";
     }
 
     /**
@@ -44,7 +43,7 @@ public class Apollo implements Deity, MovementRule {
         if(destination[0]<=5 && destination[0]>=1 && destination[1]<=5 && destination[1]>=1) {
             if (oneSquareDistance(worker, destination)) {
                 if (isNotTooHigh(worker, destination)) {
-                    if (destinationIsEmpty(destination))
+                    if (isEmpty(destination))
                         return true;
                 }
             }
@@ -84,20 +83,20 @@ public class Apollo implements Deity, MovementRule {
     }
 
     /**
-     * checks if the destination square is empty, i.e. there are no domes or friendly workers
-     * @param destination represents the coordinates of the destination
-     * @return true if on the destination square there aren't any domes or any friendly workers
+     * checks if there are any domes or owner's workers in the destination
+     * @param destination are the coordinates of a square
+     * @return true if there aren't any domes or owner's workers
      */
-    private boolean destinationIsEmpty(int[] destination) {
-        if (board.squareHasDome(destination))
+    private boolean isEmpty(int[] destination){
+        if(board.squareHasDome(destination))
             return false;
-        for (int i=1;i<=board.numberPlayers();i++){
-            if (owner.getWorker(i).getPosition()[0] == destination[0] && owner.getWorker(i).getPosition()[1] == destination[1]){
+        for(int j=1; j<3; j++){
+            if(Arrays.equals(owner.workerPosition(j), destination))
                 return false;
-            }
         }
         return true;
     }
+
 
     /**
      * if needed force the opponent's worker to the will-be former worker's square
@@ -108,7 +107,7 @@ public class Apollo implements Deity, MovementRule {
         BoardWorker worker = action.getWorker();
         int[] destination = action.getDestination();
 
-        for(int i=0; i<board.numberPlayers();i++){
+        for(int i=1; i<=board.numberPlayers();i++){
             for(BoardWorker opponentWorker : board.getPlayer(i).getWorker()){
                 if(Arrays.equals(opponentWorker.getPosition(),destination)){
                     opponentWorker.forced(worker.getPosition());
@@ -117,5 +116,12 @@ public class Apollo implements Deity, MovementRule {
             }
         }
     }
+
+    /**
+     * for initialization purpose, this method states that this god is a rule for the owner, not for the opponents
+     * @return false
+     */
+    @Override
+    public boolean isOpponent(){return false;}
 
 }

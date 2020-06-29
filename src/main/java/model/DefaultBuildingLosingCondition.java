@@ -23,7 +23,7 @@ public class DefaultBuildingLosingCondition {
      * Checks if player can't build
      * @param checker the building rule checker that allows this method to establish if the player can build in a square or not
      * @param worker the worker that is going to build
-     * @return true if player can't move any worker
+     * @return true if player can't build with this worker
      */
 
     public boolean doCheckRule(BuildingRuleChecker checker, BoardWorker worker){

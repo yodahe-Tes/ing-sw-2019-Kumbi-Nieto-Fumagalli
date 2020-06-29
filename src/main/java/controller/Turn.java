@@ -28,16 +28,25 @@ public class Turn {
      * @return a PhaseResult enum that express the turn's outcome: VICTORY, DEFEAT or nothing (so NEXT turn)
      */
     public PhaseResult doTurn(){
-        
+
+        //getOwner().getView().yourTUrnMessage();
+
         MovementPhaseResult moved = move.doMovement();
 
         PhaseResult result = moved.getResult();
 
+        if(result!=PhaseResult.NEXT){
+            //notify user of the game's end
+            return result;
+        }
         if(result==PhaseResult.NEXT)
             build.doBuild(moved.getWorker());
         if(result==PhaseResult.VICTORY) {
             //notify users of the game's end
+            return result;
         }
+
+        //getOwner().getView().notYourTUrnMessage();
         return result;
     }
 

@@ -92,11 +92,17 @@ public class Player {
 
     /**
      * establish a reference to the player's client
-     * @param view
+     * @param
      */
     public void addCliView(CliView view){
         this.view=view;
     }
 
     public CliView getView(){return view;}
+
+    /**
+     * get the desc from the player's god
+     * @return the desc of the player's god
+     */
+    public String godDesc(){return deity.desc();}
 }

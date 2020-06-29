@@ -1,0 +1,236 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Artemis</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Artemis (model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Artemis</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66,7%
+  </span>
+  <span class="absValue">
+    (6/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82,5%
+  </span>
+  <span class="absValue">
+    (33/ 40)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import controller.BuildingRuleChecker;
+<i>4</i>&nbsp;import controller.MovementRuleChecker;
+<i>5</i>&nbsp;import controller.PhaseResult;
+<i>6</i>&nbsp;import controller.VictoryConditionChecker;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import java.util.Arrays;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;/**
+<i>11</i>&nbsp; * A class implementing the deity Artemis
+<i>12</i>&nbsp; * @author Fumagalli
+<i>13</i>&nbsp; */
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;/*POWER
+<i>16</i>&nbsp; *Your Move: Your Worker may
+<i>17</i>&nbsp; * move one additional time, but not
+<i>18</i>&nbsp; * back to its initial space.
+<i>19</i>&nbsp; */
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;public class Artemis implements Deity, MovementPhase{
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    private final MovementRuleChecker checker;
+<i>24</i>&nbsp;    private final DefaultMovingLosingCondition defeated;
+<i>25</i>&nbsp;    private final VictoryConditionChecker win;
+<i>26</i>&nbsp;
+<b class="fc"><i>27</i>&nbsp;    public Artemis(MovementRuleChecker checker, DefaultMovingLosingCondition condition, VictoryConditionChecker win){</b>
+<b class="fc"><i>28</i>&nbsp;        this.checker = checker;</b>
+<b class="fc"><i>29</i>&nbsp;        defeated = condition;</b>
+<b class="fc"><i>30</i>&nbsp;        this.win = win;</b>
+<b class="fc"><i>31</i>&nbsp;    }</b>
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * a method that gives the description of the god
+<i>35</i>&nbsp;     * @return a string that represents the god&#39;s name and a short description of its power
+<i>36</i>&nbsp;     */
+<i>37</i>&nbsp;    @Override
+<i>38</i>&nbsp;    public  String desc(){
+<b class="nc"><i>39</i>&nbsp;        return &quot;ARTEMIS&quot;+System.lineSeparator()+&quot;Your Move: Your Worker may move one additional time, but not back to its initial space.&quot;;</b>
+<i>40</i>&nbsp;    }
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /**
+<i>43</i>&nbsp;     * the actual movement phase
+<i>44</i>&nbsp;     * @return the worker moved and the result of the phase packed
+<i>45</i>&nbsp;     */
+<i>46</i>&nbsp;    @Override
+<i>47</i>&nbsp;    public MovementPhaseResult doMovement() {
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;        //checking if the player can move
+<b class="fc"><i>50</i>&nbsp;        if(defeated.DoCheckRule(checker)){</b>
+<i>51</i>&nbsp;     //       getOwner().getView().noMovesLeftMessage();
+<b class="nc"><i>52</i>&nbsp;            return new MovementPhaseResult(checker.getOwner().getWorker(1),PhaseResult.DEFEAT);</b>
+<i>53</i>&nbsp;        }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;        //gets and validates the first move
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;        int[] action;
+<i>58</i>&nbsp;        MovementAction destination;
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;        do {
+<b class="fc"><i>61</i>&nbsp;            action = getFromPlayer();</b>
+<b class="fc"><i>62</i>&nbsp;            destination = interpretAction(action);</b>
+<i>63</i>&nbsp;
+<b class="fc"><i>64</i>&nbsp;        }while(!checker.doCheckRule(destination));</b>
+<i>65</i>&nbsp;
+<b class="fc"><i>66</i>&nbsp;        int[] startingSquare = destination.getWorker().getPosition();</b>
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;        //checks if a forced move is needed and does it
+<b class="fc"><i>69</i>&nbsp;        checker.checkForcedMove(destination);</b>
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;
+<b class="fc"><i>72</i>&nbsp;        destination.getWorker().move(destination.getDestination());</b>
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;        //checks if won
+<i>75</i>&nbsp;
+<b class="fc"><i>76</i>&nbsp;        if(win.doCheckRule(destination.getWorker()))</b>
+<b class="nc"><i>77</i>&nbsp;            return new MovementPhaseResult(destination.getWorker(), PhaseResult.VICTORY);</b>
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;        //second movement
+<b class="fc"><i>81</i>&nbsp;        if(canMoveFurther(destination.getWorker(), startingSquare)){</b>
+<i>82</i>&nbsp;
+<b class="fc"><i>83</i>&nbsp;            if(getBoolFromPlayer()){</b>
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;                MovementAction secondDestination;
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;                do{
+<b class="fc"><i>88</i>&nbsp;                    action = getFromPlayer();</b>
+<b class="fc"><i>89</i>&nbsp;                    secondDestination = new MovementAction(destination.getWorker(),action);</b>
+<b class="fc"><i>90</i>&nbsp;                }while(!checker.doCheckRule(secondDestination) || Arrays.equals(secondDestination.getDestination(), startingSquare));</b>
+<i>91</i>&nbsp;
+<b class="fc"><i>92</i>&nbsp;                checker.checkForcedMove(secondDestination);</b>
+<b class="fc"><i>93</i>&nbsp;                destination.getWorker().move(secondDestination.getDestination());</b>
+<i>94</i>&nbsp;
+<b class="fc"><i>95</i>&nbsp;                if(win.doCheckRule(secondDestination.getWorker())){</b>
+<b class="nc"><i>96</i>&nbsp;                    return new MovementPhaseResult(destination.getWorker(), PhaseResult.VICTORY);</b>
+<i>97</i>&nbsp;                }
+<i>98</i>&nbsp;            }
+<i>99</i>&nbsp;         }
+<b class="fc"><i>100</i>&nbsp;        return new MovementPhaseResult(destination.getWorker(), PhaseResult.NEXT);</b>
+<i>101</i>&nbsp;    }
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;    /**
+<i>104</i>&nbsp;     * a private method that checks if the worker can move after the first
+<i>105</i>&nbsp;     * @param worker the worker moved with the standard move
+<i>106</i>&nbsp;     * @param previousAction the starting position of the first move
+<i>107</i>&nbsp;     * @return true if the worker can move again without returning in the starting square
+<i>108</i>&nbsp;     */
+<i>109</i>&nbsp;    private boolean canMoveFurther(BoardWorker worker, int[] previousAction) {
+<i>110</i>&nbsp;        MovementAction action;
+<b class="fc"><i>111</i>&nbsp;        for(int i=1; i&lt;=5; i++){</b>
+<b class="fc"><i>112</i>&nbsp;            for(int j=1; j&lt;=5; j++){</b>
+<b class="fc"><i>113</i>&nbsp;                if(previousAction[0]!=i || previousAction[1]!=j){</b>
+<b class="fc"><i>114</i>&nbsp;                    action = new MovementAction(worker, new int[]{i,j});</b>
+<b class="fc"><i>115</i>&nbsp;                    if(checker.doCheckRule(action))</b>
+<b class="fc"><i>116</i>&nbsp;                        return true;</b>
+<i>117</i>&nbsp;                }
+<i>118</i>&nbsp;            }
+<i>119</i>&nbsp;        }
+<b class="nc"><i>120</i>&nbsp;        return false;</b>
+<i>121</i>&nbsp;    }
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;    /**
+<i>124</i>&nbsp;     * a private method that gets the chosen worker reference and packs it with the movement&#39;s coordinates
+<i>125</i>&nbsp;     * @param action is the action given by the view. The first int represents the worker ID, while the other two are the coordinates of the destination
+<i>126</i>&nbsp;     * @return an Action that contains the worker references
+<i>127</i>&nbsp;     */
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;    private MovementAction interpretAction(int[] action){
+<b class="fc"><i>130</i>&nbsp;        BoardWorker worker = this.checker.getOwner().getWorker(action[0]);</b>
+<b class="fc"><i>131</i>&nbsp;        int[] destination = new int[]{action[1],action[2]};</b>
+<b class="fc"><i>132</i>&nbsp;        return new MovementAction(worker, destination);</b>
+<i>133</i>&nbsp;    }
+<i>134</i>&nbsp;
+<b class="nc"><i>135</i>&nbsp;    public Player getOwner(){return checker.getOwner();}</b>
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;    /**
+<i>138</i>&nbsp;     * a testing method for getting the input for phase
+<i>139</i>&nbsp;     * @return the move
+<i>140</i>&nbsp;     */
+<i>141</i>&nbsp;    @Deprecated
+<i>142</i>&nbsp;    private int[] getFromPlayer(){
+<b class="fc"><i>143</i>&nbsp;        return TestActionProvider.getProvider().getNextMove();</b>
+<i>144</i>&nbsp;    }
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;    @Override
+<b class="nc"><i>147</i>&nbsp;    public MovementRuleChecker getChecker(){return checker;}</b>
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;    @Deprecated
+<i>150</i>&nbsp;    private boolean getBoolFromPlayer(){
+<b class="fc"><i>151</i>&nbsp;        return TestActionProvider.getProvider().getNextAnswer();</b>
+<i>152</i>&nbsp;    }
+<i>153</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-29 12:33</div>
+</div>
+</body>
+</html>

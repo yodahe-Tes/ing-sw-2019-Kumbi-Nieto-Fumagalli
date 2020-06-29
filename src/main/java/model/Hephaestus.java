@@ -1,62 +1,99 @@
 package model;
 
+import controller.BuildingRuleChecker;
+import controller.PhaseResult;
+
 /**
  * A class for the deity Hephaestus
- * @author Nieto
+ * @author Fumagalli
  */
 
 
+public class Hephaestus implements BuildingPhase, Deity{
 
-/**
- * Your Build: Your Worker may build one additional block (not dome)
- * on top of your first block.
- */
+    Board board;
+    BuildingRuleChecker checker;
+    DefaultBuildingLosingCondition loose;
 
-public class Hephaestus {/*
-    int[] newPosition;
-    int[] myPosition;
-    int[] oppWorkerPosition1;
-    int[] oppWorkerPosition2;
-    int[] oldPosition;
-
-    public Hephaestus(BoardWorker myWorker, int[] position, Board player) {
-        newPosition = position;
-        myPosition = myWorker.getPosition();
-        int i = 0;
-
-        if (myPosition == (player.getPlayer(1)).workerPosition(1)) {
-            i = 1;
-        } else if (myPosition == (player.getPlayer(1)).workerPosition(2)) {
-            i = 1;
-        } else {
-            i = 2;
-            oppWorkerPosition1 = (player.getPlayer(i)).workerPosition(1);
-            oppWorkerPosition2 = (player.getPlayer(i)).workerPosition(2);
-        }
-    }
-    public GodType type(){
-        return GodType.Player;
+    /**
+     * constructor
+     * @param board is the board where it have to build
+     * @param checker is the building rules checker associated with the player
+     */
+    public Hephaestus(Board board, BuildingRuleChecker checker, DefaultBuildingLosingCondition loose){
+        this.board=board;
+        this.checker=checker;
+        this.loose = loose;
     }
 
-    public doBuildingPhase doBuildingPhase(BoardWorker worker, int[] position) {
-        Square position = new Square();
-        Square myPosition = new Square();
+    /**
+     * a method that models the default building phase
+     * @param worker is the worker that must build
+     * @return VICTORY if the player won, DEFEAT if was defeated, NEXT otherwise
+     */
+    @Override
+    public PhaseResult doBuild(BoardWorker worker) {
+        BuildingAction action;
 
-        if (position.hasDome()) {
-            return DEFEAT;
-        } else if (newPosition == oppWorkerPosition1) {
-            return DEFEAT;
-        } else if (newPosition == oppWorkerPosition2) {
-            return DEFEAT;
-        } else if (newPosition==oldPosition){
-            return DEFEAT;
-        } else if (position.getFloor()==4){
-            return DEFEAT;
-        } else if (position != oldPosition){
-            return DEFEAT;
-        } else {
-            oldPosition = newPosition;
-            return PROSSIMO;
+        //checks if the player can't build
+        if(loose.doCheckRule(checker, worker))
+            return PhaseResult.DEFEAT;
+
+        //gets the action from the user
+        do {
+            action = getOwner().getView().buildLocationQuery();
+        }while (!checker.doCheckRules(worker, action));
+
+        //does the actual build
+        if (action.isForceBuildDome())
+            board.addDomeTo(action.getDestination());
+        else
+            board.addFloorTo(action.getDestination());
+
+        //second construction
+
+        if(!(board.getFloorFrom(action.getDestination())>=3) && (!board.squareHasDome(action.getDestination()))){
+            if(getOwner().getView().buildAgainQuery()){
+                board.addFloorTo(action.getDestination());
+            }
         }
-    }*/
+
+        return PhaseResult.NEXT;
+    }
+
+    /**
+     * a method that gives the description of the god
+     * @return a string that represents the god's name and a short description of its power
+     */
+    @Override
+    public String desc() {
+        return "HAEPHESTUS"+System.lineSeparator()+"Your Build: Your Worker may build one additional block (not dome) on top of your first block.";
+    }
+
+    @Override
+    public Player getOwner(){return checker.getOwner();}
+
+    @Override
+    public Board getBoard(){return board;}
+
+    @Override
+    public BuildingRuleChecker getChecker(){return checker;}
+
+    /**
+     * a testing method for getting a simulated user's input for phase
+     * @return the build
+     */
+    @Deprecated
+    private BuildingAction getFromPlayer(){
+        return TestActionProvider.getProvider().getNextBuild();
+    }
+
+    /**
+     * a testing method for getting a simulated user's input for phase
+     * @return a boolean
+     */
+    @Deprecated
+    private boolean getBoolFromPlayer(){
+        return TestActionProvider.getProvider().getNextAnswer();
+    }
 }

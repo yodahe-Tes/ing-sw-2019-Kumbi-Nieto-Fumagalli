@@ -1,0 +1,182 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DefaultMovementPhase</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DefaultMovementPhase (model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DefaultMovementPhase</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83,3%
+  </span>
+  <span class="absValue">
+    (5/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95,2%
+  </span>
+  <span class="absValue">
+    (20/ 21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import controller.MovementRuleChecker;
+<i>4</i>&nbsp;import controller.PhaseResult;
+<i>5</i>&nbsp;import controller.VictoryConditionChecker;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;/**
+<i>8</i>&nbsp; * a class that implements the default movement phase
+<i>9</i>&nbsp; * @author Fumagalli
+<i>10</i>&nbsp; */
+<i>11</i>&nbsp;public class DefaultMovementPhase implements MovementPhase{
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;    private final MovementRuleChecker check;
+<i>14</i>&nbsp;    private final DefaultMovingLosingCondition loose;
+<i>15</i>&nbsp;    private final VictoryConditionChecker win;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    /**
+<i>18</i>&nbsp;     * constructor
+<i>19</i>&nbsp;     * @param check is the rule checker of the phase
+<i>20</i>&nbsp;     * @param loose is the loosing condition
+<i>21</i>&nbsp;     */
+<i>22</i>&nbsp;
+<b class="fc"><i>23</i>&nbsp;    public DefaultMovementPhase(MovementRuleChecker check, DefaultMovingLosingCondition loose, VictoryConditionChecker win){</b>
+<b class="fc"><i>24</i>&nbsp;        this.check = check;</b>
+<b class="fc"><i>25</i>&nbsp;        this.loose = loose;</b>
+<b class="fc"><i>26</i>&nbsp;        this.win = win;</b>
+<b class="fc"><i>27</i>&nbsp;    }</b>
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /**
+<i>30</i>&nbsp;     * the method that implements the default movement phase
+<i>31</i>&nbsp;     * @return a structure that contains the chosen worker for moving, and the phase result
+<i>32</i>&nbsp;     */
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    @Override
+<i>35</i>&nbsp;    public MovementPhaseResult doMovement() {
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;        //checks loosing condition
+<i>39</i>&nbsp;
+<b class="fc"><i>40</i>&nbsp;        if(loose.DoCheckRule(check)){</b>
+<i>41</i>&nbsp;            //getOwner().getView().noMovesLeftMessage();
+<b class="fc"><i>42</i>&nbsp;            return new MovementPhaseResult(check.getOwner().getWorker(1), PhaseResult.DEFEAT );</b>
+<i>43</i>&nbsp;        }
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;        //moves worker
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;        int[] action;
+<i>48</i>&nbsp;        MovementAction destination;
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;        do {
+<b class="fc"><i>51</i>&nbsp;            action = getFromPlayer();</b>
+<b class="fc"><i>52</i>&nbsp;            destination = interpretAction(action);</b>
+<i>53</i>&nbsp;
+<b class="fc"><i>54</i>&nbsp;        }while(!check.doCheckRule(destination));</b>
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;        //checks if a forced move is needed
+<b class="fc"><i>57</i>&nbsp;        check.checkForcedMove(destination);</b>
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;        //does the actual move
+<b class="fc"><i>60</i>&nbsp;        destination.getWorker().move(destination.getDestination());</b>
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;        //Checks victory condition
+<b class="fc"><i>63</i>&nbsp;        if(win.doCheckRule(destination.getWorker())){</b>
+<b class="fc"><i>64</i>&nbsp;            return new MovementPhaseResult(destination.getWorker(), PhaseResult.VICTORY);</b>
+<i>65</i>&nbsp;        }
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;
+<b class="fc"><i>68</i>&nbsp;        return new MovementPhaseResult(destination.getWorker(), PhaseResult.NEXT);</b>
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    /**
+<i>73</i>&nbsp;     * a private method that gets the chosen worker reference and packs it with the movement&#39;s coordinates
+<i>74</i>&nbsp;     * @param action is the action given by the view. The first int represents the worker ID, while the other two are the coordinates of the destination
+<i>75</i>&nbsp;     * @return an Action that contains the worker references
+<i>76</i>&nbsp;     */
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    private MovementAction interpretAction(int[] action){
+<b class="fc"><i>79</i>&nbsp;        BoardWorker worker = this.check.getOwner().getWorker(action[0]);</b>
+<b class="fc"><i>80</i>&nbsp;        int[] destination = new int[]{action[1],action[2]};</b>
+<b class="fc"><i>81</i>&nbsp;        return new MovementAction(worker, destination);</b>
+<i>82</i>&nbsp;    }
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;
+<b class="nc"><i>85</i>&nbsp;    public Player getOwner(){return check.getOwner();}</b>
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    /**
+<i>89</i>&nbsp;     * a testing method for getting the input for phase
+<i>90</i>&nbsp;     * @return the move
+<i>91</i>&nbsp;     */
+<i>92</i>&nbsp;    @Deprecated
+<i>93</i>&nbsp;    private int[] getFromPlayer(){
+<b class="fc"><i>94</i>&nbsp;        return TestActionProvider.getProvider().getNextMove();</b>
+<i>95</i>&nbsp;    }
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    @Override
+<b class="fc"><i>98</i>&nbsp;    public MovementRuleChecker getChecker(){return check;}</b>
+<i>99</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-06-29 12:33</div>
+</div>
+</body>
+</html>

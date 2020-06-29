@@ -36,7 +36,7 @@ public class DefaultMovementRule implements MovementRule {
         if(destination[0]<=5 && destination[0]>=1 && destination[1]<=5 && destination[1]>=1) {
             if (oneSquareDistance(worker, destination)) {
                 if (isNotTooHigh(worker, destination)) {
-                    if (destinationIsEmpty(destination))
+                    if (board.isEmpty(destination))
                         return true;
                 }
             }
@@ -75,26 +75,16 @@ public class DefaultMovementRule implements MovementRule {
     }
 
     /**
-     * checks if the destination square is empty
-     * @param destination represents the coordinates of the destination
-     * @return true if on the destination square there aren't any workers or domes
-     */
-    private boolean destinationIsEmpty(int[] destination){
-        if(board.squareHasDome(destination))
-            return false;
-        for(int i=1;i<=board.numberPlayers();i++){
-            for(int j=1; j<3; j++){
-                if(Arrays.equals(board.getPlayer(i).workerPosition(j), destination))
-                    return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * The default movement phase doesn't force-move any worker, so this method does nothing
      * @param action is the action that would cause the forced move
      */
     @Override
     public void doForced(MovementAction action) {}
+
+    /**
+     * states that this rule is for owner's phase
+     * @return false
+     */
+    @Override
+    public boolean isOpponent(){return false;}
 }

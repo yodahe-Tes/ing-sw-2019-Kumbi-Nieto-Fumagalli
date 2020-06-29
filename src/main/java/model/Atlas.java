@@ -10,25 +10,24 @@ import static java.lang.Math.abs;
  *Your Build: Your Worker may
  * build a dome at any level
  */
-public class Atlas implements Deity, BuildingRule{
+public class Atlas implements Deity, BuildingRule {
 
     private final Board board;
 
-    public Atlas (Board board){
+    public Atlas(Board board) {
         this.board = board;
     }
 
     /**
-     * represents if the god activates during player or opponent's phase
-     * @return PLAYER phase
+     * a method that gives the description of the god
+     * @return a string that represents the god's name and a short description of its power
      */
     @Override
-    public  GodType type(){
-        return GodType.PLAYER;
-    }
+    public String desc() {return "ATLAS"+System.lineSeparator()+"Your Build: Your Worker may build a dome at any level. ";}
 
     /**
      * checks if the rules are fulfilled
+     *
      * @param worker is the worker used in the moving phase
      * @param action is the building action that the player wants to do
      * @return true if the condition is fulfilled
@@ -38,28 +37,29 @@ public class Atlas implements Deity, BuildingRule{
 
         int[] destination = action.getDestination();
 
-        if(destination[0]<=5 && destination[0]>=1 && destination[1]<=5 && destination[1]>=1) {
+        if (destination[0] <= 5 && destination[0] >= 1 && destination[1] <= 5 && destination[1] >= 1) {
             if (oneSquareDistance(worker, destination)) {
-                if (destinationIsEmpty(destination)) {
+                if (board.isEmpty(destination)) {
                     return true;
                 }
             }
         }
-            return false;
+        return false;
     }
 
     /**
-    * a side-method that checks if the worker and the destination of building action are one next to another
-    * @param worker the worker that is going to build
-    * @param destination represents the destination's coordinates
-    * @return true if the square is next to the worker
-    */
-    private boolean oneSquareDistance(BoardWorker worker, int[] destination){
+     * a side-method that checks if the worker and the destination of building action are one next to another
+     *
+     * @param worker      the worker that is going to build
+     * @param destination represents the destination's coordinates
+     * @return true if the square is next to the worker
+     */
+    private boolean oneSquareDistance(BoardWorker worker, int[] destination) {
         int row = destination[0];
-        int column = destination [1];
-        if (worker.getPosition()[0]!=row || worker.getPosition()[1]!=column){
-            if (abs(worker.getPosition()[0]-row)<=1){
-                if(abs(worker.getPosition()[1]-column)<=1)
+        int column = destination[1];
+        if (worker.getPosition()[0] != row || worker.getPosition()[1] != column) {
+            if (abs(worker.getPosition()[0] - row) <= 1) {
+                if (abs(worker.getPosition()[1] - column) <= 1)
                     return true;
             }
         }
@@ -67,19 +67,9 @@ public class Atlas implements Deity, BuildingRule{
     }
 
     /**
-     * checks if the destination square is empty
-     * @param destination represents the coordinates fo the destination
-     * @return true if on the destination square there aren't any workers or domes
+     * states for initialization purpose that Atlas is a rule that affects only owner's turns
+     * @return false
      */
-    private boolean destinationIsEmpty(int[] destination){
-        if(board.squareHasDome(destination))
-            return false;
-        for(int i=1;i<= board.numberPlayers();i++){
-            for(int j=1; j<3; j++){
-                if((board.getPlayer(i).workerPosition(j)[0]==destination[0])&&(board.getPlayer(i).workerPosition(j)[1]==destination[1]))
-                    return false;
-            }
-        }
-        return true;
-    }
+    @Override
+    public boolean isOpponent(){return false;}
 }

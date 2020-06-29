@@ -1,5 +1,6 @@
 package controller;
 
+import model.BuildingRule;
 import model.MovementAction;
 import model.MovementRule;
 import model.Player;
@@ -11,7 +12,7 @@ import model.Player;
 
 public class MovementRuleChecker {
 
-    private final MovementRule[] rule;
+    private MovementRule[] rule;
     private final Player owner;
 
     /**
@@ -46,6 +47,26 @@ public class MovementRuleChecker {
     public void checkForcedMove(MovementAction action){
         for(MovementRule particularRule : rule){
             particularRule.doForced(action);
+        }
+    }
+
+    /**
+     * removes the rules applied by a god owned by a defeated player
+     * @param looserGod is the god whose effect are to be removed
+     */
+    public void removeLooser(MovementRule looserGod){
+        if(rule.length>1){
+            int len = rule.length;
+            MovementRule[] newRules = new MovementRule[len-1];
+            int j=0;
+            for(int i=0;i<len;i++){
+                if(rule[i]!=looserGod){
+                    newRules[j]=rule[i];
+                    j++;
+                }
+            }
+            rule=newRules;
+
         }
     }
 
