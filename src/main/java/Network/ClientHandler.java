@@ -13,10 +13,13 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
     private final Socket socket;
     private ObjectOutputStream out;
     private final ServerSide server;
-
-
     private boolean active = true;
 
+    /**
+     * constructor
+     * @param socket socket used for the connection
+     * @param server server used during the communication
+     */
     public ClientHandler(Socket socket, ServerSide server)  {
         this.socket = socket;
         this.server = server;
@@ -26,6 +29,10 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
         return active;
     }
 
+    /**
+     * A class that sends messagges
+     * @param message contains the message to send
+     */
     private synchronized void send(Object message) {
         try {
             out.reset();
@@ -60,7 +67,9 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
 
     }
 
-
+    /**
+     * A class to close the connection of the determined client
+     */
     private void close() {
         closeConnection();
         System.out.println("Deregistering client...");

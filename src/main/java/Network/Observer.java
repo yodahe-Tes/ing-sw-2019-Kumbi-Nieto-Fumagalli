@@ -1,5 +1,10 @@
 package Network;
 
+/**
+ * @author Nieto
+ * An interface that models the observer pattern's observer part
+ */
+
 public interface Observer<T> {
 
     /**

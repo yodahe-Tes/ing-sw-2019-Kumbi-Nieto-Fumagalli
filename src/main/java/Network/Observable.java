@@ -1,9 +1,11 @@
 package Network;
-
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Nieto
+ * A Class that models the observer pattern's observer part
+ */
 public class Observable<T> {
 
     private final List<Observer<T>> obss = new ArrayList<>();
@@ -20,6 +22,9 @@ public class Observable<T> {
         }
     }
 
+    /**
+     *A method called by the CLiView class to notify that something changed
+     */
     public void notify(T message){
         synchronized (obss){
             for (Observer<T> observer : obss){

@@ -34,7 +34,7 @@ public class TurnManager {
             for (int i = 1; i <= getBoard().numberPlayers(); i++){
                 int[] newPosition;
                 do{
-                     newPosition = turn[i].getOwner().getView().initialPositionQuery(j);
+                     newPosition = turn[i-1].getOwner().getView().initialPositionQuery(j);
                 }while(!(getBoard().isEmpty(newPosition)));
                 getBoard().getPlayer(i).getWorker()[j-1].forced(newPosition);
             }

@@ -1,7 +1,4 @@
-
 package Network;
-
-
 import View.CliView;
 import controller.BoardGameConstructor;
 import controller.TurnManager;
@@ -15,7 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /***
- * This class implements java server class
+ * A class that handles the server, managing connections to it and by a method the initialization of the game
  * @author Nieto
  */
 
@@ -35,7 +32,6 @@ public class ServerSide {
     /**
      * A method to deregister the client connection and set free the spot to start
      * a new game
-     *
      * @param s client socket
      */
 
@@ -50,29 +46,35 @@ public class ServerSide {
         }
     }
 
-    //  public synchronized void login (ClientHandler s, Socket socket) throws InterruptedException {
+    /*public synchronized void login (ClientHandler s, Socket socket) throws InterruptedException {
 
-    //      s.send("Welcome!\nWhat is your name?");
+          s.send("Welcome!\nWhat is your name?");
 
-    //      String name = s.in.nextLine();
+          String name = s.in.nextLine();
 
-    //     clientSocket.add(socket);
-    //     queue.put(name,s);
-    //   if (queue.size()==2){
-    //     Thread t = new Thread(new Runnable() {
-    //        @Override
-    //         public void run() {
-    //            try {
-    //                  room();
-    //             } catch (InterruptedException e) {
-    //                e.printStackTrace();
-    //             }
-    //        }
-    //      });
-    //      t.start();
-    //      }
-    // }
+         clientSocket.add(socket);
+         queue.put(name,s);
+       if (queue.size()==2){
+         Thread t = new Thread(new Runnable() {
+            @Override
+             public void run() {
+                try {
+                      room();
+                 } catch (InterruptedException e) {
+                    e.printStackTrace();
+                 }
+            }
+          });
+          t.start();
+          }
+    }*/
 
+    /**
+     * A method that handles the client connected to the server and set everything to start the game
+     * @param s client managed by the class ClientHandler
+     * @param name the nickname decided from the player
+     * @param socket socked used for the connection
+     */
     public synchronized void room(ClientHandler s, String name, Socket socket) {
         clientSocket.add(socket);
         queue.put(name, s);
