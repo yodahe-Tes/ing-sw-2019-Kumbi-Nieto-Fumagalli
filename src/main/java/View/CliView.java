@@ -1,5 +1,19 @@
 package View;
 
+//TODO: dare la possibilità al player di richiedere a piacimento la descrizione del god
+//TODO: riguardare i messaggi in model e controller
+//TODO: socketing a 3 giocatori
+//TODO: risistemare errore nomi in ingresso
+//TODO: fare il jar e provarlo fuori da intelliJ
+//TODO: far vedere la board anche in fase di inizializzazione worker
+//TODO: gestire input utente durante turno avversario
+//TODO: nullPointerExeption nella nella cliview
+//TODO: tentativo disperato GUI
+//TODO: risolvere errore che se scrivi male perdi
+//TODO: tirare fuori dal client handler server.room e la domanda what's your nameXSA
+
+
+
 import Network.ClientStatus;
 import Network.Observable;
 import Network.Observer;
