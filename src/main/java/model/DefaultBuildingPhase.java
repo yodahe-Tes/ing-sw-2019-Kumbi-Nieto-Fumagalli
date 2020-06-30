@@ -82,7 +82,6 @@ public class DefaultBuildingPhase implements BuildingPhase{
         else
             board.addFloorTo(action.getDestination());
 
-
         return PhaseResult.NEXT;
     }
 
