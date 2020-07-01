@@ -4,6 +4,8 @@ import controller.MovementRuleChecker;
 import controller.PhaseResult;
 import controller.VictoryConditionChecker;
 
+import java.io.IOException;
+
 /**
  * a class that implements the default movement phase
  * @author Fumagalli
@@ -39,6 +41,7 @@ public class DefaultMovementPhase implements MovementPhase{
 
         if(loose.DoCheckRule(check)){
             getOwner().getView().noMovesLeftMessage();
+            getOwner().getView().loserMessage();
             return new MovementPhaseResult(check.getOwner().getWorker(1), PhaseResult.DEFEAT );
         }
 
@@ -48,8 +51,12 @@ public class DefaultMovementPhase implements MovementPhase{
         MovementAction destination;
 
         do {
-            action = getOwner().getView().moveLocationQuery();
-            destination = interpretAction(action);
+            try {
+                action = getOwner().getView().moveQuery();
+                destination = interpretAction(action);
+            }catch (IOException e){
+                return new MovementPhaseResult(getOwner().getWorker(1),PhaseResult.DISCONNECTED);
+            }
 
         }while(!check.doCheckRule(destination));
 
@@ -61,6 +68,7 @@ public class DefaultMovementPhase implements MovementPhase{
 
         //Checks victory condition
         if(win.doCheckRule(destination.getWorker())){
+            getOwner().getView().winnerMessage();
             return new MovementPhaseResult(destination.getWorker(), PhaseResult.VICTORY);
         }
 

@@ -2,6 +2,7 @@ package controller;
 
 import model.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -12,6 +13,9 @@ import java.util.ArrayList;
 public class TurnManager {
 
     private Turn[] turn;
+    PhaseResult currentResult = PhaseResult.DEFEAT;
+    int turnNumber=0;
+
 
     /**
      * constructor
@@ -27,52 +31,31 @@ public class TurnManager {
      */
     public void startGame(){
 
-        PhaseResult currentResult = PhaseResult.DEFEAT;
+        //informs the players about their and opponent's god cards and places the workers on the board
 
-        //gets the workers' starting positions for every player
-        for (int j=1;j<=2; j++) {
-            for (int i = 1; i <= getBoard().numberPlayers(); i++){
-                int[] newPosition;
-                do{
-                     newPosition = turn[i-1].getOwner().getView().initialPositionQuery(i,j);
-                }while(!(getBoard().isEmpty(newPosition)));
-                getBoard().getPlayer(i).getWorker()[j-1].forced(newPosition);
-            }
-        }
+        gettingStarted();
+
+        turnNumber=0;
 
         //starts the turn cycle
-        int turnNumber=0;
-        do{
+
+        while(currentResult != PhaseResult.VICTORY && turn.length>1){
             // does the actual turn
             currentResult=turn[turnNumber].doTurn();
 
-            if(currentResult==PhaseResult.DEFEAT){
+            if(currentResult==PhaseResult.DEFEAT || currentResult==PhaseResult.DISCONNECTED){
                 //if someone loose
-                if(turn.length>2){
-                    //delete god's power on other players
-                    if(turn[turnNumber].getOwner().getDeity() instanceof MovementRule){
-                        for(Turn opponentTurn : turn){
-                            if(opponentTurn!=turn[turnNumber]){
-                                opponentTurn.getMove().getChecker().removeLooser((MovementRule) turn[turnNumber].getOwner().getDeity());
-                            }
-                        }
+                playerLost(turn[turnNumber]);
+            }
+
+
+            else if(currentResult==PhaseResult.VICTORY){
+                //if someone won inform players
+                for(Turn otherTurn : turn){
+                    if (otherTurn!=turn[turnNumber]){
+                        otherTurn.getOwner().getView().aPlayerHasWonMessage(turn[turnNumber].getOwner());
+                        otherTurn.getOwner().getView().loserMessage();
                     }
-                    if(turn[turnNumber].getOwner().getDeity() instanceof BuildingRule){
-                        for(Turn opponentTurn : turn){
-                            if(opponentTurn!=turn[turnNumber]){
-                                opponentTurn.getBuild().getChecker().removeLooser((BuildingRule) turn[turnNumber].getOwner().getDeity());
-                            }
-                        }
-                    }
-                    //delete player
-                    getBoard().removePlayerFromList(turn[turnNumber].getOwner());
-                    removeTurnFromList(turn[turnNumber]);
-                    turnNumber--;
-                }
-                else{
-                    //the only remaining player wins
-                    getPlayer()[turnNumber].getView().loserMessage();
-                    currentResult=PhaseResult.VICTORY;
                 }
             }
 
@@ -82,7 +65,12 @@ public class TurnManager {
             else
                 turnNumber=0;
             //until someone wins
-        }while(currentResult != PhaseResult.VICTORY);
+        }
+
+        for(Turn remains : turn){
+            remains.getOwner().closeConnection();
+        }
+        System.out.println("finished game");
 }
 
 
@@ -122,6 +110,103 @@ public class TurnManager {
 
         Turn[] updatedTurn = new Turn[1];
         turn = result.toArray(updatedTurn);
+    }
+
+    /**
+     * removes a player from the game
+     * @param looser is the turn associated with the looser player
+     */
+    private void playerLost(Turn looser){
+
+        if(turn.length>2){
+            //if there are more than two player delete god's power on other players
+            for(Turn opponentTurn : turn) {
+                if (opponentTurn != looser){
+
+
+                    if(currentResult==PhaseResult.DEFEAT)
+                        turn[turnNumber].getOwner().getView().aPlayerHasLostmessage(looser.getOwner());
+                    if (currentResult==PhaseResult.DISCONNECTED)
+                        turn[turnNumber].getOwner().getView().aPlayerHasDisconnectedMessage(looser.getOwner());
+
+
+                    if (looser.getOwner().getDeity() instanceof MovementRule)
+                        opponentTurn.getMove().getChecker().removeLooser((MovementRule) looser.getOwner().getDeity());
+                    if (looser.getOwner().getDeity() instanceof BuildingRule)
+                        opponentTurn.getBuild().getChecker().removeLooser((BuildingRule) looser.getOwner().getDeity());
+                }
+            }
+            //delete player
+            getBoard().removePlayerFromList(looser.getOwner());
+            removeTurnFromList(looser);
+            turnNumber--;
+        }
+        else{
+            //the only remaining player wins
+            int winner;
+            if(turnNumber==0)
+                winner=1;
+            else
+                winner=0;
+
+            if(currentResult==PhaseResult.DEFEAT)
+                turn[winner].getOwner().getView().aPlayerHasLostmessage(looser.getOwner());
+            if (currentResult==PhaseResult.DISCONNECTED)
+                turn[winner].getOwner().getView().aPlayerHasDisconnectedMessage(looser.getOwner());
+            turn[winner].getOwner().getView().winnerMessage();
+            currentResult=PhaseResult.VICTORY;
+        }
+
+    }
+
+    private void gettingStarted(){
+        //informs every player of gods choice
+        for(Turn player : turn){
+            player.getOwner().getView().assignedGodMessage();
+            for(Turn opponent : turn){
+                if(opponent != player){
+                    player.getOwner().getView().otherPlayersGod();
+                }
+            }
+            player.getOwner().getView().informType();
+        }
+
+        //gets the workers' starting positions for every player
+        for (int j=1;j<=2; j++) {
+            for (int i = 1; i <= getBoard().numberPlayers(); i++){
+                int[] newPosition = null;
+                do{
+                    try {
+                        newPosition = turn[i - 1].getOwner().getView().initialPositionQuery(j);
+                    }catch (IOException|NullPointerException e){
+                        currentResult=PhaseResult.DISCONNECTED;
+                        for(Turn notDisconnected : turn){
+                            if(notDisconnected != turn[i-1]){
+                                notDisconnected.getOwner().getView().aPlayerHasDisconnectedMessage(turn[i-1].getOwner());
+                            }
+                        }
+                        getBoard().removePlayerFromList(turn[i-1].getOwner());
+                        removeTurnFromList(turn[i-1]);
+                        if(turn.length==1) {
+                            for (Turn remained : turn) {
+                                remained.getOwner().getView().winnerMessage();
+                            }
+                            return;
+                        }
+                        else if(turn.length<1){
+                            return;
+                        }
+                        else
+                            i--;
+                    }
+
+                }while(newPosition==null && getBoard().isInside(newPosition) && !(getBoard().isEmpty(newPosition)));
+                if(newPosition!=null)
+                    getBoard().getPlayer(i).getWorker()[j-1].forced(newPosition);
+                turn[i - 1].getOwner().getView().notYourTUrnMessage();
+
+            }
+        }
     }
 
     /**

@@ -3,10 +3,9 @@ import Network.ServerSide;
 import java.io.IOException;
 
 /**
- * A class that launches the main server
- * @author Nieto
+ * Hello world!
+ *
  */
-
 public class OpenServer
 {
     public static void main( String[] args )

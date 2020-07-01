@@ -48,7 +48,7 @@ public class Hypnus implements Deity, MovementRule {
 
     private Player activePlayer(BoardWorker worker){
         for(int i=1; i<=board.numberPlayers();i++){
-            for(int j=1;i<=2;j++){
+            for(int j=1;j<=2;j++){
                 if(board.getPlayer(i).getWorker(j)==worker)
                     return board.getPlayer(i);
             }

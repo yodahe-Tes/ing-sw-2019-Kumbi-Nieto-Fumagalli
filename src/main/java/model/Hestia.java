@@ -7,6 +7,8 @@ package model;
 import controller.BuildingRuleChecker;
 import controller.PhaseResult;
 
+import java.io.IOException;
+
 
 public class Hestia implements Deity, BuildingPhase {
 
@@ -49,7 +51,11 @@ public class Hestia implements Deity, BuildingPhase {
         BuildingAction action;
 
         do {
-            action = getOwner().getView().buildLocationQuery();
+            try{
+                action = getOwner().getView().buildLocationAndTypeQuery();
+            }catch (IOException e){
+                return PhaseResult.DISCONNECTED;
+            }
         } while (!checker.doCheckRules(worker, action));
 
         board.build(action);
@@ -57,9 +63,19 @@ public class Hestia implements Deity, BuildingPhase {
         //second building action
 
         if (canBuildFurther(worker)) {
-            if (getOwner().getView().buildAgainQuery()) {
+            boolean buildAgain=false;
+            try{
+                buildAgain=getOwner().getView().buildAgainQuery();
+            }catch (IOException e){
+                return PhaseResult.DISCONNECTED;
+            }
+            if (buildAgain) {
                 do {
-                    action = getFromPlayer();
+                    try{
+                        action = getOwner().getView().buildLocationAndTypeQuery();
+                    }catch (IOException e){
+                        return PhaseResult.DISCONNECTED;
+                    }
                 } while (!checker.doCheckRules(worker, action) || action.getDestination()[0]==1 || action.getDestination()[0]==5 || action.getDestination()[1]==1 || action.getDestination()[1]==5);
                 board.build(action);
             }

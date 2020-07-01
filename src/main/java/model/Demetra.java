@@ -8,6 +8,7 @@ package model;
 import controller.BuildingRuleChecker;
 import controller.PhaseResult;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 
@@ -43,7 +44,7 @@ public class Demetra implements Deity, BuildingPhase {
 
         //checks if defeated
         if (loose.doCheckRule(checker, worker)) {
-            //getOwner().getView().loserMessage();
+            getOwner().getView().loserMessage();
             return PhaseResult.DEFEAT;
         }
 
@@ -52,7 +53,11 @@ public class Demetra implements Deity, BuildingPhase {
         BuildingAction action;
 
         do {
-            action = getOwner().getView().buildLocationQuery();
+            try{
+                action = getOwner().getView().buildLocationAndTypeQuery();
+            }catch (IOException e){
+                return PhaseResult.DISCONNECTED;
+            }
         } while (!checker.doCheckRules(worker, action));
 
         board.build(action);
@@ -60,10 +65,20 @@ public class Demetra implements Deity, BuildingPhase {
         //second building action
 
         if (canBuildFurther(worker, action.getDestination())) {
-            if (getOwner().getView().buildAgainQuery()) {
+            boolean buildAgain=false;
+            try{
+                buildAgain=getOwner().getView().buildAgainQuery();
+            }catch (IOException e){
+                return PhaseResult.DISCONNECTED;
+            }
+            if (buildAgain) {
                 BuildingAction actionTwo;
                 do {
-                    actionTwo = getOwner().getView().buildLocationQuery();
+                    try{
+                        actionTwo = getOwner().getView().buildLocationAndTypeQuery();
+                    }catch (IOException e){
+                        return PhaseResult.DISCONNECTED;
+                    }
                 } while (!checker.doCheckRules(worker, actionTwo) || Arrays.equals(action.getDestination(),actionTwo.getDestination()));
                 board.build(actionTwo);
             }

@@ -3,6 +3,8 @@ package model;
 import controller.BuildingRuleChecker;
 import controller.PhaseResult;
 
+import javax.imageio.IIOException;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -44,7 +46,11 @@ public class DefaultBuildingPhase implements BuildingPhase{
 
         //gets the action from the player
         do {
-            action = getOwner().getView().buildLocationQuery();
+            try{
+                action = getOwner().getView().buildLocationAndTypeQuery();
+            }catch (IOException e){
+                return PhaseResult.DISCONNECTED;
+            }
         }while (!checker.doCheckRules(worker, action));
 
         //does the actual build
@@ -67,13 +73,17 @@ public class DefaultBuildingPhase implements BuildingPhase{
 
         //checks if the player can build with the chosen worker
         if(loose.doCheckRule(checker, worker)) {
-            //getOwner().getView().loserMessage();
+            getOwner().getView().loserMessage();
             return PhaseResult.DEFEAT;
         }
 
         //gets a legal action from the player
         do {
+            try{
             action = getOwner().getView().buildLocationAndTypeQuery();
+            }catch (IOException e){
+                return PhaseResult.DISCONNECTED;
+            }
         }while (!checker.doCheckRules(worker, action)|| Arrays.equals(action.getDestination(),here));
 
         //does the actual build

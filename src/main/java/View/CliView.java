@@ -7,6 +7,8 @@ import model.Board;
 import model.BuildingAction;
 import model.Player;
 
+import java.io.IOException;
+
 import static java.lang.Thread.sleep;
 
 
@@ -20,6 +22,8 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
     private Board board;
     private Player[] player;
     private ClientStatus client;
+    private boolean active=false;
+    private boolean connectionActive=true;
 
     public static final String FLOOR = "\u2589";
     public static final String DOME = "D";
@@ -89,12 +93,17 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
 
         String workerIdentifierStr;
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < board.numberPlayers(); i++) {
             for (int j = 0; j < 2; j++) {
                 workerPosition = player[i].getWorker(j + 1).getPosition();
-                int row = workerPosition[0] - 1, column = workerPosition[1] - 1;
-                workerIdentifierStr = WORKER + idTag(i + 1) + idTag(j + 1);
-                boardImage[row][column] = boardImage[row][column].concat(workerIdentifierStr);
+                try {
+                    int row = workerPosition[0] - 1, column = workerPosition[1] - 1;
+                    workerIdentifierStr = WORKER + idTag(i + 1) + idTag(j + 1);
+                    boardImage[row][column] = boardImage[row][column].concat(workerIdentifierStr);
+                }
+                catch (ArrayIndexOutOfBoundsException e){
+                    System.out.println("error in constructing board");
+                }
             }
         }
     }
@@ -161,13 +170,34 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
 
     /**
      * @author Kumbi
-     * updates the readInput after receiving message from client
+     * updates the readInput after receiving message from client, sends the gods description and informs the player about its input
      */
 
     @Override
     public void updateCli(String message) {
-        this.flag = true;
-        this.readInput = message;
+
+        if(message!=null && message.equals("closed") && !client.isActive()){
+            connectionActive=false;
+        }
+        else if(message!=null && message.equals("g")){
+            assignedGodMessage();
+            otherPlayersGod();
+        }
+        else if(active) {
+            this.flag = true;
+            this.readInput = message;
+        }
+        else{
+            informType();
+        }
+
+    }
+
+    /**
+     * informs the client when and what it can send
+     */
+    public void informType(){
+        inform("When not asked to type you can only check gods with the command [g], or disconnect typing [disconnect]");
     }
 
     /**
@@ -175,7 +205,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * Asks the player if he wants to move or build and calls the respective Querymethods
      */
 
-    public void intentionQuery(boolean waitingFor) {
+    public void intentionQuery(boolean waitingFor) throws IOException {
         String str = ask("Do You want to  : \n  [1] move    or\n [2] build  \n (input 1 or 2) ");
         int choice = Integer.parseInt(str);
 
@@ -202,10 +232,17 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * Asks the player which worker he wants to move and returns choice
      */
 
-    public int workerChoiceQuery() {
+    public int workerChoiceQuery() throws IOException {
+        update();
         String str = ask("Which worker do you want to move?[1] or [2] ");
 
-        Integer choice = Integer.valueOf(str);
+        Integer choice;
+        try {
+            choice = Integer.valueOf(str);
+        }catch (NumberFormatException e){
+            inform("Please provide an integer values as worker number");
+            choice = workerChoiceQuery();
+        }
         if (xTOychecker(choice,1,2))
             return choice;
         else {
@@ -219,48 +256,56 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * Asks the player where he wants to move the worker and passes move action to Controller
      */
 
-    public int[] initialPositionQuery(int i,int j) {
+    public int[] initialPositionQuery(int i) throws IOException {
 
-        String [] input = null;
+        String [] input;
         int[] destination=null;
-        while(input==null) {
+        while(destination==null) {
             try {
-                String str = ask("Choose initial position of player "+i+",worker"+j+"(row,column)");
+                update();
+                String str = ask("Choose initial position of worker"+i+"(row,column)");
                 input = str.split(",");
                 if (xTOychecker(Integer.parseInt(input[0]),1,5)&&xTOychecker(Integer.parseInt(input[1]),1,5))
                     destination = new int[]{Integer.parseInt(input[0]), Integer.parseInt(input[1])};
-
-                return destination;
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException|NullPointerException|ArrayIndexOutOfBoundsException e) {
                 inform("Please provide integer values as coordinates");
-                destination = null;
+                destination = initialPositionQuery(i);
             }
-        }return destination;
+        }
+        return destination;
     }
 
     /**
-     * Asks the player where he wants to move the worker and passes move action to Controller
+     * Asks the player which worker he wants to move and where, then passes move action to Controller
      */
 
-    public int[] moveLocationQuery() {
-        System.out.println("Dentro MoveLocation");
+    public int[] moveQuery() throws IOException {
+        System.out.println("Dentro MoveQuery");
         int workerId = workerChoiceQuery();
+        int[] destination = moveLocationQuery();
+        return new int[]{workerId,destination[0],destination[1]};
+    }
+
+    /**
+     * Asks the player where he wants to move the worker
+     */
+    public int[] moveLocationQuery() throws IOException {
+        System.out.println("Dentro MoveLocation");
         String [] input = null;
         int[] destination=null;
         while(input==null) {
             try {
                 String str = ask("Where do you want to move the worker to? (row,column)");
                 input = str.split(",");
-                destination = new int[]{workerId,Integer.parseInt(input[0]), Integer.parseInt(input[1])};
+                destination = new int[]{Integer.parseInt(input[0]), Integer.parseInt(input[1])};
                 return destination;
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException|NullPointerException e) {
                 inform("Please provide integer values as coordinates");
                 destination = null;
             }
 
         }return destination;
     }
-
 
 
     /**
@@ -269,7 +314,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * @return building action
      */
 
-    public BuildingAction buildLocationQuery() {
+    public BuildingAction buildLocationQuery() throws IOException {
         String str = ask("Where do you want to build ? (row,column)\n");
         String [] input = null;
         int[] buildLocation=null;
@@ -278,7 +323,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
                 input = str.split(",");
                 buildLocation = new int[]{Integer.parseInt(input[0]), Integer.parseInt(input[1])};
                 return new BuildingAction(buildLocation);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException|NullPointerException e) {
                 inform("Please provide integer values as coordinates");
                 buildLocation = null;
             }
@@ -291,7 +336,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * Asks the player where he wants to build  and what he wants to build and passes build action to Controller
      */
 
-    public BuildingAction buildLocationAndTypeQuery() {
+    public BuildingAction buildLocationAndTypeQuery() throws IOException {
 
         String str = ask("Where do you want to build ? (row,column)\n");
 
@@ -309,7 +354,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
                 inform("input [1] or [2]");
                 buildLocationAndTypeQuery();
             }
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException|NullPointerException e) {
             ask("Please provide integer values as coordinates");
         }
 
@@ -344,14 +389,17 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * @return boolean
      */
 
-    public boolean buildAgainQuery() {
+    public boolean buildAgainQuery() throws IOException{
 
         String answer = ask("Do you want to build again ? (y, n)");
-        if(answer== "y"){
+
+        if(answer.equals("y")){
             return true;}
-        else if(answer=="n"){
+
+        else if(answer.equals("n")){
             return false;
         }
+
         else{
             inform("Type y or n ");
             return buildAgainQuery();
@@ -364,12 +412,12 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * @return boolean
      */
 
-    public boolean moveAgainQuery() {
+    public boolean moveAgainQuery() throws IOException{
 
         String answer = ask("Do you want to move again ? (y, n)");
-        if(answer == "y"){
+        if(answer.equals("y")){
             return true;}
-        else if(answer =="n"){
+        else if(answer.equals("n")){
             return false;
         }
         else{
@@ -382,10 +430,10 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * used to inform a player about the opponent players' God
      *
      */
-    private void otherPlayersGod(){
-        for(Player players : player){
-            if (players != playerOwner()){
-                inform("The player "+players.getNickname()+" has God "+players.godDesc());
+    public void otherPlayersGod(){
+        for(int i=0;i<player.length;i++){
+            if (player[i] != playerOwner()){
+                inform(player[i].getNickname()+", the player "+(i+1)+", has God "+player[i].godDesc());
             }
         }
     }
@@ -449,10 +497,16 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      *
      */
 
+
     public void aPlayerHasLostmessage(Player loser) {
         inform("player "+ loser.getNickname()+" has lost.");
     }
 
+    /**
+     * informs players that one of the player has disconnected
+     * @param disconnected
+     */
+    public void aPlayerHasDisconnectedMessage(Player disconnected){inform("player "+ disconnected.getNickname()+" has disconnected from game.");}
 
     /**
      * Informs player that he has lost
@@ -463,6 +517,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
         inform("Sorry, you have lost");
     }
 
+    public void aPlayerHasWonMessage(Player winner){inform("player "+ winner.getNickname()+" has won.");}
     /**
      * method used to send info to client
      */
@@ -476,26 +531,43 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * method used to send questions to the client and retrieve the answer
      *
      */
-    protected String ask(String QueryForClient) {
-
+    protected String ask(String QueryForClient) throws IOException{
         client.asyncSend(QueryForClient);
+        active=true;
         String str = null;
         try {
             System.out.println("prima di wait");
-            while (!flag) {
+            while (!flag && connectionActive) {
                 try {
+
                     sleep(200);
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
                 }
             }
-            System.out.println("finito wait");
-            str = readInput;
-            flag=false;
-            System.out.println("ho fatto ask");
+            if(connectionActive) {
+                System.out.println("finito wait");
+                str = readInput;
+                flag = false;
+                System.out.println("ho fatto ask");
+                if(str.equals("disconnect")){
+                    throw new IOException();
+                }
+            }
+            else{
+                throw new IOException();
+            }
         } catch (Exception e) {
+            if(e instanceof IOException)
+                throw new IOException();
             e.printStackTrace();
         }
+        active=false;
         return str;
+    }
+
+    public void closeConnection(){
+        client.close();
+
     }
 }

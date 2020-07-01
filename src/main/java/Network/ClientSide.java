@@ -11,8 +11,8 @@ import java.util.Scanner;
 
 /***
  * This class implements java socket class
- * It implements a thin client that  read user input and sends to the server
- * vice-versa and elaborates it.
+ * It implements a thin client that simply read user input and sends to the server
+ * and vice-versa
  * @author Nieto
  */
 
@@ -22,12 +22,7 @@ public class ClientSide {
         private String ip;
         private int port;
 
-    /**
-     * Constructor
-     * @param ip address used for the connection
-     * @param port used to establish the connection
-     */
-    public ClientSide(String ip, int port){
+        public ClientSide(String ip, int port){
             this.ip = ip;
             this.port = port;
         }
@@ -42,12 +37,7 @@ public class ClientSide {
             this.active = active;
         }
 
-    /**
-     * A class that reads from the socket and based on what it gets it shows different infos to the player
-     * @param socketIn the socket used by the client for the connection
-     * @return the thread that contains the communication
-     */
-    public Thread asyncReadFromSocket(final ObjectInputStream socketIn){
+        public Thread asyncReadFromSocket(final ObjectInputStream socketIn){
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -71,12 +61,6 @@ public class ClientSide {
             return t;
         }
 
-    /**
-     * A class used to elaborate the output sent to the server
-     * @param stdin the input received
-     * @param socketOut the output to send
-     * @return the thread that contains the communication
-     */
         public Thread asyncWriteToSocket(final Scanner stdin, final PrintWriter socketOut){
             Thread t = new Thread(new Runnable() {
                 @Override

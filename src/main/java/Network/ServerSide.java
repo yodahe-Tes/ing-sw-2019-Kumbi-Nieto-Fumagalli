@@ -3,8 +3,8 @@ import View.CliView;
 import controller.BoardGameConstructor;
 import controller.TurnManager;
 import model.Player;
-import java.io.IOException;
-import java.io.InputStream;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
@@ -37,7 +37,7 @@ public class ServerSide {
 
     public synchronized void deregisterConnection(ClientStatus s) {
         ClientStatus opponent = gameConnection.get(s);
-        if (opponent != null) opponent.closeConnection();
+        if (opponent != null) opponent.close();
         gameConnection.remove(s);
         gameConnection.remove(opponent);
         Iterator<String> iterator = queue.keySet().iterator();
@@ -157,7 +157,8 @@ public class ServerSide {
         while (true) {
             try {
                 Socket newSocket = listener.accept();
-                ClientHandler clHandler = new ClientHandler(newSocket, this);
+
+                ClientHandler clHandler = new ClientHandler(newSocket, this );
                 pool.submit(clHandler);
             } catch (IOException e) {
                 System.out.println("Connection Error!");
