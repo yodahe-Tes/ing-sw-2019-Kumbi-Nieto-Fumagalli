@@ -30,6 +30,8 @@ public class ServerSide {
     private ArrayList<InputStream> InputStr = new ArrayList();
     private Map<ClientStatus, ClientStatus> gameConnection = new HashMap<>();
     private static ExecutorService pool = Executors.newFixedThreadPool(128);
+    int keyNum=0;
+    String keyString;
 
 
     /**
@@ -75,26 +77,28 @@ public class ServerSide {
 
     public synchronized void room(ClientHandler s, String name, Socket socket) {
         clientSocket.add(socket);
-        queue.put(name, s);
+        keyString = ""+keyNum;
+        queue.put(keyString, s);
+        keyNum++;
         if (queue.size() == 2) {
 
             List<String> keys = new ArrayList<>(queue.keySet());
             ClientStatus c1 = queue.get(keys.get(0));
             ClientStatus c2 = queue.get(keys.get(1));
 
-            ClientStatus[] ListaC = {c1, c2};
+            ClientStatus[] listaC = {c1, c2};
 
             Set ss = queue.keySet();
             Object[] a = ss.toArray();
             String[] players = new String[a.length];
             for (int i = 0; i < players.length; i++) {
-                players[i] = a[i].toString();
+                players[i] = listaC[i].getName();
             }
             final TurnManager newTurnManager = BoardGameConstructor.construct(players);
             Player[] player = newTurnManager.getPlayer();
             CliView jj;
             for (int i = 0; i < (newTurnManager.getPlayer()).length; i++) {
-                jj = new CliView(ListaC[i], newTurnManager.getBoard());
+                jj = new CliView(listaC[i], newTurnManager.getBoard());
                 (player[i]).addCliView(jj);
             }
             gameConnection.put(c1, c2);

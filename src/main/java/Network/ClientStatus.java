@@ -11,4 +11,5 @@ public interface ClientStatus  {
 
     boolean isActive();
 
+    String getName();
 }

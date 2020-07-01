@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /***
  * A class that handles the input from the clients
@@ -13,7 +15,9 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
     private final Socket socket;
     private ObjectOutputStream out;
     private final ServerSide server;
-
+    private String name;
+    private int numberPlayer;
+    Lock lock = new ReentrantLock();
 
     private boolean active = true;
 
@@ -71,10 +75,9 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
 
     @Override
     public void run() {
+        lock.lock();
         Scanner in;
-        String name;
 
-        int numberOfPlayers;
         try{
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
@@ -97,18 +100,18 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
 
             String read = in.nextLine();
             name = read;
-            int players = 0;
-            while (players==0){
+            lock.unlock();
+            numberPlayer = 0;
+            while (numberPlayer==0){
                 try{
                     read=in.nextLine();
-                    players=Integer.parseInt(read);
+                    numberPlayer=Integer.parseInt(read);
                 }
                 catch (Exception e ){
-                    players=0;
+                    numberPlayer=0;
                 }
             }
 
-            System.out.println(players);
 
             server.room(this,name, socket);
 
@@ -129,4 +132,10 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
         }
     }
 
+    @Override
+    public String getName(){
+        lock.lock();
+        lock.unlock();
+        return name;
+    }
 }
