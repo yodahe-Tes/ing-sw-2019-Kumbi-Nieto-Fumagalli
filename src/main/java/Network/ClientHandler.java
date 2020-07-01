@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /***
  * A class that handles the input from the clients
@@ -13,7 +15,9 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
     private final Socket socket;
     private ObjectOutputStream out;
     private final ServerSide server;
-
+    private String name;
+    private int numberPlayer;
+    Lock lock = new ReentrantLock();
 
     private boolean active = true;
 
@@ -22,7 +26,7 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
         this.server = server;
     }
 
-    private synchronized boolean isActive(){
+    public synchronized boolean isActive(){
         return active;
     }
 
@@ -36,8 +40,8 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
         }
     }
 
-    @Override
-    public synchronized void closeConnection() {
+
+    private void closeConnection() {
         send("Connection closed!");
         try {
             socket.close();
@@ -60,8 +64,8 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
 
     }
 
-
-    private void close() {
+    @Override
+    public synchronized void close() {
         closeConnection();
         System.out.println("Deregistering client...");
         server.deregisterConnection(this);
@@ -71,10 +75,9 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
 
     @Override
     public void run() {
+        lock.lock();
         Scanner in;
-        String name;
 
-        int numberOfPlayers;
         try{
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
@@ -93,22 +96,46 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
                     notify(read);
                 }
             } else {*/
-            send("Welcome!\nWhat is your name?");
+
+
             String read = in.nextLine();
             name = read;
+            lock.unlock();
+            numberPlayer = 0;
+            while (numberPlayer==0){
+                try{
+                    read=in.nextLine();
+                    numberPlayer=Integer.parseInt(read);
+                }
+                catch (Exception e ){
+                    numberPlayer=0;
+                }
+            }
+
+
             server.room(this,name, socket);
 
             while (isActive()) {
                 read = in.nextLine();
+                if(read.equals("disconnect"))
+                    throw new IOException();
                 notify(read);
                 System.err.println("notified" + read);
             }
 
         } catch (NoSuchElementException | IOException e) {
+            active=false;
+            System.out.println("active set falseZ");
             System.err.println("Error!" + e.getMessage());
         } finally {
                 close();
         }
     }
 
+    @Override
+    public String getName(){
+        lock.lock();
+        lock.unlock();
+        return name;
+    }
 }
