@@ -1,32 +1,5 @@
 package View;
 
-//TODO: dare la possibilità al player di richiedere a piacimento la descrizione del god -!-!-!-!-!-!-!-!
-//TODO: gestire input utente durante turno avversario -!-!-!-!-!-
-//TODO: riguardare i messaggi in model e controller -!-!-!-!-!-
-//TODO: nullPointerException nella cliview -!-!-!-!-!-!-!-
-//TODO: far vedere la board anche in fase di inizializzazione worker -!-!-!
-//TODO: uscire loop infinito build/moveagainqueary -!-!-!-!-!-
-//TODO: controllare stampa board per 3 giocatori -!-!-!-!-!-!-
-//TODO: risolvere errore hasDome in izializzazione -!-!-!-!-!-!-!-
-//TODO: visualizzazione board anche prima della move -!-!-!-!-!-
-//TODO: controllare che sia sempre lo stesso worker a muoversi con Triton -!-!-!-!-!-
-//TODO: numberFOrmatExption quando input errato in workerchoicequeary -!-!-!-!-!-!-!-
-//TODO: errore in Hypnus outOfBounds -!-!-!-!-!-!-!-
-//TODO: errore in Limus effetto opposto -!-!-!-!-!-!-!-!-!-
-//TODO: not showing victory message -!-!-!-!-!-!-
-//TODO: tirare fuori dal client handler server.room
-//TODO: la domanda what's your name va spostata fuori da client handler -!-!-!-!-!-!-
-
-//TODO: socketing a 3 giocatori -?-?-?-?-
-//TODO: tentativo disperato GUI -?-?-?-?-?
-
-//TODO: risistemare errore nomi in ingresso
-//TODO: gestire disconnessione client e aggiungere possibilità di ritirarsi e gestire caso di disconnessione
-//TODO: sistemare errore port già occupata se si ripresenta
-//TODO: fare il jar e provarlo fuori da intelliJ
-
-
-
 import Network.ClientStatus;
 import Network.Observable;
 import Network.Observer;
