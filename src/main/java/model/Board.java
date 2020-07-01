@@ -109,6 +109,19 @@ public class Board implements Subject {
     }
 
     /**
+     * checks if the coordinates provided are valid
+     * @param square the coordinates to check
+     * @return if the coordinates provided are correct
+     */
+    public boolean isInside(int[] square){
+        for(int i=0;i<2;i++){
+            if(square[i]>5 && square[i]<1)
+                return false;
+        }
+        return true;
+    }
+
+    /**
      * simple getter for player
      * @param playerNumber player's number ID (1 or 2 in a normal 2 players game)
      */
@@ -168,6 +181,5 @@ public class Board implements Subject {
         Player[] updatedPlayers = new Player[1];
         player = result.toArray(updatedPlayers);
     }
-
 }
 

@@ -4,8 +4,6 @@ import controller.MovementRuleChecker;
 import controller.PhaseResult;
 import controller.VictoryConditionChecker;
 
-import java.util.Arrays;
-
 /**
  * A class implementing the deity Triton
  * @author Fumagalli
@@ -42,16 +40,19 @@ public class Triton implements Deity, MovementPhase{
         //checking if the player can move
         if(defeated.DoCheckRule(checker)){
             getOwner().getView().noMovesLeftMessage();
+            getOwner().getView().loserMessage();
             return new MovementPhaseResult(checker.getOwner().getWorker(1),PhaseResult.DEFEAT);
         }
 
         //gets and validates the first move
 
+        getOwner().getView().yourTUrnMessage();
+
         int[] action;
         MovementAction destination;
 
         do {
-            action = getOwner().getView().moveLocationQuery();
+            action = getOwner().getView().moveQuery();
             destination = interpretAction(action);
 
         }while(!checker.doCheckRule(destination));
@@ -74,7 +75,7 @@ public class Triton implements Deity, MovementPhase{
 
         BoardWorker movingWorker=destination.getWorker();
 
-        while(canMoveFurther(destination.getWorker(), startingSquare) && (destination.getDestination()[0]==1 || destination.getDestination()[0]==5 || destination.getDestination()[1]==1 || destination.getDestination()[1]==5) && getOwner().getView().moveAgainQuery()){
+        while(canMoveFurther(destination.getWorker()) && (destination.getDestination()[0]==1 || destination.getDestination()[0]==5 || destination.getDestination()[1]==1 || destination.getDestination()[1]==5) && getOwner().getView().moveAgainQuery()){
 
             do{
                 action = getOwner().getView().moveLocationQuery();
@@ -93,12 +94,10 @@ public class Triton implements Deity, MovementPhase{
 
     /**
      * a private method that checks if the worker can move after the first
-     * @param worker the worker moved with the standard move
-     * @param previousAction the starting position of the first move
-     * @return true if the worker can move again without returning in the starting square
+     * @param worker the worker moved with the first move
+     * @return true if the worker can move again
      */
-    private boolean canMoveFurther(BoardWorker worker, int[] previousAction) {
-        MovementAction action;
+    private boolean canMoveFurther(BoardWorker worker) {
         for(int i=1; i<=5; i++){
             for(int j=1; j<=5; j++){
                 if(checker.doCheckRule(new MovementAction(worker,new int[]{i,j})))

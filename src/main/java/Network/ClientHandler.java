@@ -93,9 +93,23 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
                     notify(read);
                 }
             } else {*/
-            send("Welcome!\nWhat is your name?");
+
+
             String read = in.nextLine();
             name = read;
+            int players = 0;
+            while (players==0){
+                try{
+                    read=in.nextLine();
+                    players=Integer.parseInt(read);
+                }
+                catch (Exception e ){
+                    players=0;
+                }
+            }
+
+            System.out.println(players);
+
             server.room(this,name, socket);
 
             while (isActive()) {
@@ -105,6 +119,8 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
             }
 
         } catch (NoSuchElementException | IOException e) {
+            active=false;
+            System.out.println("active set falseZ");
             System.err.println("Error!" + e.getMessage());
         } finally {
                 close();

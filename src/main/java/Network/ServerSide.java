@@ -6,8 +6,8 @@ import View.CliView;
 import controller.BoardGameConstructor;
 import controller.TurnManager;
 import model.Player;
-import java.io.IOException;
-import java.io.InputStream;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
@@ -155,7 +155,8 @@ public class ServerSide {
         while (true) {
             try {
                 Socket newSocket = listener.accept();
-                ClientHandler clHandler = new ClientHandler(newSocket, this);
+
+                ClientHandler clHandler = new ClientHandler(newSocket, this );
                 pool.submit(clHandler);
             } catch (IOException e) {
                 System.out.println("Connection Error!");

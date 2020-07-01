@@ -1,6 +1,5 @@
 package model;
 
-import controller.BuildingRuleChecker;
 import controller.MovementRuleChecker;
 import controller.PhaseResult;
 import controller.VictoryConditionChecker;
@@ -48,11 +47,13 @@ public class Artemis implements Deity, MovementPhase{
 
         //gets and validates the first move
 
+        getOwner().getView().yourTUrnMessage();
+
         int[] action;
         MovementAction destination;
 
         do {
-            action = getOwner().getView().moveLocationQuery();
+            action = getOwner().getView().moveQuery();
             destination = interpretAction(action);
 
         }while(!checker.doCheckRule(destination));
@@ -79,7 +80,7 @@ public class Artemis implements Deity, MovementPhase{
                 MovementAction secondDestination;
 
                 do{
-                    action = getOwner().getView().moveLocationQuery();
+                    action = getOwner().getView().moveQuery();
                     secondDestination = new MovementAction(destination.getWorker(),action);
                 }while(!checker.doCheckRule(secondDestination) || Arrays.equals(secondDestination.getDestination(), startingSquare));
 

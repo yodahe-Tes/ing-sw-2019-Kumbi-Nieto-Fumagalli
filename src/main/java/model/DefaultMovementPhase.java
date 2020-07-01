@@ -39,6 +39,7 @@ public class DefaultMovementPhase implements MovementPhase{
 
         if(loose.DoCheckRule(check)){
             getOwner().getView().noMovesLeftMessage();
+            getOwner().getView().loserMessage();
             return new MovementPhaseResult(check.getOwner().getWorker(1), PhaseResult.DEFEAT );
         }
 
@@ -48,7 +49,7 @@ public class DefaultMovementPhase implements MovementPhase{
         MovementAction destination;
 
         do {
-            action = getOwner().getView().moveLocationQuery();
+            action = getOwner().getView().moveQuery();
             destination = interpretAction(action);
 
         }while(!check.doCheckRule(destination));
@@ -61,6 +62,7 @@ public class DefaultMovementPhase implements MovementPhase{
 
         //Checks victory condition
         if(win.doCheckRule(destination.getWorker())){
+            getOwner().getView().winnerMessage();
             return new MovementPhaseResult(destination.getWorker(), PhaseResult.VICTORY);
         }
 

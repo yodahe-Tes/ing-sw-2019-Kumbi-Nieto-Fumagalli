@@ -67,7 +67,7 @@ public class DefaultBuildingPhase implements BuildingPhase{
 
         //checks if the player can build with the chosen worker
         if(loose.doCheckRule(checker, worker)) {
-            //getOwner().getView().loserMessage();
+            getOwner().getView().loserMessage();
             return PhaseResult.DEFEAT;
         }
 

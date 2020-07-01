@@ -37,7 +37,7 @@ public class Atlas implements Deity, BuildingRule {
 
         int[] destination = action.getDestination();
 
-        if (destination[0] <= 5 && destination[0] >= 1 && destination[1] <= 5 && destination[1] >= 1) {
+        if (board.isInside(destination)) {
             if (oneSquareDistance(worker, destination)) {
                 if (board.isEmpty(destination)) {
                     return true;

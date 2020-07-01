@@ -54,17 +54,19 @@ public class Prometheus implements Deity, MovementPhase{
         //checking if the player can move
         if(defeated.DoCheckRule(checker)){
             getOwner().getView().noMovesLeftMessage();
+            getOwner().getView().loserMessage();
             return new MovementPhaseResult(checker.getOwner().getWorker(1),PhaseResult.DEFEAT);
         }
 
         //gets and validates move
 
         getOwner().getView().yourTUrnMessage();
+
         int[] action;
         MovementAction destination;
 
         do {
-            action = getOwner().getView().moveLocationQuery();
+            action = getOwner().getView().moveQuery();
             destination = interpretAction(action);
 
         }while(!checker.doCheckRule(destination));

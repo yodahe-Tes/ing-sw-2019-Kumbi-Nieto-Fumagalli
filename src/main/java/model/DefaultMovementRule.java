@@ -33,7 +33,7 @@ public class DefaultMovementRule implements MovementRule {
         BoardWorker worker = action.getWorker();
         int[] destination = action.getDestination();
 
-        if(destination[0]<=5 && destination[0]>=1 && destination[1]<=5 && destination[1]>=1) {
+        if(board.isInside(destination)) {
             if (oneSquareDistance(worker, destination)) {
                 if (isNotTooHigh(worker, destination)) {
                     if (board.isEmpty(destination))

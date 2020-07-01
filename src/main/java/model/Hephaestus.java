@@ -36,9 +36,10 @@ public class Hephaestus implements BuildingPhase, Deity{
         BuildingAction action;
 
         //checks if the player can't build
-        if(loose.doCheckRule(checker, worker))
+        if(loose.doCheckRule(checker, worker)) {
+            getOwner().getView().loserMessage();
             return PhaseResult.DEFEAT;
-
+        }
         //gets the action from the user
         do {
             action = getOwner().getView().buildLocationQuery();
