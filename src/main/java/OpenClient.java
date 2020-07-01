@@ -1,5 +1,9 @@
 import Network.ClientSide;
-
+/**
+ * @author Nieto
+ *
+ *
+ */
 public class OpenClient
 {
 

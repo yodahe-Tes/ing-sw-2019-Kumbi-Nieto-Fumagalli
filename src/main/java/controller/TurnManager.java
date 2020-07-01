@@ -200,7 +200,7 @@ public class TurnManager {
                             i--;
                     }
 
-                }while(newPosition==null && getBoard().isInside(newPosition) && !(getBoard().isEmpty(newPosition)));
+                }while(newPosition==null || !(getBoard().isInside(newPosition) && (getBoard().isEmpty(newPosition))));
                 if(newPosition!=null)
                     getBoard().getPlayer(i).getWorker()[j-1].forced(newPosition);
                 turn[i - 1].getOwner().getView().notYourTUrnMessage();

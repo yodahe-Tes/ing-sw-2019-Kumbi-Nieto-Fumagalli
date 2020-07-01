@@ -1,5 +1,9 @@
 package Network;
-
+/**
+ * @author Nieto
+ *
+ *
+ */
 
 public interface ClientStatus  {
 

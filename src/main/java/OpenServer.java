@@ -3,7 +3,8 @@ import Network.ServerSide;
 import java.io.IOException;
 
 /**
- * Hello world!
+ * @author Nieto
+ *
  *
  */
 public class OpenServer

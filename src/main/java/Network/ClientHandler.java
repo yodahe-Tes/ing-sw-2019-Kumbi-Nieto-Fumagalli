@@ -55,12 +55,7 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
     @Override
     public void asyncSend(final Object message) {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                send(message);
-            }
-        }).start();
+        new Thread(() -> send(message)).start();
 
     }
 
@@ -112,9 +107,11 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
                 }
             }
 
-
-            server.room(this,name, socket);
-
+            if (numberPlayer == 2) {
+                server.room(this, name, socket);
+            }else {
+                server.room2(this, name, socket);
+            }
             while (isActive()) {
                 read = in.nextLine();
                 if(read.equals("disconnect"))
