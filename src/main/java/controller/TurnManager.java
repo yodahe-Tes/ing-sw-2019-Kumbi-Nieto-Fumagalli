@@ -2,6 +2,7 @@ package controller;
 
 import model.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -34,14 +35,15 @@ public class TurnManager {
 
         gettingStarted();
 
+        turnNumber=0;
 
         //starts the turn cycle
 
-        do{
+        while(currentResult != PhaseResult.VICTORY && turn.length>1){
             // does the actual turn
             currentResult=turn[turnNumber].doTurn();
 
-            if(currentResult==PhaseResult.DEFEAT){
+            if(currentResult==PhaseResult.DEFEAT || currentResult==PhaseResult.DISCONNECTED){
                 //if someone loose
                 playerLost(turn[turnNumber]);
             }
@@ -63,7 +65,12 @@ public class TurnManager {
             else
                 turnNumber=0;
             //until someone wins
-        }while(currentResult != PhaseResult.VICTORY);
+        }
+
+        for(Turn remains : turn){
+            remains.getOwner().closeConnection();
+        }
+        System.out.println("finished game");
 }
 
 
@@ -115,7 +122,14 @@ public class TurnManager {
             //if there are more than two player delete god's power on other players
             for(Turn opponentTurn : turn) {
                 if (opponentTurn != looser){
-                    opponentTurn.getOwner().getView().aPlayerHasLostmessage(looser.getOwner());
+
+
+                    if(currentResult==PhaseResult.DEFEAT)
+                        turn[turnNumber].getOwner().getView().aPlayerHasLostmessage(looser.getOwner());
+                    if (currentResult==PhaseResult.DISCONNECTED)
+                        turn[turnNumber].getOwner().getView().aPlayerHasDisconnectedMessage(looser.getOwner());
+
+
                     if (looser.getOwner().getDeity() instanceof MovementRule)
                         opponentTurn.getMove().getChecker().removeLooser((MovementRule) looser.getOwner().getDeity());
                     if (looser.getOwner().getDeity() instanceof BuildingRule)
@@ -135,10 +149,14 @@ public class TurnManager {
             else
                 winner=0;
 
-            turn[winner].getOwner().getView().aPlayerHasLostmessage(looser.getOwner());
+            if(currentResult==PhaseResult.DEFEAT)
+                turn[winner].getOwner().getView().aPlayerHasLostmessage(looser.getOwner());
+            if (currentResult==PhaseResult.DISCONNECTED)
+                turn[winner].getOwner().getView().aPlayerHasDisconnectedMessage(looser.getOwner());
             turn[winner].getOwner().getView().winnerMessage();
+            currentResult=PhaseResult.VICTORY;
         }
-        currentResult=PhaseResult.VICTORY;
+
     }
 
     private void gettingStarted(){
@@ -156,13 +174,37 @@ public class TurnManager {
         //gets the workers' starting positions for every player
         for (int j=1;j<=2; j++) {
             for (int i = 1; i <= getBoard().numberPlayers(); i++){
-                int[] newPosition;
+                int[] newPosition = null;
                 do{
-                    newPosition = turn[i-1].getOwner().getView().initialPositionQuery(j);
-                    System.out.println(newPosition[0]+","+newPosition[1]);
+                    try {
+                        newPosition = turn[i - 1].getOwner().getView().initialPositionQuery(j);
+                    }catch (IOException|NullPointerException e){
+                        currentResult=PhaseResult.DISCONNECTED;
+                        for(Turn notDisconnected : turn){
+                            if(notDisconnected != turn[i-1]){
+                                notDisconnected.getOwner().getView().aPlayerHasDisconnectedMessage(turn[i-1].getOwner());
+                            }
+                        }
+                        getBoard().removePlayerFromList(turn[i-1].getOwner());
+                        removeTurnFromList(turn[i-1]);
+                        if(turn.length==1) {
+                            for (Turn remained : turn) {
+                                remained.getOwner().getView().winnerMessage();
+                            }
+                            return;
+                        }
+                        else if(turn.length<1){
+                            return;
+                        }
+                        else
+                            i--;
+                    }
 
-                }while(getBoard().isInside(newPosition) && !(getBoard().isEmpty(newPosition)));
-                getBoard().getPlayer(i).getWorker()[j-1].forced(newPosition);
+                }while(newPosition==null && getBoard().isInside(newPosition) && !(getBoard().isEmpty(newPosition)));
+                if(newPosition!=null)
+                    getBoard().getPlayer(i).getWorker()[j-1].forced(newPosition);
+                turn[i - 1].getOwner().getView().notYourTUrnMessage();
+
             }
         }
     }

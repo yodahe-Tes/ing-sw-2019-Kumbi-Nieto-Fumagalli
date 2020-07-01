@@ -4,6 +4,8 @@ import controller.MovementRuleChecker;
 import controller.PhaseResult;
 import controller.VictoryConditionChecker;
 
+import java.io.IOException;
+
 /**
  * a class that implements the default movement phase
  * @author Fumagalli
@@ -49,8 +51,12 @@ public class DefaultMovementPhase implements MovementPhase{
         MovementAction destination;
 
         do {
-            action = getOwner().getView().moveQuery();
-            destination = interpretAction(action);
+            try {
+                action = getOwner().getView().moveQuery();
+                destination = interpretAction(action);
+            }catch (IOException e){
+                return new MovementPhaseResult(getOwner().getWorker(1),PhaseResult.DISCONNECTED);
+            }
 
         }while(!check.doCheckRule(destination));
 

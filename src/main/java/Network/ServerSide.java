@@ -41,7 +41,7 @@ public class ServerSide {
 
     public synchronized void deregisterConnection(ClientStatus s) {
         ClientStatus opponent = gameConnection.get(s);
-        if (opponent != null) opponent.closeConnection();
+        if (opponent != null) opponent.close();
         gameConnection.remove(s);
         gameConnection.remove(opponent);
         Iterator<String> iterator = queue.keySet().iterator();

@@ -22,14 +22,15 @@ public class Board implements Subject {
 
     /**
      * Class constructor, initializes a blank board
+     *
      * @param player is the array of players that will play the game
      */
-    public Board(Player[] player){
+    public Board(Player[] player) {
 
         checkerboard = new Square[rowNumber][columnNumber];
 
-        for(int i=0; i<rowNumber;i++){
-            for(int j=0; j<columnNumber; j++){
+        for (int i = 0; i < rowNumber; i++) {
+            for (int j = 0; j < columnNumber; j++) {
                 checkerboard[i][j] = new Square();
             }
         }
@@ -41,10 +42,11 @@ public class Board implements Subject {
 
     /**
      * simulates the actual building action
+     *
      * @param action the desired action
      */
 
-    public void build(BuildingAction action){
+    public void build(BuildingAction action) {
         if (action.isForceBuildDome())
             addDomeTo(action.getDestination());
         else addFloorTo(action.getDestination());
@@ -54,54 +56,59 @@ public class Board implements Subject {
 
     /**
      * Adds a floor on the square specified
+     *
      * @param position is the array that identifies the coordinates
      */
-    public void addFloorTo(int[] position){
-            checkerboard[position[0] - 1][position[1] - 1].addFloor();
-            notifyObservers();
+    public void addFloorTo(int[] position) {
+        checkerboard[position[0] - 1][position[1] - 1].addFloor();
+        notifyObservers();
     }
 
 
     /**
      * Adds a dome on the square specified
+     *
      * @param position is the array that identifies the coordinates
      */
-    public void addDomeTo(int[] position){
-            checkerboard[position[0] - 1][position[1] - 1].addDome();
-            notifyObservers();
+    public void addDomeTo(int[] position) {
+        checkerboard[position[0] - 1][position[1] - 1].addDome();
+        notifyObservers();
     }
 
 
     /**
      * check the floor of a chosen square inside the gameboard
+     *
      * @param position is the array that identifies the coordinates
      * @return the floor of the chosen square
      */
-    public int getFloorFrom(int[] position){
-            return checkerboard[position[0] - 1][position[1] - 1].getFloor();
+    public int getFloorFrom(int[] position) {
+        return checkerboard[position[0] - 1][position[1] - 1].getFloor();
     }
 
 
     /**
      * check if the square has a dome
+     *
      * @param position is the array of int that identifies the coordinates
      * @return true if the chosen square has a dome
      */
-    public boolean squareHasDome(int[] position){
-            return checkerboard[position[0]-1][position[1]-1].hasDome();
+    public boolean squareHasDome(int[] position) {
+        return checkerboard[position[0] - 1][position[1] - 1].hasDome();
     }
 
     /**
      * checks if the chosen square is empty
+     *
      * @param destination represents the coordinates of the destination
      * @return true if on the destination square there aren't any workers or domes
      */
-    public boolean isEmpty(int[] destination){
-        if(squareHasDome(destination))
+    public boolean isEmpty(int[] destination) {
+        if (squareHasDome(destination))
             return false;
-        for(int i=1;i<=numberPlayers();i++){
-            for(int j=1; j<3; j++){
-                if(Arrays.equals(getPlayer(i).workerPosition(j), destination))
+        for (int i = 1; i <= numberPlayers(); i++) {
+            for (int j = 1; j < 3; j++) {
+                if (Arrays.equals(getPlayer(i).workerPosition(j), destination))
                     return false;
             }
         }
@@ -110,12 +117,13 @@ public class Board implements Subject {
 
     /**
      * checks if the coordinates provided are valid
+     *
      * @param square the coordinates to check
      * @return if the coordinates provided are correct
      */
-    public boolean isInside(int[] square){
-        for(int i=0;i<2;i++){
-            if(square[i]>5 && square[i]<1)
+    public boolean isInside(int[] square) {
+        for (int i = 0; i < 2; i++) {
+            if (square[i] > 5 && square[i] < 1)
                 return false;
         }
         return true;
@@ -123,14 +131,16 @@ public class Board implements Subject {
 
     /**
      * simple getter for player
+     *
      * @param playerNumber player's number ID (1 or 2 in a normal 2 players game)
      */
     public Player getPlayer(int playerNumber) {
-            return player[playerNumber - 1];
+        return player[playerNumber - 1];
     }
 
     /**
      * Adds o to the observer arraylist
+     *
      * @param o is the observer that needs to be notified
      */
     @Override
@@ -141,7 +151,8 @@ public class Board implements Subject {
     }
 
     /**
-     *Deletes reference to o in the observer arraylist
+     * Deletes reference to o in the observer arraylist
+     *
      * @param o is an observer that doesn't need anymore updates
      */
     @Override
@@ -150,7 +161,7 @@ public class Board implements Subject {
     }
 
     /**
-     *notifies every observer that position is change
+     * notifies every observer that position is change
      */
     @Override
     public void notifyObservers() {
@@ -162,23 +173,27 @@ public class Board implements Subject {
     /**
      * @return the number of players on the board
      */
-    public int numberPlayers(){
+    public int numberPlayers() {
         return player.length;
     }
 
     /**
      * removes selected player from player list when the associated player looses
+     *
      * @param deleteMe is the looser
      */
     public void removePlayerFromList(Player deleteMe) {
 
         ArrayList<Player> result = new ArrayList<>();
 
-        for(int i=0;i<player.length;i++)
+        for (int i = 0; i < player.length; i++){
             if(!deleteMe.equals(player[i]))
-                result.add(player[i]);
+            result.add(player[i]);
+        }
 
         Player[] updatedPlayers = new Player[1];
+        deleteMe.closeConnection();
+
         player = result.toArray(updatedPlayers);
     }
 }

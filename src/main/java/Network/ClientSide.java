@@ -22,6 +22,7 @@ public class ClientSide {
         private int port = 12345;
         private String name;
         private int players = 2;
+        Scanner scanner = new Scanner(System.in);
 
         public ClientSide(){
             name = getName();
@@ -93,12 +94,12 @@ public class ClientSide {
         private String getName(){
 
             String name=null;
-            Scanner scanner;
+            //Scanner scanner;
 
             while(name==null){
                 try{
                     System.out.println("What's your name?");
-                    scanner = new Scanner(System.in);
+                    //scanner = new Scanner(System.in);
                     name=scanner.nextLine().split(" ")[0];
                 }catch (Exception e){
                     System.out.println("There was a problem with your name. Try with something normal and you'll see there won't be any.");
@@ -110,13 +111,13 @@ public class ClientSide {
 
         private int numberOpponents(){
             int players = 0;
-            Scanner scanner;
+            //Scanner scanner;
             String input;
 
             while(players != 2 && players != 3){
                 try{
                     System.out.println("Do you want to play in a game with [2] or [3] players?");
-                    scanner = new Scanner(System.in);
+                    //scanner = new Scanner(System.in);
                     input = scanner.nextLine();
                     players = Integer.parseInt(input);
                     if(players != 2 && players != 3)
@@ -131,12 +132,12 @@ public class ClientSide {
 
         private String changeIp(){
             String newIp = null;
-            Scanner scanner;
+            //Scanner scanner;
 
             while (newIp==null){
                 try {
                     System.out.println("Type the ip address of your server, or [default] to reset the default server:");
-                    scanner = new Scanner(System.in);
+                    //scanner = new Scanner(System.in);
                     newIp = scanner.next();
                     if(newIp.equals("default")){
                         newIp="127.0.0.1";
@@ -191,7 +192,7 @@ public class ClientSide {
                             System.err.println(e.getMessage());
                         }
                         finally {
-                            break;
+                            return;
                         }
                     }
                     case(2):{
@@ -220,7 +221,7 @@ public class ClientSide {
 
     private int getMenuInput(){
         int input = 0;
-        Scanner scanner;
+        //Scanner scanner;
 
         while(input == 0){
             try{
@@ -235,7 +236,6 @@ public class ClientSide {
     }
 
     private void connectToGame() throws IOException {
-
 
         Socket socket = new Socket(ip, port);
         System.out.println("Connection established");
@@ -255,12 +255,15 @@ public class ClientSide {
 
 
         } catch(InterruptedException | NoSuchElementException e){
+            active=false;
             System.out.println("Connection closed from the client side");
         } finally {
             stdin.close();
             socketIn.close();
             socketOut.close();
             socket.close();
+            System.err.println("finito di chiudere socket");
+            scanner = new Scanner(System.in);
         }
     }
 }

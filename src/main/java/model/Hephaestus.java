@@ -3,6 +3,8 @@ package model;
 import controller.BuildingRuleChecker;
 import controller.PhaseResult;
 
+import java.io.IOException;
+
 /**
  * A class for the deity Hephaestus
  * @author Fumagalli
@@ -42,7 +44,11 @@ public class Hephaestus implements BuildingPhase, Deity{
         }
         //gets the action from the user
         do {
-            action = getOwner().getView().buildLocationQuery();
+            try{
+                action = getOwner().getView().buildLocationAndTypeQuery();
+            }catch (IOException e){
+                return PhaseResult.DISCONNECTED;
+            }
         }while (!checker.doCheckRules(worker, action));
 
         //does the actual build
@@ -54,7 +60,13 @@ public class Hephaestus implements BuildingPhase, Deity{
         //second construction
 
         if(!(board.getFloorFrom(action.getDestination())>=3) && (!board.squareHasDome(action.getDestination()))){
-            if(getOwner().getView().buildAgainQuery()){
+            boolean buildAgain=false;
+            try{
+                buildAgain=getOwner().getView().buildAgainQuery();
+            }catch (IOException e){
+                return PhaseResult.DISCONNECTED;
+            }
+            if (buildAgain) {
                 board.addFloorTo(action.getDestination());
             }
         }

@@ -34,6 +34,8 @@ import model.Board;
 import model.BuildingAction;
 import model.Player;
 
+import java.io.IOException;
+
 import static java.lang.Thread.sleep;
 
 
@@ -48,6 +50,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
     private Player[] player;
     private ClientStatus client;
     private boolean active=false;
+    private boolean connectionActive=true;
 
     public static final String FLOOR = "\u2589";
     public static final String DOME = "D";
@@ -200,7 +203,10 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
     @Override
     public void updateCli(String message) {
 
-        if(message!=null && message.equals("g")){
+        if(message!=null && message.equals("closed") && !client.isActive()){
+            connectionActive=false;
+        }
+        else if(message!=null && message.equals("g")){
             assignedGodMessage();
             otherPlayersGod();
         }
@@ -218,7 +224,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * informs the client when and what it can send
      */
     public void informType(){
-        inform("When not asked to type you can only check gods with the command [g]");
+        inform("When not asked to type you can only check gods with the command [g], or disconnect typing [disconnect]");
     }
 
     /**
@@ -226,7 +232,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * Asks the player if he wants to move or build and calls the respective Querymethods
      */
 
-    public void intentionQuery(boolean waitingFor) {
+    public void intentionQuery(boolean waitingFor) throws IOException {
         String str = ask("Do You want to  : \n  [1] move    or\n [2] build  \n (input 1 or 2) ");
         int choice = Integer.parseInt(str);
 
@@ -253,7 +259,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * Asks the player which worker he wants to move and returns choice
      */
 
-    public int workerChoiceQuery() {
+    public int workerChoiceQuery() throws IOException {
         update();
         String str = ask("Which worker do you want to move?[1] or [2] ");
 
@@ -277,7 +283,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * Asks the player where he wants to move the worker and passes move action to Controller
      */
 
-    public int[] initialPositionQuery(int i) {
+    public int[] initialPositionQuery(int i) throws IOException {
 
         String [] input;
         int[] destination=null;
@@ -300,7 +306,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * Asks the player which worker he wants to move and where, then passes move action to Controller
      */
 
-    public int[] moveQuery() {
+    public int[] moveQuery() throws IOException {
         System.out.println("Dentro MoveQuery");
         int workerId = workerChoiceQuery();
         int[] destination = moveLocationQuery();
@@ -310,7 +316,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
     /**
      * Asks the player where he wants to move the worker
      */
-    public int[] moveLocationQuery() {
+    public int[] moveLocationQuery() throws IOException {
         System.out.println("Dentro MoveLocation");
         String [] input = null;
         int[] destination=null;
@@ -335,7 +341,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * @return building action
      */
 
-    public BuildingAction buildLocationQuery() {
+    public BuildingAction buildLocationQuery() throws IOException {
         String str = ask("Where do you want to build ? (row,column)\n");
         String [] input = null;
         int[] buildLocation=null;
@@ -357,7 +363,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * Asks the player where he wants to build  and what he wants to build and passes build action to Controller
      */
 
-    public BuildingAction buildLocationAndTypeQuery() {
+    public BuildingAction buildLocationAndTypeQuery() throws IOException {
 
         String str = ask("Where do you want to build ? (row,column)\n");
 
@@ -410,7 +416,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * @return boolean
      */
 
-    public boolean buildAgainQuery() {
+    public boolean buildAgainQuery() throws IOException{
 
         String answer = ask("Do you want to build again ? (y, n)");
 
@@ -433,7 +439,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * @return boolean
      */
 
-    public boolean moveAgainQuery() {
+    public boolean moveAgainQuery() throws IOException{
 
         String answer = ask("Do you want to move again ? (y, n)");
         if(answer.equals("y")){
@@ -523,6 +529,11 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
         inform("player "+ loser.getNickname()+" has lost.");
     }
 
+    /**
+     * informs players that one of the player has disconnected
+     * @param disconnected
+     */
+    public void aPlayerHasDisconnectedMessage(Player disconnected){inform("player "+ disconnected.getNickname()+" has disconnected from game.");}
 
     /**
      * Informs player that he has lost
@@ -547,27 +558,43 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * method used to send questions to the client and retrieve the answer
      *
      */
-    protected String ask(String QueryForClient) {
+    protected String ask(String QueryForClient) throws IOException{
         client.asyncSend(QueryForClient);
         active=true;
         String str = null;
         try {
             System.out.println("prima di wait");
-            while (!flag) {
+            while (!flag && connectionActive) {
                 try {
+
                     sleep(200);
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
                 }
             }
-            System.out.println("finito wait");
-            str = readInput;
-            flag=false;
-            System.out.println("ho fatto ask");
+            if(connectionActive) {
+                System.out.println("finito wait");
+                str = readInput;
+                flag = false;
+                System.out.println("ho fatto ask");
+                if(str.equals("disconnect")){
+                    throw new IOException();
+                }
+            }
+            else{
+                throw new IOException();
+            }
         } catch (Exception e) {
+            if(e instanceof IOException)
+                throw new IOException();
             e.printStackTrace();
         }
         active=false;
         return str;
+    }
+
+    public void closeConnection(){
+        client.close();
+
     }
 }

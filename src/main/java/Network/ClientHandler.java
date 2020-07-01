@@ -22,7 +22,7 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
         this.server = server;
     }
 
-    private synchronized boolean isActive(){
+    public synchronized boolean isActive(){
         return active;
     }
 
@@ -36,8 +36,8 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
         }
     }
 
-    @Override
-    public synchronized void closeConnection() {
+
+    private void closeConnection() {
         send("Connection closed!");
         try {
             socket.close();
@@ -60,8 +60,8 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
 
     }
 
-
-    private void close() {
+    @Override
+    public synchronized void close() {
         closeConnection();
         System.out.println("Deregistering client...");
         server.deregisterConnection(this);
@@ -114,6 +114,8 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
 
             while (isActive()) {
                 read = in.nextLine();
+                if(read.equals("disconnect"))
+                    throw new IOException();
                 notify(read);
                 System.err.println("notified" + read);
             }

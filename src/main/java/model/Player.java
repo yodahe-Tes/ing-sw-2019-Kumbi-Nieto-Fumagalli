@@ -105,4 +105,8 @@ public class Player {
      * @return the desc of the player's god
      */
     public String godDesc(){return deity.desc();}
+
+    public void closeConnection(){
+        view.closeConnection();
+    }
 }

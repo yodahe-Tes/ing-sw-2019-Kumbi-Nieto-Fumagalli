@@ -4,6 +4,7 @@ import controller.MovementRuleChecker;
 import controller.PhaseResult;
 import controller.VictoryConditionChecker;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -53,8 +54,13 @@ public class Artemis implements Deity, MovementPhase{
         MovementAction destination;
 
         do {
-            action = getOwner().getView().moveQuery();
-            destination = interpretAction(action);
+            try {
+                action = getOwner().getView().moveQuery();
+                destination = interpretAction(action);
+            }catch (IOException e){
+                return new MovementPhaseResult(getOwner().getWorker(1),PhaseResult.DEFEAT);
+            }
+
 
         }while(!checker.doCheckRule(destination));
 
@@ -75,13 +81,24 @@ public class Artemis implements Deity, MovementPhase{
         //second movement
         if(canMoveFurther(destination.getWorker(), startingSquare)){
 
-            if(getOwner().getView().moveAgainQuery()){
+            boolean buildAgain =false;
+            try{
+                 buildAgain = getOwner().getView().moveAgainQuery();
+            }catch (IOException e){
+                return new MovementPhaseResult(getOwner().getWorker(1),PhaseResult.DISCONNECTED);
+            }
+
+            if(buildAgain){
 
                 MovementAction secondDestination;
 
                 do{
-                    action = getOwner().getView().moveQuery();
-                    secondDestination = new MovementAction(destination.getWorker(),action);
+                    try {
+                        action = getOwner().getView().moveQuery();
+                        secondDestination = new MovementAction(destination.getWorker(),action);
+                    }catch (IOException e) {
+                        return new MovementPhaseResult(getOwner().getWorker(1), PhaseResult.DEFEAT);
+                    }
                 }while(!checker.doCheckRule(secondDestination) || Arrays.equals(secondDestination.getDestination(), startingSquare));
 
                 checker.checkForcedMove(secondDestination);
