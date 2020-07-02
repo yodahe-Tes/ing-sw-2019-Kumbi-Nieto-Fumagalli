@@ -4,6 +4,7 @@ import static java.lang.Math.abs;
 
 /**
  * @author Fumagalli
+ * A class that implements the deity Atlas
  */
 
 /*
@@ -19,14 +20,14 @@ public class Atlas implements Deity, BuildingRule {
     }
 
     /**
-     * a method that gives the description of the god
+     * A method that gives the description of the god
      * @return a string that represents the god's name and a short description of its power
      */
     @Override
     public String desc() {return "ATLAS"+System.lineSeparator()+"Your Build: Your Worker may build a dome at any level. ";}
 
     /**
-     * checks if the rules are fulfilled
+     * Checks if the rules are fulfilled
      *
      * @param worker is the worker used in the moving phase
      * @param action is the building action that the player wants to do
@@ -48,7 +49,7 @@ public class Atlas implements Deity, BuildingRule {
     }
 
     /**
-     * a side-method that checks if the worker and the destination of building action are one next to another
+     * A side-method that checks if the worker and the destination of building action are one next to another
      *
      * @param worker      the worker that is going to build
      * @param destination represents the destination's coordinates
@@ -67,7 +68,7 @@ public class Atlas implements Deity, BuildingRule {
     }
 
     /**
-     * states for initialization purpose that Atlas is a rule that affects only owner's turns
+     * States for initialization purpose that Atlas is a rule that affects only owner's turns
      * @return false
      */
     @Override

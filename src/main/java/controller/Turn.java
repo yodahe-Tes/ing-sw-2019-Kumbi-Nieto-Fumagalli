@@ -13,7 +13,7 @@ public class Turn {
     private final BuildingPhase build;
 
     /**
-     * constructor
+     * Constructor
      * @param move the movement phase of the turn
      * @param build the build phase of the turn
      */
@@ -24,7 +24,7 @@ public class Turn {
     }
 
     /**
-     * the method that models the turn' execution
+     * A method that models the turn execution
      * @return a PhaseResult enum that express the turn's outcome: VICTORY, DEFEAT or nothing (so NEXT turn)
      */
     public PhaseResult doTurn(){
@@ -47,10 +47,13 @@ public class Turn {
         return result;
     }
 
+    /**
+     * A method to obtain the owner of a chosen worker
+     * @return the player's name
+     */
     public Player getOwner(){
         return build.getOwner();
     }
-
 
     public Board getBoard(){
         return build.getBoard();

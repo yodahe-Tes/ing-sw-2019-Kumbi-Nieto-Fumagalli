@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 /**
  * @author Fumagalli
- * a class that manages the game turns
+ * A class that manages the game turns
  */
 
 public class TurnManager {
@@ -18,7 +18,7 @@ public class TurnManager {
 
 
     /**
-     * constructor
+     * Constructor
      * @param turn is the array of turns
      */
     public TurnManager(Turn[] turn){
@@ -27,7 +27,7 @@ public class TurnManager {
 
 
     /**
-     * a method that handle the turns' cycle
+     * A method that handle the turns' cycle
      */
     public void startGame(){
 
@@ -76,7 +76,7 @@ public class TurnManager {
 
 
     /**
-     * method for getting the players
+     * Method for getting the players
      * @return the players involved in the game in an array form
      */
     public Player[] getPlayer(){
@@ -98,7 +98,7 @@ public class TurnManager {
 
 
     /**
-     * removes selected turn from turn list when the associated player looses
+     * Removes selected turn from turn list when the associated player looses
      * @param deleteMe is the turn of the looser
      */
     private void removeTurnFromList(Turn deleteMe) {
@@ -114,7 +114,7 @@ public class TurnManager {
     }
 
     /**
-     * removes a player from the game
+     * Removes a player from the game
      * @param looser is the turn associated with the looser player
      */
     private void playerLost(Turn looser){
@@ -160,6 +160,9 @@ public class TurnManager {
 
     }
 
+    /**
+     * A method that initialize the position for every worker of every player
+     */
     private void gettingStarted(){
         //informs every player of gods choice
         for(Turn player : turn){

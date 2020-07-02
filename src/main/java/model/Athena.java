@@ -13,7 +13,7 @@ public class Athena implements Deity, MovementRule, Observer {
     private final Player owner;
 
     /**
-     * constructor, it initializes the board and the owner and subscribes to the movement of the owner's workers
+     * Constructor, it initializes the board and the owner and subscribes to the movement of the owner's workers
      * to checks if they moved up
      * @param board the board  where the game is played
      * @param owner the player owner
@@ -28,14 +28,14 @@ public class Athena implements Deity, MovementRule, Observer {
     }
 
     /**
-     * a method that gives the description of the god
+     * A method that gives the description of the god
      * @return a string that represents the god's name and a short description of its power
      */
     @Override
     public String desc(){ return "ATHENA"+System.lineSeparator()+"Opponent’s Turn: If one of your Workers moved up on your last turn, opponent Workers cannot move up this turn.";}
 
     /**
-     * checks if Athena's restrictions are fulfilled
+     * Checks if Athena's restrictions are fulfilled
      * @param action is the movement action (worker + destination)
      * @return true if move is legal
      */
@@ -51,7 +51,7 @@ public class Athena implements Deity, MovementRule, Observer {
     }
 
     /**
-     * updates the conditionFulfilled with TRUE if the condition for activating power are fulfilled
+     * Updates the conditionFulfilled with TRUE if the condition for activating power are fulfilled
      */
     @Override
     public void update(){
@@ -66,7 +66,7 @@ public class Athena implements Deity, MovementRule, Observer {
     }
 
     /**
-     * a private method that checks if the worker moved up
+     * A private method that checks if the worker moved up
      * @param worker the last moved worker
      * @return true if waas moved up
      */
@@ -82,7 +82,7 @@ public class Athena implements Deity, MovementRule, Observer {
     public void doForced(MovementAction action){}
 
     /**
-     * states for initialization purpose that athena is a movement phase that acts in opponents' turns
+     * A method that states for initialization purpose that athena is a movement phase that acts in opponents' turns
      * @return true
      */
     @Override

@@ -7,7 +7,7 @@ import model.BuildingRule;
 import model.Player;
 
 /**
- * a class that collects rules affecting the construction rules
+ * A class that collects rules affecting the construction rules
  * @author Fumagalli
  */
 
@@ -17,7 +17,7 @@ public class BuildingRuleChecker {
     private final Player owner;
 
     /**
-     * constructor
+     * Constructor
      * @param rule the array of rules the player have to obey at
      * @param owner the player which the rules refer to
      */
@@ -27,7 +27,7 @@ public class BuildingRuleChecker {
     }
 
     /**
-     * the method that validates every rule for requested move
+     * The method that validates every rule for requested move
      * @param action is the action to check
      * @return true if every condition is fulfilled
      */
@@ -42,7 +42,7 @@ public class BuildingRuleChecker {
     }
 
     /**
-     * removes the rules applied by a god owned by a defeated player
+     * Removes the rules applied by a god owned by a defeated player
      * @param looserGod is the god whose effect are to be removed
      */
     public void removeLooser(BuildingRule looserGod){
@@ -61,6 +61,10 @@ public class BuildingRuleChecker {
         }
     }
 
+    /**
+     * A method to obtain the owner of a chosen worker
+     * @return the player's name
+     */
     public Player getOwner() {
         return owner;
     }

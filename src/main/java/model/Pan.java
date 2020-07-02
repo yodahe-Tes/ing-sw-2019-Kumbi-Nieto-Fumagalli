@@ -4,13 +4,17 @@ public class Pan implements Deity,VictoryCondition{
 
     private final Board board;
 
+    /**
+     * Constructor
+     * @param board where the deity is going to be used
+     */
     public Pan(Board board){
         this.board = board;
     }
 
 
     /**
-     * a method that gives the description of the god
+     * A method that gives the description of the god
      * @return a string that represents the god's name and a short description of its power
      */
     @Override
@@ -19,7 +23,7 @@ public class Pan implements Deity,VictoryCondition{
     }
 
     /**
-     * checks if the move fulfills the Pan's winning condition
+     * A method that checks if the move fulfills the Pan's winning condition
      * @param worker the worker that last moved
      * @return true if the player won
      */

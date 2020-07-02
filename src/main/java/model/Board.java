@@ -41,7 +41,7 @@ public class Board implements Subject {
 
 
     /**
-     * simulates the actual building action
+     * Simulates the actual building action
      *
      * @param action the desired action
      */
@@ -77,7 +77,7 @@ public class Board implements Subject {
 
 
     /**
-     * check the floor of a chosen square inside the gameboard
+     * Checks the floor of a chosen square inside the gameboard
      *
      * @param position is the array that identifies the coordinates
      * @return the floor of the chosen square
@@ -88,7 +88,7 @@ public class Board implements Subject {
 
 
     /**
-     * check if the square has a dome
+     * Checks if the square has a dome
      *
      * @param position is the array of int that identifies the coordinates
      * @return true if the chosen square has a dome
@@ -98,7 +98,7 @@ public class Board implements Subject {
     }
 
     /**
-     * checks if the chosen square is empty
+     * Checks if the chosen square is empty
      *
      * @param destination represents the coordinates of the destination
      * @return true if on the destination square there aren't any workers or domes
@@ -116,7 +116,7 @@ public class Board implements Subject {
     }
 
     /**
-     * checks if the coordinates provided are valid
+     * Checks if the coordinates provided are valid
      *
      * @param square the coordinates to check
      * @return if the coordinates provided are correct
@@ -130,7 +130,7 @@ public class Board implements Subject {
     }
 
     /**
-     * simple getter for player
+     * Simple getter for player
      *
      * @param playerNumber player's number ID (1 or 2 in a normal 2 players game)
      */
@@ -161,7 +161,7 @@ public class Board implements Subject {
     }
 
     /**
-     * notifies every observer that position is change
+     * Notifies every observer that position is change
      */
     @Override
     public void notifyObservers() {

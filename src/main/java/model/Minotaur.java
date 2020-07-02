@@ -5,7 +5,7 @@ import java.util.Arrays;
 import static java.lang.Math.abs;
 
 /**
- * A class for the deity Minotaur
+ * A class that implements the deity Minotaur
  * @author Fumagalli
  */
 
@@ -14,13 +14,18 @@ public class Minotaur implements Deity, MovementRule {
     private final Board board;
     private final Player owner;
 
+    /**
+     * Constructor
+     *
+     * @param board is the board where the game is played
+     */
     public Minotaur(Board board, Player owner) {
         this.board = board;
         this.owner = owner;
     }
 
     /**
-     * a method that gives the description of the god
+     * A method that gives the description of the god
      * @return a string that represents the god's name and a short description of its power
      */
     @Override
@@ -29,7 +34,7 @@ public class Minotaur implements Deity, MovementRule {
     }
 
     /**
-     * checks if the chosen action fulfills the Minotaur's rules
+     * Checks if the chosen action fulfills the Minotaur's rules
      *
      * @param action is the movement action (worker + destination)
      * @return true if the rules are fulfilled
@@ -55,7 +60,7 @@ public class Minotaur implements Deity, MovementRule {
     }
 
     /**
-     * a private method that checks if the worker and the destination are one next to another
+     * A private method that checks if the worker and the destination are one next to another
      *
      * @param worker      the worker that is going to move
      * @param destination represents the coordinates of the destination
@@ -75,7 +80,7 @@ public class Minotaur implements Deity, MovementRule {
         return false;
     }
     /**
-     * checks if the destination is low enough for worker to reach
+     * Checks if the destination is low enough for worker to reach
      *
      * @param worker      the worker that is going to move
      * @param destination represents the coordinates of the destination
@@ -88,7 +93,7 @@ public class Minotaur implements Deity, MovementRule {
     }
 
     /**
-     * checks if there are no domes or friendly workers on the destination square
+     * Checks if there are no domes or friendly workers on the destination square
      * @param destination represents the coordinates of the destination
      * @return true if on the destination square there aren't any domes or any friendly workers
      */
@@ -104,7 +109,7 @@ public class Minotaur implements Deity, MovementRule {
     }
 
     /**
-     * if needed pushes the opponent's worker to the next square
+     * If needed pushes the opponent's worker to the next square
      * @param action is the action that would cause the forced move
      */
     @Override
@@ -123,7 +128,7 @@ public class Minotaur implements Deity, MovementRule {
     }
 
     /**
-     * a method that states for initialization purpose that this rule affects only owner's phase
+     * A method that states for initialization purpose that this rule affects only owner's phase
      * @return false
      */
     @Override

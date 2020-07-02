@@ -44,7 +44,7 @@ public class Player {
 
 
     /**
-     * getter for nickname
+     * Getter for nickname
      * @return the player's nickname
      */
     public String getNickname() {
@@ -53,7 +53,7 @@ public class Player {
 
 
     /**
-     * getter for Deity
+     * Getter for Deity
      * @return the player's deity
      */
     public Deity getDeity(){
@@ -62,7 +62,7 @@ public class Player {
 
 
     /**
-     * allows those who has a player reference to get its workers' position
+     * A method that allows those who has a player reference to get its workers' position
      * @param workerNum is the number which identifies the worker (1 or 2 in normal games)
      * @return the worker's position
      */
@@ -71,7 +71,7 @@ public class Player {
     }
 
     /**
-     * returns a chosen worker
+     * Returns a chosen worker
      * @param workerNum the chosen worker's ID
      * @return the chosen worker
      */
@@ -82,7 +82,7 @@ public class Player {
     public BoardWorker[] getWorker(){ return worker; }
 
     /**
-     * this method allows only one initialization for player's god
+     * This method allows only one initialization for player's god
      * @param god the god the player will uses as its
      */
     public void setDeity(Deity god){
@@ -91,17 +91,21 @@ public class Player {
     }
 
     /**
-     * establish a reference to the player's client
+     * Establish a reference to the player's client
      * @param
      */
     public void addCliView(CliView view){
         this.view=view;
     }
 
+    /**
+     * Getter for the view linked to the player
+     * @return the needed ClientView
+     */
     public CliView getView(){return view;}
 
     /**
-     * get the desc from the player's god
+     * A method that get the desc from the player's god
      * @return the desc of the player's god
      */
     public String godDesc(){return deity.desc();}

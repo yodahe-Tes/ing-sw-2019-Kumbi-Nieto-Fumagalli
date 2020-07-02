@@ -1,16 +1,14 @@
 package model;
-
-/**
- * A class for the deity Demetra
- * @author Fumagalli
- */
-
 import controller.BuildingRuleChecker;
 import controller.PhaseResult;
 
 import java.io.IOException;
 import java.util.Arrays;
 
+/**
+ * A class that implements the deity Demetra
+ * @author Fumagalli
+ */
 
 public class Demetra implements Deity, BuildingPhase {
 
@@ -18,6 +16,12 @@ public class Demetra implements Deity, BuildingPhase {
     private final BuildingRuleChecker checker;
     private final Board board;
 
+    /**
+     * Constructor
+     * @param board where the game is going
+     * @param loose checks the default building losing condition
+     * @param checker is the building rules checker associated with the player
+     */
     public Demetra(Board board, DefaultBuildingLosingCondition loose, BuildingRuleChecker checker) {
         this.checker = checker;
         this.loose = loose;
@@ -25,7 +29,7 @@ public class Demetra implements Deity, BuildingPhase {
     }
 
     /**
-     * a method that gives the description of the god
+     * A method that gives the description of the god
      * @return a string that represents the god's name and a short description of its power
      */
     @Override
@@ -34,7 +38,7 @@ public class Demetra implements Deity, BuildingPhase {
     }
 
     /**
-     * the actual building phase
+     * The actual building phase
      *
      * @param worker is the worker used for the moving phase
      * @return if the player was DEFEATed or if the game can go to the NEXT phase
@@ -88,7 +92,7 @@ public class Demetra implements Deity, BuildingPhase {
     }
 
     /**
-     * a private method that checks if the player can build more with the chosen worker
+     * A private method that checks if the player can build more with the chosen worker
      *
      * @param worker         the worker that is going to build
      * @param previousAction the last built square, where the worker can't build anymore for this turn
@@ -127,7 +131,7 @@ public class Demetra implements Deity, BuildingPhase {
     public BuildingRuleChecker getChecker(){return checker;}
 
     /**
-     * a testing method for getting a simulated user's input for phase
+     * A testing method for getting a simulated user's input for phase
      * @return the move
      */
     @Deprecated

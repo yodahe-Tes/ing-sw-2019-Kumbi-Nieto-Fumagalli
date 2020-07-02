@@ -3,7 +3,7 @@ package model;
 import static java.lang.Math.abs;
 
 /**
- * a class that implements the usual building rules
+ * A class that implements the usual building rules
  * @author Fumagalli
  */
 public class DefaultBuildingRule implements BuildingRule {
@@ -11,7 +11,7 @@ public class DefaultBuildingRule implements BuildingRule {
     private final Board board;
 
     /**
-     * constructor
+     * Constructor
      *
      * @param board is the board where the game is played
      */
@@ -20,7 +20,7 @@ public class DefaultBuildingRule implements BuildingRule {
     }
 
     /**
-     * the method that check if building in a square is legal for the chosen worker
+     * The method that check if building in a square is legal for the chosen worker
      *
      * @param action is the action that must be checked
      * @return true if the worker can build in the chosen square
@@ -43,7 +43,7 @@ public class DefaultBuildingRule implements BuildingRule {
     }
 
     /**
-     * a private method that checks if the worker and the destination of building action are one next to another
+     * A private method that checks if the worker and the destination of building action are one next to another
      *
      * @param worker      the worker that is going to build
      * @param destination represents the destination's coordinates
@@ -62,7 +62,7 @@ public class DefaultBuildingRule implements BuildingRule {
     }
 
     /**
-     * for initialization purpose states that this rule acts only in player phase
+     * For initialization purpose states that this rule acts only in player phase
      * @return false
      */
     @Override

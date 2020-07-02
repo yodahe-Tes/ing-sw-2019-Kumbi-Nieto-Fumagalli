@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * a class that simulates a default building phases, i.e. the player build only one time
+ * A class that simulates a default building phases, i.e. the player builds only one time
  * @author Fumagalli
  */
 
@@ -19,7 +19,7 @@ public class DefaultBuildingPhase implements BuildingPhase{
     DefaultBuildingLosingCondition loose;
 
     /**
-     * constructor
+     * Constructor
      * @param board is the board where it have to build
      * @param checker is the building rules checker associated with the player
      */
@@ -30,7 +30,7 @@ public class DefaultBuildingPhase implements BuildingPhase{
     }
 
     /**
-     * a method that models the default building phase
+     * A method that models the default building phase
      * @param worker is the worker that must build
      * @return VICTORY if the player won, DEFEAT if was defeated, NEXT otherwise
      */
@@ -62,7 +62,7 @@ public class DefaultBuildingPhase implements BuildingPhase{
     }
 
     /**
-     * a method that simulate a default building phase where the player can't build on a square
+     * A method that simulate a default building phase where the player can't build on a square
      * @param worker is the worker that must build
      * @param here is the square where the player can't build for a specific reason
      * @return VICTORY if the player won, DEFEAT if was defeated, NEXT otherwise
@@ -110,7 +110,7 @@ public class DefaultBuildingPhase implements BuildingPhase{
     public Board getBoard(){return board;}
 
     /**
-     * a method intended for testing that simulates the input from users
+     * A method intended for testing that simulates the input from users
      * @return a building action
      */
     @Deprecated

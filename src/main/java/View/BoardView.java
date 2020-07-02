@@ -42,27 +42,27 @@ public class BoardView implements Serializable {
     public void displayBoardView() {
 
 
-            for (int i = 0; i < 5; i++) {
-                for (int j = 0; j < 5; j++) {
-                    System.out.print(GREEN + "\u2587" + BLUE + BORDER + BORDER + BORDER + BORDER + RED + (j + 1)
-                            + RESET + BLUE + BORDER + BORDER + BORDER + BORDER + BORDER + RESET);     // shows top border of board
-                }
-                System.out.print(GREEN + "\u2587" + RESET + "\n");
-
-                for (int j = 0; j < 5; j++) {
-                    System.out.print(BLUE + BORDER + RESET + "          ");                             // shows top layer of first row squares
-                }
-                System.out.print(BLUE + BORDER + RESET + "  " + "\n");                                        // shows last wall of top layer of first row of square
-
-                for (int j = 0; j < 5; j++) {
-                    System.out.print("   " + indent(boardView[i][j], 8));                        // shows blocks and players row
-                }
-                System.out.print(RED + (i + 1) + RESET + "\n");                                                         //shows row identifier number
-
-                for (int j = 0; j < 5; j++)
-                    System.out.print(BLUE + BORDER + RESET + "          ");                            // shows bottom layer of row
-                System.out.print(BLUE + BORDER + RESET + "\n");                                        // shows last wall of bottom layer of row
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                System.out.print(GREEN + "\u2587" + BLUE + BORDER + BORDER + BORDER + BORDER + RED + (j + 1)
+                        + RESET + BLUE + BORDER + BORDER + BORDER + BORDER + BORDER + RESET);     // shows top border of board
             }
+            System.out.print(GREEN + "\u2587" + RESET + "\n");
+
+            for (int j = 0; j < 5; j++) {
+                System.out.print(BLUE + BORDER + RESET + "          ");                             // shows top layer of first row squares
+            }
+            System.out.print(BLUE + BORDER + RESET + "  " + "\n");                                        // shows last wall of top layer of first row of square
+
+            for (int j = 0; j < 5; j++) {
+                System.out.print("   " + indent(boardView[i][j], 8));                        // shows blocks and players row
+            }
+            System.out.print(RED + (i + 1) + RESET + "\n");                                                         //shows row identifier number
+
+            for (int j = 0; j < 5; j++)
+                System.out.print(BLUE + BORDER + RESET + "          ");                            // shows bottom layer of row
+            System.out.print(BLUE + BORDER + RESET + "\n");                                        // shows last wall of bottom layer of row
+        }
 
         for (int j = 0; j < 5; j++) {
             System.out.print(GREEN + "\u2587" + BLUE + BORDER + BORDER + BORDER + BORDER + RED + (j + 1)
@@ -74,10 +74,6 @@ public class BoardView implements Serializable {
         System.out.print("---+---   ---+---   ---+---   ---+---   ---+---  ---+---\n");
 
     }
-
-
-
-
 
 }
 

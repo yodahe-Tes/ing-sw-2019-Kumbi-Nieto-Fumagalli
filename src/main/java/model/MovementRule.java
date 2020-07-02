@@ -8,7 +8,7 @@ package model;
 public interface MovementRule {
 
     /**
-     * the method that checks the rule
+     * The method that checks the rule
      * @param action is the movement action (worker + destination)
      * @return true if the condition is fulfilled
      */
@@ -16,13 +16,13 @@ public interface MovementRule {
     boolean doCheckRule(MovementAction action);
 
     /**
-     * does a forced move on a worker according to rules if necessary
+     * A method that does a forced move on a worker according to rules if necessary
      * @param action is the action that would cause the forced move
      */
     void doForced(MovementAction action);
 
     /**
-     * states for initialization purpose if this rule will affect owner's phase or opponents' phases
+     * A method that states for initialization purpose, if this rule will affect owner's phase or opponents' phases
      * @return true if the rule will affect only opponents' phases
      */
     boolean isOpponent();

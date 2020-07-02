@@ -20,7 +20,7 @@ public class Apollo implements Deity, MovementRule {
     }
 
     /**
-     * a method that gives the description of the god
+     * A method that gives the description of the god
      * @return a string that represents the god's name and a short description of its power
      */
     @Override
@@ -29,7 +29,7 @@ public class Apollo implements Deity, MovementRule {
     }
 
     /**
-     * checks if the chosen action fulfills the Apollo's rules
+     * Checks if the chosen action fulfills the Apollo's rules
      *
      * @param action is the movement action (worker + destination)
      * @return true if the rules are fulfilled
@@ -52,7 +52,7 @@ public class Apollo implements Deity, MovementRule {
     }
 
     /**
-     * a side-method that checks if the worker and the destination are one next to another
+     * A side-method that checks if the worker and the destination are one next to another
      *
      * @param worker      the worker that is going to move
      * @param destination represents the coordinates of the destination
@@ -70,7 +70,7 @@ public class Apollo implements Deity, MovementRule {
         return false;
     }
     /**
-     * checks if the destination is low enough for worker to reach
+     * Checks if the destination is low enough for worker to reach
      *
      * @param worker      the worker that is going to move
      * @param destination represents the coordinates of the destination
@@ -83,7 +83,7 @@ public class Apollo implements Deity, MovementRule {
     }
 
     /**
-     * checks if there are any domes or owner's workers in the destination
+     * Checks if there are any domes or owner's workers in the destination
      * @param destination are the coordinates of a square
      * @return true if there aren't any domes or owner's workers
      */
@@ -99,7 +99,7 @@ public class Apollo implements Deity, MovementRule {
 
 
     /**
-     * if needed force the opponent's worker to the will-be former worker's square
+     * If needed force the opponent's worker to the will-be former worker's square
      * @param action is the action that would cause the forced move
      */
     @Override
@@ -118,7 +118,7 @@ public class Apollo implements Deity, MovementRule {
     }
 
     /**
-     * for initialization purpose, this method states that this god is a rule for the owner, not for the opponents
+     * For initialization purpose, this method states that this god is a rule for the owner, not for the opponents
      * @return false
      */
     @Override

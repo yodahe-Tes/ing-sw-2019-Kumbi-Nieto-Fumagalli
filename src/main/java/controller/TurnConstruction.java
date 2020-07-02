@@ -7,13 +7,12 @@ import java.util.Random;
 
 /**
  * @author Fumagalli
- * a class that at the game's start chooses random gods and initializes all turn-related parts
+ * A class that at the game's start chooses random gods and initializes all turn-related parts
  */
 
 public class TurnConstruction {
 
-    /*
-            GODS TABLE
+    /*            GODS TABLE
 
             ID  GOD         PHASE       EXTENDS
 
@@ -63,7 +62,7 @@ public class TurnConstruction {
 
 
     /**
-     * constructor
+     * Constructor
      * @param player are the player involved in the game
      * @param board the board where the play will be played
      */
@@ -92,7 +91,7 @@ public class TurnConstruction {
     }
 
     /**
-     * a constructor that sets the gods inside the 'gods' param as a chosen gods, for test use
+     * A constructor that sets the gods inside the 'gods' param as a chosen gods, for test use
      * @param player are the players involved in the game
      * @param board is the board where the game will be played
      * @param gods  are the id of the chosen gods
@@ -110,7 +109,7 @@ public class TurnConstruction {
     }
 
     /**
-     * side method that randomly choose a god id
+     * Side method that randomly choose a god id
      * @return an int between 0 and godSet
      */
     private int pickARandomGod(){
@@ -119,7 +118,7 @@ public class TurnConstruction {
     }
 
     /**
-     * this method creates the movement rules at which players will obey and put them inside a player specific rule checker
+     * This method creates the movement rules at which players will obey and put them inside a player specific rule checker
      * @return an array of movement rule checker which indexes are consistent with the array pickedGods
      */
     private MovementRuleChecker[] createMovementRuleChecker() {
@@ -199,7 +198,7 @@ public class TurnConstruction {
 
 
     /**
-     * this method creates the building rules at which players will obey and put them inside a player specific rule checker
+     * This method creates the building rules at which players will obey and put them inside a player specific rule checker
      * @return an array of building rule checker which indexes are consistent with the array pickedGods
      */
 
@@ -260,7 +259,7 @@ public class TurnConstruction {
     }
 
     /**
-     * creates the player-specific victory condition checker
+     * Creates the player-specific victory condition checker
      * @return an array of VictoryConditionChecker which indexes are consistent with the array pickedGods.
      */
     private VictoryConditionChecker[] createVictoryChecker(){
@@ -289,7 +288,7 @@ public class TurnConstruction {
     }
 
     /**
-     * this method creates the turn for every player.
+     * This method creates the turn for every player.
      * @return the array of turns, which indexes are consistent with pickedGod's, that contains initialized movement phases
      */
 
@@ -355,7 +354,7 @@ public class TurnConstruction {
     }
 
     /**
-     * this method creates the building phases for every player.
+     * This method creates the building phases for every player.
      * @return the array, which indexes are consistent with pickedGod's, that contains initialized building phases
      */
 

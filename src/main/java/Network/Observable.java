@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * @author Nieto
+ *
  * A Class that models the observer pattern's observer part
  */
 public class Observable<T> {
