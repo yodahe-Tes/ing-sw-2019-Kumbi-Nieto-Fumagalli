@@ -69,6 +69,7 @@ public class ClientSide {
                     try {
                         while (isActive()) {
                             String inputLine = stdin.nextLine();
+                            cleanIn();
                             socketOut.println(inputLine);
                             socketOut.flush();
                         }
@@ -92,17 +93,14 @@ public class ClientSide {
 
 
         private String getName(){
-
-            String name=null;
-            //Scanner scanner;
-
-            while(name==null){
-                try{
+            String name = null;
+            while (name==null){
+                try {
                     System.out.println("What's your name?");
-                    //scanner = new Scanner(System.in);
-                    name=scanner.nextLine().split(" ")[0];
+                    name = scanner.next();
+                    cleanIn();
                 }catch (Exception e){
-                    System.out.println("There was a problem with your name. Try with something normal and you'll see there won't be any.");
+                    System.out.println("Try to type a normal name.");
                     name=null;
                 }
             }
@@ -111,20 +109,18 @@ public class ClientSide {
 
         private int numberOpponents(){
             int players = 0;
-            //Scanner scanner;
-            String input;
-
-            while(players != 2 && players != 3){
-                try{
-                    System.out.println("Do you want to play in a game with [2] or [3] players?");
-                    //scanner = new Scanner(System.in);
-                    input = scanner.nextLine();
+            String input = null;
+            while (input==null){
+                try {
+                    System.out.println("Type [2] if you want to play a 2 players game, [3] if yo want to play a 3 players game.");
+                    input = scanner.next();
+                    cleanIn();
                     players = Integer.parseInt(input);
                     if(players != 2 && players != 3)
                         System.out.println("Just type [2] or [3] and then press enter, not more, not less");
                 }catch (Exception e){
-                    System.out.println("Just type [2] or [3] and then press enter, it isn't so difficult.");
-                    players = 0;
+                    System.out.println("Just type [2] or [3] and then press enter, not more, not less");
+                    name=null;
                 }
             }
             return players;
@@ -132,13 +128,11 @@ public class ClientSide {
 
         private String changeIp(){
             String newIp = null;
-            //Scanner scanner;
-
             while (newIp==null){
                 try {
                     System.out.println("Type the ip address of your server, or [default] to reset the default server:");
-                    //scanner = new Scanner(System.in);
                     newIp = scanner.next();
+                    cleanIn();
                     if(newIp.equals("default")){
                         newIp="127.0.0.1";
                     }
@@ -191,9 +185,6 @@ public class ClientSide {
                         }catch (IOException e) {
                             System.err.println(e.getMessage());
                         }
-                        finally {
-                            return;
-                        }
                     }
                     case(2):{
                         name = getName();
@@ -221,13 +212,12 @@ public class ClientSide {
 
     private int getMenuInput(){
         int input = 0;
-        //Scanner scanner;
-
         while(input == 0){
             try{
-                scanner = new Scanner(System.in);
                 input = scanner.nextInt();
+                cleanIn();
             }catch (Exception e){
+                e.getMessage();
                 System.out.println("Just type a number and then press enter, it isn't so difficult.");
                 input = 0;
             }
@@ -263,7 +253,18 @@ public class ClientSide {
             socketOut.close();
             socket.close();
             System.err.println("finito di chiudere socket");
-            scanner = new Scanner(System.in);
+            scanner.nextLine();
+        }
+    }
+
+    private void cleanIn(){
+        int dummy;
+
+        try {
+            while ((System.in.available()) != 0)
+                dummy = System.in.read();
+        } catch (java.io.IOException e) {
+            System.out.println("Input error");
         }
     }
 }

@@ -76,22 +76,6 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
         try{
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
-            //Ask to the new connected player what kind of game he wants to play
-            //  send("Choose if 2 or 3 players");
-            //    String pick = in.nextLine();
-            //    System.out.println(pick);
-         /*    numberOfPlayers = Integer.parseInt(pick);
-            if (numberOfPlayers == 3) {
-                send("Welcome!\nWhat is your name?");
-                String read = in.nextLine();
-                name = read;
-                server.room2(this, name);
-                while (isActive()) {
-                    read = in.nextLine();
-                    notify(read);
-                }
-            } else {*/
-
 
             String read = in.nextLine();
             name = read;
@@ -114,16 +98,20 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
             }
             while (isActive()) {
                 read = in.nextLine();
-                if(read.equals("disconnect"))
-                    throw new IOException();
+                if(read.equals("disconnect")) {
+                    close();
+                    return;
+                }
                 notify(read);
                 System.err.println("notified" + read);
             }
 
         } catch (NoSuchElementException | IOException e) {
             active=false;
-            System.out.println("active set falseZ");
+            System.out.println("active set false");
+            notify("disconnect");
             System.err.println("Error!" + e.getMessage());
+
         } finally {
                 close();
         }

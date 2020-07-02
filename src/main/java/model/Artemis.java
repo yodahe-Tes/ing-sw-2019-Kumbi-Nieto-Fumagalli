@@ -81,20 +81,20 @@ public class Artemis implements Deity, MovementPhase{
         //second movement
         if(canMoveFurther(destination.getWorker(), startingSquare)){
 
-            boolean buildAgain =false;
+            boolean moveAgain =false;
             try{
-                 buildAgain = getOwner().getView().moveAgainQuery();
+                moveAgain = getOwner().getView().moveAgainQuery();
             }catch (IOException e){
                 return new MovementPhaseResult(getOwner().getWorker(1),PhaseResult.DISCONNECTED);
             }
 
-            if(buildAgain){
+            if(moveAgain){
 
                 MovementAction secondDestination;
 
                 do{
                     try {
-                        action = getOwner().getView().moveQuery();
+                        action = getOwner().getView().moveLocationQuery();
                         secondDestination = new MovementAction(destination.getWorker(),action);
                     }catch (IOException e) {
                         return new MovementPhaseResult(getOwner().getWorker(1), PhaseResult.DEFEAT);

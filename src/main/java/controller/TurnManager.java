@@ -39,12 +39,12 @@ public class TurnManager {
 
         //starts the turn cycle
 
-        while(currentResult != PhaseResult.VICTORY && turn.length>1){
+        while(currentResult != PhaseResult.VICTORY && turn.length>1 && currentResult!=PhaseResult.DISCONNECTED){
             // does the actual turn
             currentResult=turn[turnNumber].doTurn();
 
             if(currentResult==PhaseResult.DEFEAT || currentResult==PhaseResult.DISCONNECTED){
-                //if someone loose
+                //if someone loose or disconnects
                 playerLost(turn[turnNumber]);
             }
 
@@ -68,7 +68,8 @@ public class TurnManager {
         }
 
         for(Turn remains : turn){
-            remains.getOwner().closeConnection();
+            getBoard().removePlayerFromList(remains.getOwner());
+            removeTurnFromList(remains);
         }
         System.out.println("finished game");
 }
@@ -163,11 +164,7 @@ public class TurnManager {
         //informs every player of gods choice
         for(Turn player : turn){
             player.getOwner().getView().assignedGodMessage();
-            for(Turn opponent : turn){
-                if(opponent != player){
-                    player.getOwner().getView().otherPlayersGod();
-                }
-            }
+            player.getOwner().getView().otherPlayersGod();
             player.getOwner().getView().informType();
         }
 
@@ -175,18 +172,21 @@ public class TurnManager {
         for (int j=1;j<=2; j++) {
             for (int i = 1; i <= getBoard().numberPlayers(); i++){
                 int[] newPosition = null;
+                currentResult=PhaseResult.NEXT;
                 do{
                     try {
                         newPosition = turn[i - 1].getOwner().getView().initialPositionQuery(j);
                     }catch (IOException|NullPointerException e){
+                        System.out.println("sono nel catch");
                         currentResult=PhaseResult.DISCONNECTED;
                         for(Turn notDisconnected : turn){
                             if(notDisconnected != turn[i-1]){
                                 notDisconnected.getOwner().getView().aPlayerHasDisconnectedMessage(turn[i-1].getOwner());
                             }
+                            getBoard().removePlayerFromList(notDisconnected.getOwner());
+                            removeTurnFromList(notDisconnected);
+                            return;
                         }
-                        getBoard().removePlayerFromList(turn[i-1].getOwner());
-                        removeTurnFromList(turn[i-1]);
                         if(turn.length==1) {
                             for (Turn remained : turn) {
                                 remained.getOwner().getView().winnerMessage();
@@ -194,6 +194,7 @@ public class TurnManager {
                             return;
                         }
                         else if(turn.length<1){
+
                             return;
                         }
                         else
