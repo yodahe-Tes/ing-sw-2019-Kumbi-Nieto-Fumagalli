@@ -85,7 +85,6 @@ public class ClientSide {
 
 
 
-
         public void run(){
             menu();
         }
@@ -99,6 +98,7 @@ public class ClientSide {
             while (name==null){
                 try {
                     System.out.println("What's your name?");
+                    cleanIn();
                     name = scanner.next();
                     cleanIn();
                 }catch (Exception e){
@@ -158,7 +158,12 @@ public class ClientSide {
             return newIp;
         }
 
-        private boolean correctIp(String ip){
+    /**
+     * a method that checks if the ip address is well formed
+     * @param ip the ip string
+     * @return true if it's well formed
+     */
+    private boolean correctIp(String ip){
             try {
                 String[] stringArr = ip.split("\\.");
                 int i = 0;
@@ -201,6 +206,8 @@ public class ClientSide {
                         }catch (IOException e) {
                             System.err.println(e.getMessage());
                         }
+                        cleanIn();
+                        break;
                     }
                     case(2):{
                         name = getName();
@@ -281,12 +288,14 @@ public class ClientSide {
         }
     }
 
+    /**
+     * a method that cleans System.In
+     */
     private void cleanIn(){
-        int dummy;
 
         try {
             while ((System.in.available()) != 0)
-                dummy = System.in.read();
+                System.in.read();
         } catch (java.io.IOException e) {
             System.out.println("Input error");
         }

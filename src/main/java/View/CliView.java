@@ -185,6 +185,9 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
             assignedGodMessage();
             otherPlayersGod();
         }
+        else if(message!=null && message.equals("disconnect")){
+            connectionActive=false;
+        }
         else if(active) {
             this.flag = true;
             this.readInput = message;
@@ -550,6 +553,9 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
                 flag = false;
                 System.out.println("ho fatto ask");
                 if(str.equals("disconnect")){
+
+                    connectionActive=false;
+                    closeConnection();
                     throw new IOException();
                 }
             }
