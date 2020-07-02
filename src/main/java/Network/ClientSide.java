@@ -9,9 +9,9 @@ import java.util.Scanner;
 
 
 /***
- * This class implements java socket class
+ * A class that implements the client socket
  * It implements a thin client that simply read user input and sends to the server
- * and vice-versa
+ * and vice-versa, using a CLI menu
  * @author Nieto
  */
 
@@ -37,6 +37,7 @@ public class ClientSide {
         public synchronized void setActive(boolean active){
             this.active = active;
         }
+
 
         public Thread asyncReadFromSocket(final ObjectInputStream socketIn){
             Thread t = new Thread(new Runnable() {
@@ -69,6 +70,7 @@ public class ClientSide {
                     try {
                         while (isActive()) {
                             String inputLine = stdin.nextLine();
+                            cleanIn();
                             socketOut.println(inputLine);
                             socketOut.flush();
                         }
@@ -83,62 +85,64 @@ public class ClientSide {
 
 
 
-
         public void run(){
             menu();
         }
 
-
-
-
+        /**
+        * A method that returns the name given by the player
+        * @return the name of the player
+        */
         private String getName(){
-
-            String name=null;
-            //Scanner scanner;
-
-            while(name==null){
-                try{
+            String name = null;
+            while (name==null){
+                try {
                     System.out.println("What's your name?");
-                    //scanner = new Scanner(System.in);
-                    name=scanner.nextLine().split(" ")[0];
+                    cleanIn();
+                    name = scanner.next();
+                    cleanIn();
                 }catch (Exception e){
-                    System.out.println("There was a problem with your name. Try with something normal and you'll see there won't be any.");
+                    System.out.println("Try to type a normal name.");
                     name=null;
                 }
             }
             return name;
         }
 
+        /**
+        * A method that return the number of players for the game decided by the player
+        * @return number of players for the game
+        */
         private int numberOpponents(){
             int players = 0;
-            //Scanner scanner;
-            String input;
-
-            while(players != 2 && players != 3){
-                try{
-                    System.out.println("Do you want to play in a game with [2] or [3] players?");
-                    //scanner = new Scanner(System.in);
-                    input = scanner.nextLine();
+            String input = null;
+            while (input==null){
+                try {
+                    System.out.println("Type [2] if you want to play a 2 players game, [3] if yo want to play a 3 players game.");
+                    input = scanner.next();
+                    cleanIn();
                     players = Integer.parseInt(input);
                     if(players != 2 && players != 3)
                         System.out.println("Just type [2] or [3] and then press enter, not more, not less");
                 }catch (Exception e){
-                    System.out.println("Just type [2] or [3] and then press enter, it isn't so difficult.");
-                    players = 0;
+                    System.out.println("Just type [2] or [3] and then press enter, not more, not less");
+                    name=null;
                 }
             }
             return players;
         }
 
+        /**
+        * A method that returns the new changed ip decided by the player
+        * @return new IP address
+        */
         private String changeIp(){
             String newIp = null;
-            //Scanner scanner;
-
             while (newIp==null){
                 try {
                     System.out.println("Type the ip address of your server, or [default] to reset the default server:");
-                    //scanner = new Scanner(System.in);
                     newIp = scanner.next();
+                    cleanIn();
                     if(newIp.equals("default")){
                         newIp="127.0.0.1";
                     }
@@ -154,7 +158,12 @@ public class ClientSide {
             return newIp;
         }
 
-        private boolean correctIp(String ip){
+    /**
+     * a method that checks if the ip address is well formed
+     * @param ip the ip string
+     * @return true if it's well formed
+     */
+    private boolean correctIp(String ip){
             try {
                 String[] stringArr = ip.split("\\.");
                 int i = 0;
@@ -175,11 +184,17 @@ public class ClientSide {
             }
         }
 
+        /***
+        * A method to print the menù
+        */
         private void printMenu(){
             System.out.println("Your nickname is "+name+System.lineSeparator()+"Your game size is "+players+" players"+System.lineSeparator()+"The server's ip is "+ip+System.lineSeparator());
             System.out.println(System.lineSeparator()+"Do you want to:"+System.lineSeparator()+"[1]:    Start a new game with current settings"+System.lineSeparator()+"[2]:    Change nickname"+System.lineSeparator()+"[3]:   Change game's size"+System.lineSeparator()+"[4]:    Change server's ip address"+System.lineSeparator()+"[5]:    Exit the game");
         }
 
+        /**
+        * A method that sets up the menù to show to the player
+        */
         private void menu(){
             boolean insideMenu=true;
             while(insideMenu){
@@ -191,9 +206,8 @@ public class ClientSide {
                         }catch (IOException e) {
                             System.err.println(e.getMessage());
                         }
-                        finally {
-                            return;
-                        }
+                        cleanIn();
+                        break;
                     }
                     case(2):{
                         name = getName();
@@ -219,39 +233,46 @@ public class ClientSide {
             }
         }
 
-    private int getMenuInput(){
+        /**
+        * A method that saves the input from the player
+        * @return input from the player
+        */
+        private int getMenuInput(){
         int input = 0;
-        //Scanner scanner;
-
         while(input == 0){
             try{
-                scanner = new Scanner(System.in);
                 input = scanner.nextInt();
+                cleanIn();
             }catch (Exception e){
+                e.getMessage();
                 System.out.println("Just type a number and then press enter, it isn't so difficult.");
                 input = 0;
             }
         }
         return input;
-    }
+        }
 
-    private void connectToGame() throws IOException {
+        /**
+        * A method that creates the connection to the server
+        * @throws IOException
+        */
+        private void connectToGame() throws IOException {
 
-        Socket socket = new Socket(ip, port);
-        System.out.println("Connection established");
-        ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
-        PrintWriter socketOut = new PrintWriter(socket.getOutputStream(),true);
-        Scanner stdin = new Scanner(System.in);
+            Socket socket = new Socket(ip, port);
+            System.out.println("Connection established");
+            ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
+            PrintWriter socketOut = new PrintWriter(socket.getOutputStream(),true);
+            Scanner stdin = new Scanner(System.in);
 
-        socketOut.println(name);
-        socketOut.println(players);
+            socketOut.println(name);
+            socketOut.println(players);
 
-        try{
-            Thread t0 = asyncReadFromSocket(socketIn);
-            Thread t1 = asyncWriteToSocket(stdin, socketOut);
+            try{
+                Thread t0 = asyncReadFromSocket(socketIn);
+                Thread t1 = asyncWriteToSocket(stdin, socketOut);
 
-            t0.join();
-            t1.join();
+                t0.join();
+                t1.join();
 
 
         } catch(InterruptedException | NoSuchElementException e){
@@ -263,7 +284,20 @@ public class ClientSide {
             socketOut.close();
             socket.close();
             System.err.println("finito di chiudere socket");
-            scanner = new Scanner(System.in);
+            scanner.nextLine();
+        }
+    }
+
+    /**
+     * a method that cleans System.In
+     */
+    private void cleanIn(){
+
+        try {
+            while ((System.in.available()) != 0)
+                System.in.read();
+        } catch (java.io.IOException e) {
+            System.out.println("Input error");
         }
     }
 }

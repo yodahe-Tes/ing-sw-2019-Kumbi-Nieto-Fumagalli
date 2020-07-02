@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class BoardGameConstructor {
 
     /**
-     * this method constructs all model's and turn related classes for starting a new game, with the TurnConstruction's help
+     * This method constructs all model's and turn related classes for starting a new game, with the TurnConstruction's help
      *
      * @param playerName are the players' nicknames
      * @return the class that will manage the turns' order and allows to start the game
@@ -36,7 +36,7 @@ public class BoardGameConstructor {
     }
 
     /**
-     * a debug method that allows to start the game with chosen gods
+     * A debug method that allows to start the game with chosen gods
      *
      * @param playerName the nickname of the players
      * @param playerGods the IDs of the chosen god5
@@ -61,7 +61,7 @@ public class BoardGameConstructor {
     }
 
     /**
-     * inner method that initializes the turns
+     * Inner method that initializes the turns
      * @param construct the constructor that has memorized the game's gods and players
      * @return the Turn Manager of the completed game
      */

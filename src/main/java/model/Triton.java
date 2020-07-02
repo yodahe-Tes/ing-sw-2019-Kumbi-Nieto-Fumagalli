@@ -7,7 +7,7 @@ import controller.VictoryConditionChecker;
 import java.io.IOException;
 
 /**
- * A class implementing the deity Triton
+ * A class that implements the deity Triton
  * @author Fumagalli
  */
 
@@ -24,7 +24,7 @@ public class Triton implements Deity, MovementPhase{
     }
 
     /**
-     * a method that gives the description of the god
+     * A method that gives the description of the god
      * @return a string that represents the god's name and a short description of its power
      */
     @Override
@@ -33,7 +33,7 @@ public class Triton implements Deity, MovementPhase{
     }
 
     /**
-     * the actual movement phase
+     * A method that does the actual movement phase
      * @return the worker moved and the result of the phase packed
      */
     @Override
@@ -111,7 +111,7 @@ public class Triton implements Deity, MovementPhase{
     }
 
     /**
-     * a private method that checks if the worker can move after the first
+     * A private method that checks if the worker can move after the first
      * @param worker the worker moved with the first move
      * @return true if the worker can move again
      */
@@ -126,7 +126,7 @@ public class Triton implements Deity, MovementPhase{
     }
 
     /**
-     * a private method that gets the chosen worker reference and packs it with the movement's coordinates
+     * A private method that gets the chosen worker reference and packs it with the movement's coordinates
      * @param action is the action given by the view. The first int represents the worker ID, while the other two are the coordinates of the destination
      * @return an Action that contains the worker references
      */
@@ -140,7 +140,7 @@ public class Triton implements Deity, MovementPhase{
     public Player getOwner(){return checker.getOwner();}
 
     /**
-     * a testing method for getting the input for phase
+     * A testing method for getting the input for phase
      * @return the move
      */
     @Deprecated
@@ -152,7 +152,7 @@ public class Triton implements Deity, MovementPhase{
     public MovementRuleChecker getChecker(){return checker;}
 
     /**
-     * a testing method for getting a simulated user's input for phase
+     * A testing method for getting a simulated user's input for phase
      * @return a boolean
      */
     @Deprecated

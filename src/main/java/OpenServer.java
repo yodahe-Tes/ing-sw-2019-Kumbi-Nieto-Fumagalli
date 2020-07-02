@@ -4,7 +4,7 @@ import java.io.IOException;
 
 /**
  * @author Nieto
- *
+ *A class that starts the server
  *
  */
 public class OpenServer

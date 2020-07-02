@@ -9,7 +9,7 @@ import java.io.IOException;
 
 
 /**
- * A class implementing the deity Prometheus
+ * A class that implements the deity Prometheus
  * @author Fumagalli
  */
 
@@ -22,7 +22,7 @@ public class Prometheus implements Deity, MovementPhase{
     private final Board board;
 
     /**
-     * constructor that initializes this class and an inner DefaultBuildingPhase for simulate the optional build
+     * Constructor that initializes this class and an inner DefaultBuildingPhase for simulate the optional build
      * @param checker is the movement rule checker used for check if the move is legal
      * @param condition is the default loosing condition in the movement phase
      * @param win is the victory condition checker
@@ -38,7 +38,7 @@ public class Prometheus implements Deity, MovementPhase{
     }
 
     /**
-     * a method that gives the description of the god
+     * A method that gives the description of the god
      * @return a string that represents the god's name and a short description of its power
      */
     @Override
@@ -47,7 +47,7 @@ public class Prometheus implements Deity, MovementPhase{
     }
 
     /**
-     * the actual movement phase
+     * The actual movement phase
      * @return the worker moved and the result of the phase packed
      */
     @Override
@@ -109,7 +109,7 @@ public class Prometheus implements Deity, MovementPhase{
     }
 
     /**
-     * checks if the worker wants to go up or not
+     * Checks if the worker wants to go up or not
      * @param action the movement action
      * @return
      */
@@ -119,7 +119,7 @@ public class Prometheus implements Deity, MovementPhase{
 
 
     /**
-     * a private method that gets the chosen worker reference and packs it with the movement's coordinates
+     * A private method that gets the chosen worker reference and packs it with the movement's coordinates
      * @param action is the action given by the view. The first int represents the worker ID, while the other two are the coordinates of the destination
      * @return an Action that contains the worker references
      */
@@ -133,7 +133,7 @@ public class Prometheus implements Deity, MovementPhase{
     public Player getOwner(){return checker.getOwner();}
 
     /**
-     * a testing method for getting the input for phase
+     * A testing method for getting the input for phase
      * @return the move
      */
     @Deprecated
@@ -145,7 +145,7 @@ public class Prometheus implements Deity, MovementPhase{
     public MovementRuleChecker getChecker(){return checker;}
 
     /**
-     * a testing method for getting a simulated user's input for phase
+     * A testing method for getting a simulated user's input for phase
      * @return a boolean
      */
     @Deprecated

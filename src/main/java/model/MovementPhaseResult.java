@@ -3,7 +3,7 @@ package model;
 import controller.PhaseResult;
 
 /**
- * a class that collects the values returned by a MovementPhase
+ * A class that collects the values returned by a MovementPhase
  * @author Fumagalli
  */
 
@@ -12,7 +12,7 @@ public class MovementPhaseResult{
     PhaseResult result;
 
     /**
-     * constructor
+     * Constructor
      * @param worker a reference to a worker
      * @param result the result of the phase
      */
@@ -21,8 +21,11 @@ public class MovementPhaseResult{
         this.result = result;
     }
 
-    public BoardWorker getWorker(){ return worker;
-    }
+    public BoardWorker getWorker(){ return worker;}
 
+    /**
+     * Getter to know the result of the on going phase
+     * @return
+     */
     public PhaseResult getResult(){return result;}
 }

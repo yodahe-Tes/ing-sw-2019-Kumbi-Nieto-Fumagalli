@@ -1,7 +1,7 @@
 package model;
 
 /**
- * a class used during tests to simulate the user's input
+ * A class used during tests to simulate the user's input
  */
 
 public class TestActionProvider {
@@ -18,7 +18,7 @@ public class TestActionProvider {
     int requestsCounter;
 
     /**
-     * constructor: initializes the singleton
+     * Constructor: initializes the singleton
      */
     private TestActionProvider(){
         buildActionsCounter=0;
@@ -27,7 +27,7 @@ public class TestActionProvider {
     }
 
     /**
-     * public getter for this singleton class
+     * Public getter for this singleton class
      * @return the singleton
      */
     public static TestActionProvider getProvider(){
@@ -35,7 +35,7 @@ public class TestActionProvider {
     }
 
     /**
-     * set the movement actions that will be sent in the array's order to the caller
+     * A method tht sets the movement actions that will be sent in the array's order to the caller
      * @param actions is the array representing the movement actions
      */
     public void setMovingActions(int[][] actions){
@@ -44,7 +44,7 @@ public class TestActionProvider {
     }
 
     /**
-     * set the building actions that will be sent in the array's order to the caller
+     * A method tht sets the building actions that will be sent in the array's order to the caller
      * @param actions is the array representing the building actions
      */
     public void setBuildingActions(BuildingAction[] actions){
@@ -53,7 +53,7 @@ public class TestActionProvider {
     }
 
     /**
-     * set the boolean feedback that will be sent in the array's order to the caller
+     * A method tht sets the boolean feedback that will be sent in the array's order to the caller
      * @param requests is the array that contains the booleans
      */
     public void setBooleanRequest(boolean[] requests){
@@ -62,7 +62,7 @@ public class TestActionProvider {
     }
 
     /**
-     * provides to the caller a building action previously chosen
+     * A method that provides to the caller a building action previously chosen
      * @return last never used building action in the build array
      */
     public BuildingAction getNextBuild(){
@@ -70,7 +70,7 @@ public class TestActionProvider {
         return build[(buildActionsCounter-1)];
     }
     /**
-     * provides to the caller a movement action previously chosen
+     * A method that provides to the caller a movement action previously chosen
      * @return last never used movement action in the move array
      */
     public int[] getNextMove(){
@@ -79,7 +79,7 @@ public class TestActionProvider {
     }
 
     /**
-     * provides to the caller a boolean previously chosen
+     * A method that provides to the caller a boolean previously chosen
      * @return last never used boolean in the booleanRequest array
      */
     public boolean getNextAnswer(){

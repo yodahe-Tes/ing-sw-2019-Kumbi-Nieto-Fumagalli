@@ -1,7 +1,7 @@
 package model;
 
 /**
- * a class that models a movement worker action
+ * A class that models a movement worker action
  * @Author Fumagalli
  */
 
@@ -11,7 +11,7 @@ public class MovementAction {
     final int[] destination;
 
     /**
-     * constructor
+     * Constructor
      * @param worker is the worker that is going to move
      * @param destination is the destination where the worker is going
      */
@@ -20,10 +20,18 @@ public class MovementAction {
         this.destination = destination;
     }
 
+    /**
+     * Getter for the worker moving
+     * @return the worker
+     */
     public BoardWorker getWorker() {
         return worker;
     }
 
+    /**
+     * Getter for the destination of the movement
+     * @return
+     */
     public int[] getDestination() { return destination; }
 
 }
