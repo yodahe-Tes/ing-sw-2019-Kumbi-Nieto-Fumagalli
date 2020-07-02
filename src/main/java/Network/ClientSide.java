@@ -24,7 +24,8 @@ public class ClientSide {
         private int players = 2;
         Scanner scanner = new Scanner(System.in);
 
-        public ClientSide(){
+
+    public ClientSide(){
             name = getName();
         }
 
@@ -189,7 +190,7 @@ public class ClientSide {
         */
         private void printMenu(){
             System.out.println("Your nickname is "+name+System.lineSeparator()+"Your game size is "+players+" players"+System.lineSeparator()+"The server's ip is "+ip+System.lineSeparator());
-            System.out.println(System.lineSeparator()+"Do you want to:"+System.lineSeparator()+"[1]:    Start a new game with current settings"+System.lineSeparator()+"[2]:    Change nickname"+System.lineSeparator()+"[3]:   Change game's size"+System.lineSeparator()+"[4]:    Change server's ip address"+System.lineSeparator()+"[5]:    Exit the game");
+            System.out.println(System.lineSeparator()+"Do you want to:"+System.lineSeparator()+"[1]:    Start a new game with current settings"+System.lineSeparator()+"[2]:    Change nickname"+System.lineSeparator()+"[3]:    Change game's size"+System.lineSeparator()+"[4]:    Change server's ip address"+System.lineSeparator()+"[5]:    Exit the game");
         }
 
         /**
@@ -238,18 +239,21 @@ public class ClientSide {
         * @return input from the player
         */
         private int getMenuInput(){
-        int input = 0;
-        while(input == 0){
-            try{
-                input = scanner.nextInt();
-                cleanIn();
-            }catch (Exception e){
-                e.getMessage();
-                System.out.println("Just type a number and then press enter, it isn't so difficult.");
-                input = 0;
+            String input = "";
+            int inputInteger = 0;
+            BufferedReader br = new BufferedReader(new InputStreamReader (System.in));
+
+            try {
+                input = br.readLine();
+                inputInteger = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Please Enter An Integer");
+                //e.printStackTrace();
+            } catch (IOException e) {
+                //e.printStackTrace();
             }
-        }
-        return input;
+
+            return inputInteger;
         }
 
         /**
@@ -283,13 +287,13 @@ public class ClientSide {
             socketIn.close();
             socketOut.close();
             socket.close();
-            System.err.println("finito di chiudere socket");
+            System.err.println("Socket closed");
             scanner.nextLine();
         }
     }
 
     /**
-     * a method that cleans System.In
+     * A method that cleans System.In
      */
     private void cleanIn(){
 
