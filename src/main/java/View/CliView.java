@@ -30,6 +30,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
     public static final String WORKER = "\uD83D\uDC68";
     public static final String IDTAG1 = "\u00B9";
     public static final String IDTAG2 = "\u00B2";
+    public static final String IDTAG3 = "³";
     public String[][] boardImage = new String[5][5];
     public String readInput = null;
     private boolean flag = false;
@@ -98,7 +99,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
                 workerPosition = player[i].getWorker(j + 1).getPosition();
                 try {
                     int row = workerPosition[0] - 1, column = workerPosition[1] - 1;
-                    workerIdentifierStr = WORKER + idTag(i + 1) + idTag(j + 1);
+                    workerIdentifierStr = WORKER + idTag((i + 1)) + idTag((j + 1));
                     boardImage[row][column] = boardImage[row][column].concat(workerIdentifierStr);
                 }
                 catch (ArrayIndexOutOfBoundsException e){
@@ -118,9 +119,10 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
     private String idTag(int n) {
         if (n == 1) {
             return IDTAG1;
-        } else {
+        } else if(n==2){
             return IDTAG2;
         }
+        else{return IDTAG3;}
     }
 
 
@@ -182,6 +184,9 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
         else if(message!=null && message.equals("g")){
             assignedGodMessage();
             otherPlayersGod();
+        }
+        else if(message!=null && message.equals("disconnect")){
+            connectionActive=false;
         }
         else if(active) {
             this.flag = true;
@@ -280,7 +285,6 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      */
 
     public int[] moveQuery() throws IOException {
-        System.out.println("Dentro MoveQuery");
         int workerId = workerChoiceQuery();
         int[] destination = moveLocationQuery();
         return new int[]{workerId,destination[0],destination[1]};
@@ -299,7 +303,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
                 input = str.split(",");
                 destination = new int[]{Integer.parseInt(input[0]), Integer.parseInt(input[1])};
                 return destination;
-            } catch (NumberFormatException|NullPointerException e) {
+            } catch (NumberFormatException|NullPointerException|ArrayIndexOutOfBoundsException e) {
                 inform("Please provide integer values as coordinates");
                 destination = null;
             }
@@ -323,7 +327,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
                 input = str.split(",");
                 buildLocation = new int[]{Integer.parseInt(input[0]), Integer.parseInt(input[1])};
                 return new BuildingAction(buildLocation);
-            } catch (NumberFormatException|NullPointerException e) {
+            } catch (NumberFormatException|NullPointerException|ArrayIndexOutOfBoundsException e) {
                 inform("Please provide integer values as coordinates");
                 buildLocation = null;
             }
@@ -354,7 +358,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
                 inform("input [1] or [2]");
                 buildLocationAndTypeQuery();
             }
-        } catch (NumberFormatException|NullPointerException e) {
+        } catch (NumberFormatException|NullPointerException|ArrayIndexOutOfBoundsException e) {
             ask("Please provide integer values as coordinates");
         }
 
@@ -549,6 +553,9 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
                 flag = false;
                 System.out.println("ho fatto ask");
                 if(str.equals("disconnect")){
+
+                    connectionActive=false;
+                    closeConnection();
                     throw new IOException();
                 }
             }

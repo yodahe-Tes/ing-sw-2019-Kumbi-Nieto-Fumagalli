@@ -25,7 +25,6 @@ public class ServerSide {
     public Map<String, ClientStatus> queue = new HashMap<>();
     public Map<String, ClientStatus> queue2 = new HashMap<>();
     public ArrayList<Socket> clientSocket = new ArrayList();
-    private ArrayList<InputStream> InputStr = new ArrayList();
     private Map<ClientStatus, ClientStatus> gameConnection = new HashMap<>();
     private static ExecutorService pool = Executors.newFixedThreadPool(128);
     int keyNum=0;
@@ -42,38 +41,8 @@ public class ServerSide {
      */
 
     public synchronized void deregisterConnection(ClientStatus s) {
-        ClientStatus opponent = gameConnection.get(s);
-        if (opponent != null) opponent.close();
         gameConnection.remove(s);
-        gameConnection.remove(opponent);
-        Iterator<String> iterator = queue.keySet().iterator();
-        while (iterator.hasNext()) {
-            if (queue.get(iterator.next()) == s) iterator.remove();
-        }
     }
-
-    /*public synchronized void login (ClientHandler s, Socket socket) throws InterruptedException {
-
-          s.send("Welcome!\nWhat is your name?");
-
-          String name = s.in.nextLine();
-
-         clientSocket.add(socket);
-         queue.put(name,s);
-       if (queue.size()==2){
-         Thread t = new Thread(new Runnable() {
-            @Override
-             public void run() {
-                try {
-                      room();
-                 } catch (InterruptedException e) {
-                    e.printStackTrace();
-                 }
-            }
-          });
-          t.start();
-          }
-    }*/
 
     /**
      * A method that handles the client connected to the server and set everything to start the game

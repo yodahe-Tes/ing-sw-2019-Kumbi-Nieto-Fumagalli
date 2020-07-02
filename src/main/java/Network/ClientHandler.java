@@ -54,10 +54,15 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
      */
 
     private void closeConnection() {
-        send("Connection closed!");
+        try{
+            send("Connection closed!");
+        }catch (Exception e){
+            System.err.println("error in sending close statement to client");
+        }
+
         try {
             socket.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Error when closing socket!");
         }
         active = false;
@@ -73,9 +78,9 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
 
     @Override
     public synchronized void close() {
-        closeConnection();
         System.out.println("Deregistering client...");
         server.deregisterConnection(this);
+        closeConnection();
         System.out.println("Done!");
     }
 
@@ -85,60 +90,57 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
         lock.lock();
         Scanner in;
 
-        try{
+        try {
             in = new Scanner(socket.getInputStream());
             out = new ObjectOutputStream(socket.getOutputStream());
-            //Ask to the new connected player what kind of game he wants to play
-            //  send("Choose if 2 or 3 players");
-            //    String pick = in.nextLine();
-            //    System.out.println(pick);
-         /*    numberOfPlayers = Integer.parseInt(pick);
-            if (numberOfPlayers == 3) {
-                send("Welcome!\nWhat is your name?");
-                String read = in.nextLine();
-                name = read;
-                server.room2(this, name);
-                while (isActive()) {
-                    read = in.nextLine();
-                    notify(read);
+        }catch (IOException e){
+            System.out.println("never got inputstream");
+            close();
+            return;
+        }
+        String read = in.nextLine();
+        name = read;
+        lock.unlock();
+        numberPlayer = 0;
+        while (numberPlayer==0){
+            try{
+                read=in.nextLine();
+                numberPlayer=Integer.parseInt(read);
                 }
-            } else {*/
-
-
-            String read = in.nextLine();
-            name = read;
-            lock.unlock();
-            numberPlayer = 0;
-            while (numberPlayer==0){
-                try{
-                    read=in.nextLine();
-                    numberPlayer=Integer.parseInt(read);
-                }
-                catch (Exception e ){
-                    numberPlayer=0;
-                }
+            catch (NullPointerException e ){
+                notify("disconnect");
+                System.err.println("didn't get number player");
+                close();
+                return;
             }
+        }
 
-            if (numberPlayer == 2) {
-                server.room(this, name, socket);
-            }else {
-                server.room2(this, name, socket);
-            }
-            while (isActive()) {
+        if (numberPlayer == 2) {
+            server.room(this, name, socket);
+        }else {
+            server.room2(this, name, socket);
+        }
+        while (isActive()) {
+            try {
                 read = in.nextLine();
-                if(read.equals("disconnect"))
-                    throw new IOException();
+                if(read.equals("disconnect")) {
+                    System.out.println("red disconnect");
+                    active=false;
+                }
                 notify(read);
                 System.err.println("notified" + read);
-            }
-
-        } catch (NoSuchElementException | IOException e) {
-            active=false;
-            System.out.println("active set falseZ");
-            System.err.println("Error!" + e.getMessage());
-        } finally {
+            }catch (NoSuchElementException e){
+                active=false;
+                notify("disconnect");
+                System.err.println("Error!" + e.getMessage());
                 close();
+                break;
+            }
         }
+        System.out.println("finally closing socket");
+        notify("disconnect");
+        close();
+
     }
 
     @Override
