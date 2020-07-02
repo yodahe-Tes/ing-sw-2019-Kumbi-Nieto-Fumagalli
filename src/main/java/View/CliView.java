@@ -25,12 +25,13 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
     private boolean active=false;
     private boolean connectionActive=true;
 
-    public static final String FLOOR = "\u2589";
-    public static final String DOME = "D";
-    public static final String WORKER = "\uD83D\uDC68";
-    public static final String IDTAG1 = "\u00B9";
-    public static final String IDTAG2 = "\u00B2";
-    public String[][] boardImage = new String[5][5];
+    private static final String FLOOR = "\u2589";
+    private static final String DOME = "D";
+    private static final String WORKER = "\u2689";
+    private static final String IDTAG1 = "\u00B9";
+    private static final String IDTAG2 = "\u00B2";
+    private static final String IDTAG3 = "\u00B3";
+    private String[][] boardImage = new String[5][5];
     public String readInput = null;
     private boolean flag = false;
 
@@ -118,8 +119,10 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
     private String idTag(int n) {
         if (n == 1) {
             return IDTAG1;
-        } else {
+        } else if(n == 2) {
             return IDTAG2;
+        }else  {
+            return IDTAG3;
         }
     }
 
@@ -295,7 +298,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
         int[] destination=null;
         while(input==null) {
             try {
-                String str = ask("Where do you want to move the worker to? (row,column)");
+                String str = ask(" (row,column)");
                 input = str.split(",");
                 destination = new int[]{Integer.parseInt(input[0]), Integer.parseInt(input[1])};
                 return destination;
