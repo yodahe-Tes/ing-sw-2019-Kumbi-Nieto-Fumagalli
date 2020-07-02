@@ -19,6 +19,7 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
     private int numberPlayer;
     Lock lock = new ReentrantLock();
 
+
     private boolean active = true;
 
     /**
@@ -115,10 +116,24 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
             }
         }
 
+        ClientHandler s = this;
         if (numberPlayer == 2) {
-            server.room(this, name, socket);
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    server.room(s, name, socket);
+                }
+            });
+            t.start();
+
         }else {
-            server.room2(this, name, socket);
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    server.room2(s, name, socket);
+                }
+            });
+            t.start();
         }
         while (isActive()) {
             try {
