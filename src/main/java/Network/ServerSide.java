@@ -23,6 +23,7 @@ public class ServerSide {
     private static int port = 12345;
     //A store fo all the threads and a pool to execute them
     public Map<String, ClientStatus> queue = new HashMap<>();
+    public Map<String, ClientStatus> queue2 = new HashMap<>();
     public ArrayList<Socket> clientSocket = new ArrayList();
     private ArrayList<InputStream> InputStr = new ArrayList();
     private Map<ClientStatus, ClientStatus> gameConnection = new HashMap<>();
@@ -129,17 +130,17 @@ public class ServerSide {
     public  synchronized void room2 (ClientStatus s, String name, Socket socket){
         clientSocket.add(socket);
         keyString = ""+ keyNum;
-        queue.put(keyString, s);
+        queue2.put(keyString, s);
         keyNum++;
 
-        if (queue.size()==3){
-            List<String> keys = new ArrayList<>(queue.keySet());
-            ClientStatus c1 = queue.get(keys.get(0));
-            ClientStatus c2 = queue.get(keys.get(1));
-            ClientStatus c3 = queue.get(keys.get(2));
+        if (queue2.size()==3){
+            List<String> keys = new ArrayList<>(queue2.keySet());
+            ClientStatus c1 = queue2.get(keys.get(0));
+            ClientStatus c2 = queue2.get(keys.get(1));
+            ClientStatus c3 = queue2.get(keys.get(2));
             ClientStatus [] listaC = {c1, c2, c3};
 
-            Set gg = queue.keySet ();
+            Set gg = queue2.keySet ();
             Object[] a = gg.toArray ();
             String[] players = new String[a.length];
             for (int i = 0; i < players.length; i++){
@@ -157,7 +158,7 @@ public class ServerSide {
             gameConnection.put(c1, c2);
             gameConnection.put(c2, c3);
             gameConnection.put(c1,c3);
-            queue.clear();
+            queue2.clear();
 
             Thread t = new Thread(new Runnable() {
                 @Override
