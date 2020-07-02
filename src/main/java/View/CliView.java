@@ -186,9 +186,12 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
             assignedGodMessage();
             otherPlayersGod();
         }
+        else if(message!=null && message.equals("disconnect")){
+            connectionActive=false;
+        }
         else if(active) {
-            this.flag = true;
-            this.readInput = message;
+                this.flag = true;
+                this.readInput = message;
         }
         else{
             informType();
