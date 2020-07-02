@@ -120,6 +120,7 @@ public class ClientSide {
             while (input==null){
                 try {
                     System.out.println("Type [2] if you want to play a 2 players game, [3] if yo want to play a 3 players game.");
+                    System.out.print("> ");
                     input = scanner.next();
                     cleanIn();
                     players = Integer.parseInt(input);
@@ -142,6 +143,7 @@ public class ClientSide {
             while (newIp==null){
                 try {
                     System.out.println("Type the ip address of your server, or [default] to reset the default server:");
+                    System.out.print("> ");
                     newIp = scanner.next();
                     cleanIn();
                     if(newIp.equals("default")){
@@ -186,7 +188,7 @@ public class ClientSide {
         }
 
         /***
-        * A method to print the menù
+        * A method to print the menu
         */
         private void printMenu(){
             System.out.println("Your nickname is "+name+System.lineSeparator()+"Your game size is "+players+" players"+System.lineSeparator()+"The server's ip is "+ip+System.lineSeparator());
@@ -194,7 +196,7 @@ public class ClientSide {
         }
 
         /**
-        * A method that sets up the menù to show to the player
+        * A method that sets up the menu to show to the player
         */
         private void menu(){
             boolean insideMenu=true;
@@ -208,7 +210,7 @@ public class ClientSide {
                             System.err.println(e.getMessage());
                         }
                         cleanIn();
-                        break;
+                        return;
                     }
                     case(2):{
                         name = getName();
@@ -240,17 +242,15 @@ public class ClientSide {
         */
         private int getMenuInput(){
             String input = "";
+            System.out.print("> ");
             int inputInteger = 0;
             BufferedReader br = new BufferedReader(new InputStreamReader (System.in));
 
             try {
                 input = br.readLine();
                 inputInteger = Integer.parseInt(input);
-            } catch (NumberFormatException e) {
+            } catch (Exception e) {
                 System.out.println("Please Enter An Integer");
-                //e.printStackTrace();
-            } catch (IOException e) {
-                //e.printStackTrace();
             }
 
             return inputInteger;

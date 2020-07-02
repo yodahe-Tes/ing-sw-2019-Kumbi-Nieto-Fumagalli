@@ -12,5 +12,6 @@ public class OpenClient
 
         ClientSide client = new ClientSide();
             client.run();
+            System.out.println("Now the game is closing.");
     }
 }
