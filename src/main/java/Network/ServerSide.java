@@ -51,15 +51,38 @@ public class ServerSide {
      * @param socket socked used for the connection
      */
     public synchronized void room(ClientHandler s, String name, Socket socket) {
+
         clientSocket.add(socket);
         keyString = ""+keyNum;
         queue.put(keyString, s);
         keyNum++;
+
+
         if (queue.size() == 2) {
 
             List<String> keys = new ArrayList<>(queue.keySet());
             ClientStatus c1 = queue.get(keys.get(0));
+
+            if (!c1.isActive()){
+                deregisterConnection(c1);
+
+                queue.remove(keys.get(0));
+
+                keys.remove(0);
+
+                return;
+            }
             ClientStatus c2 = queue.get(keys.get(1));
+
+            if (!c2.isActive()){
+                deregisterConnection(c2);
+
+                queue.remove(keys.get(1));
+
+                keys.remove(1);
+
+                return;
+            }
 
             ClientStatus[] listaC = {c1, c2};
 
@@ -105,8 +128,41 @@ public class ServerSide {
         if (queue2.size()==3){
             List<String> keys = new ArrayList<>(queue2.keySet());
             ClientStatus c1 = queue2.get(keys.get(0));
+
+            if (!c1.isActive()){
+                deregisterConnection(c1);
+
+                queue2.remove(keys.get(0));
+
+                keys.remove(0);
+
+                return;
+            }
+
             ClientStatus c2 = queue2.get(keys.get(1));
+
+            if (!c2.isActive()){
+                deregisterConnection(c2);
+
+                queue2.remove(keys.get(1));
+
+                keys.remove(1);
+
+                return;
+            }
+
             ClientStatus c3 = queue2.get(keys.get(2));
+
+            if (!c3.isActive()){
+                deregisterConnection(c3);
+
+                queue2.remove(keys.get(2));
+
+                keys.remove(2);
+
+                return;
+            }
+
             ClientStatus [] listaC = {c1, c2, c3};
 
             Set gg = queue2.keySet ();

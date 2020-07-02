@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  *
  * @author Kumbi
- * CLASS for visual representation of the Board
+ * Class for visual representation of the Board
  *
  */
 
@@ -25,7 +25,7 @@ public class BoardView implements Serializable {
     /**
      * @param myString string
      * @author Kumbi
-     * used to provide the right indentation for the clear representation
+     * Used to provide the right indentation for the clear representation
      * of each square
      */
 
@@ -36,7 +36,7 @@ public class BoardView implements Serializable {
 
     /**
      * @author Kumbi
-     * displays the board
+     * Displays the board
      */
 
     public void displayBoardView() {
