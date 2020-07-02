@@ -1,7 +1,7 @@
 package model;
 
 /**
- * a class that implements the god Limus
+ * A class that implements the deity Limus
  * @author Fumagalli
  */
 public class Limus implements Deity, BuildingRule {
@@ -18,7 +18,7 @@ public class Limus implements Deity, BuildingRule {
     }
 
     /**
-     * constructor
+     * Constructor
      *
      * @param board is the board where the game is played
      */
@@ -28,7 +28,7 @@ public class Limus implements Deity, BuildingRule {
     }
 
     /**
-     * the method that check if building in a square is legal for the chosen worker
+     * The method that check if building in a square is legal for the chosen worker
      *
      * @param action is the action that must be checked
      * @return true if the worker can build in the chosen square
@@ -38,7 +38,8 @@ public class Limus implements Deity, BuildingRule {
         return (completeTower(action) || !nextToOwnerWorker(action));
     }
 
-    /**a private method that checks if the action will build a complete tower
+    /**
+     * A private method that checks if the action will build a complete tower
      *
      * @param action is the building action to check
      * @return true if the action will complete a tower
@@ -47,7 +48,8 @@ public class Limus implements Deity, BuildingRule {
         return(board.getFloorFrom(action.getDestination())==3);
     }
 
-    /**checks if the action will target a square next to the owner's workers
+    /**
+     * Checks if the action will target a square next to the owner's workers
      *
      * @param action is the action to check
      * @return true if the target square is next to an owner's worker
@@ -61,7 +63,7 @@ public class Limus implements Deity, BuildingRule {
     }
 
     /**
-     * for initialization purpose states that this is a rule that affects only opponents' phases
+     * A method for initialization purpose, states that this is a rule that affects only opponents' phases
      * @return true
      */
     @Override

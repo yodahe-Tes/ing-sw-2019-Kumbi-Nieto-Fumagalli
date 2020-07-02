@@ -5,7 +5,7 @@ import java.util.Arrays;
 import static java.lang.Math.abs;
 
 /**
- * class that implements the default movement rule
+ * Class that implements the default movement rule
  * @author Fumagalli
  */
 
@@ -14,7 +14,7 @@ public class DefaultMovementRule implements MovementRule {
     private final Board board;
 
     /**
-     * constructor
+     * Constructor
      * @param board the game board where the game is played
      */
 
@@ -23,7 +23,7 @@ public class DefaultMovementRule implements MovementRule {
     }
 
     /**
-     * the method that checks if the rule is respected
+     * The method that checks if the rule is respected
      * @param action the action to check if is legal
      * @return true if the movement submitted is legal
      */
@@ -45,7 +45,7 @@ public class DefaultMovementRule implements MovementRule {
     }
 
     /**
-     * a side-method that checks if the worker and the destination are one next to another
+     * A side-method that checks if the worker and the destination are one next to another
      * @param worker the worker that is going to move
      * @param destination represents the coordinates of the destination
      * @return true if the square is next to the worker
@@ -63,7 +63,7 @@ public class DefaultMovementRule implements MovementRule {
     }
 
     /**
-     * checks if the destination is low enough for worker to reach
+     * Checks if the destination is low enough for worker to reach
      * @param worker the worker that is going to move
      * @param destination represents the coordinates of the destination
      * @return true if the destination square is at most one layer higher than the worker's
@@ -82,7 +82,7 @@ public class DefaultMovementRule implements MovementRule {
     public void doForced(MovementAction action) {}
 
     /**
-     * states that this rule is for owner's phase
+     * States that this rule is for owner's phase
      * @return false
      */
     @Override

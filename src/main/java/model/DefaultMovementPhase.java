@@ -7,7 +7,7 @@ import controller.VictoryConditionChecker;
 import java.io.IOException;
 
 /**
- * a class that implements the default movement phase
+ * A class that implements the default movement phase
  * @author Fumagalli
  */
 public class DefaultMovementPhase implements MovementPhase{
@@ -17,7 +17,7 @@ public class DefaultMovementPhase implements MovementPhase{
     private final VictoryConditionChecker win;
 
     /**
-     * constructor
+     * Constructor
      * @param check is the rule checker of the phase
      * @param loose is the loosing condition
      */
@@ -29,7 +29,7 @@ public class DefaultMovementPhase implements MovementPhase{
     }
 
     /**
-     * the method that implements the default movement phase
+     * The method that implements the default movement phase
      * @return a structure that contains the chosen worker for moving, and the phase result
      */
 
@@ -78,7 +78,7 @@ public class DefaultMovementPhase implements MovementPhase{
     }
 
     /**
-     * a private method that gets the chosen worker reference and packs it with the movement's coordinates
+     * A private method that gets the chosen worker reference and packs it with the movement's coordinates
      * @param action is the action given by the view. The first int represents the worker ID, while the other two are the coordinates of the destination
      * @return an Action that contains the worker references
      */
@@ -94,7 +94,7 @@ public class DefaultMovementPhase implements MovementPhase{
 
 
     /**
-     * a testing method for getting the input for phase
+     * A testing method for getting the input for phase
      * @return the move
      */
     @Deprecated

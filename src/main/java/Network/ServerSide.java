@@ -122,7 +122,10 @@ public class ServerSide {
         }
     }
 
-
+    /**
+     * Same class as below with the only difference that here is possible to
+     * handle a three players game
+     */
     public  synchronized void room2 (ClientStatus s, String name, Socket socket){
         clientSocket.add(socket);
         keyString = ""+ keyNum;

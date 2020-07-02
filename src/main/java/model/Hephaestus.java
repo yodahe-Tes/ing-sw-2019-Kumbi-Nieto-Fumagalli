@@ -6,7 +6,7 @@ import controller.PhaseResult;
 import java.io.IOException;
 
 /**
- * A class for the deity Hephaestus
+ * A class that implements the deity Hephaestus
  * @author Fumagalli
  */
 
@@ -18,7 +18,7 @@ public class Hephaestus implements BuildingPhase, Deity{
     DefaultBuildingLosingCondition loose;
 
     /**
-     * constructor
+     * Constructor
      * @param board is the board where it have to build
      * @param checker is the building rules checker associated with the player
      */
@@ -29,7 +29,7 @@ public class Hephaestus implements BuildingPhase, Deity{
     }
 
     /**
-     * a method that models the default building phase
+     * A method that models the default building phase
      * @param worker is the worker that must build
      * @return VICTORY if the player won, DEFEAT if was defeated, NEXT otherwise
      */
@@ -75,7 +75,7 @@ public class Hephaestus implements BuildingPhase, Deity{
     }
 
     /**
-     * a method that gives the description of the god
+     * A method that gives the description of the god
      * @return a string that represents the god's name and a short description of its power
      */
     @Override
@@ -93,7 +93,7 @@ public class Hephaestus implements BuildingPhase, Deity{
     public BuildingRuleChecker getChecker(){return checker;}
 
     /**
-     * a testing method for getting a simulated user's input for phase
+     * A testing method for getting a simulated user's input for phase
      * @return the build
      */
     @Deprecated
@@ -102,7 +102,7 @@ public class Hephaestus implements BuildingPhase, Deity{
     }
 
     /**
-     * a testing method for getting a simulated user's input for phase
+     * A testing method for getting a simulated user's input for phase
      * @return a boolean
      */
     @Deprecated

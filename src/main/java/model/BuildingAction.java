@@ -1,7 +1,7 @@
 package model;
 
 /**
- * a class that models a building worker action
+ * A class that models a building worker action
  */
 public class BuildingAction {
     private final int[] destination;

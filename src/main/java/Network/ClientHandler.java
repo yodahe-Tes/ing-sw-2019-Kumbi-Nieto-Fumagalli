@@ -21,6 +21,11 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
 
     private boolean active = true;
 
+    /**
+     * Constructor
+     * @param socket client socket
+     * @param server server connection
+     */
     public ClientHandler(Socket socket, ServerSide server)  {
         this.socket = socket;
         this.server = server;
@@ -30,6 +35,10 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
         return active;
     }
 
+    /***
+     * A method to send messages via the socket
+     * @param message information to send
+     */
     private synchronized void send(Object message) {
         try {
             out.reset();
@@ -40,6 +49,9 @@ public class ClientHandler extends Observable<String> implements ClientStatus, R
         }
     }
 
+    /**
+     * A method that closes the socket connection
+     */
 
     private void closeConnection() {
         send("Connection closed!");

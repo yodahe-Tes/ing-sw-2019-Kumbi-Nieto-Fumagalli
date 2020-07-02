@@ -12,7 +12,7 @@ public class DefaultMovingLosingCondition {
     private final Board board;
 
     /**
-     * constructor
+     * Constructor
      * @param board is the board where it will control the condition
      */
 

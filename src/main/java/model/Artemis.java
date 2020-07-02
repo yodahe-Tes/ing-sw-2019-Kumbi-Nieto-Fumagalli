@@ -25,7 +25,7 @@ public class Artemis implements Deity, MovementPhase{
     }
 
     /**
-     * a method that gives the description of the god
+     * A method that gives the description of the god
      * @return a string that represents the god's name and a short description of its power
      */
     @Override
@@ -34,7 +34,7 @@ public class Artemis implements Deity, MovementPhase{
     }
 
     /**
-     * the actual movement phase
+     * The actual movement phase
      * @return the worker moved and the result of the phase packed
      */
     @Override
@@ -113,7 +113,7 @@ public class Artemis implements Deity, MovementPhase{
     }
 
     /**
-     * a private method that checks if the worker can move after the first
+     * A private method that checks if the worker can move after the first
      * @param worker the worker moved with the standard move
      * @param previousAction the starting position of the first move
      * @return true if the worker can move again without returning in the starting square
@@ -133,7 +133,7 @@ public class Artemis implements Deity, MovementPhase{
     }
 
     /**
-     * a private method that gets the chosen worker reference and packs it with the movement's coordinates
+     * A private method that gets the chosen worker reference and packs it with the movement's coordinates
      * @param action is the action given by the view. The first int represents the worker ID, while the other two are the coordinates of the destination
      * @return an Action that contains the worker references
      */
@@ -147,7 +147,7 @@ public class Artemis implements Deity, MovementPhase{
     public Player getOwner(){return checker.getOwner();}
 
     /**
-     * a testing method for getting the input for phase
+     * A testing method for getting the input for phase
      * @return the move
      */
     @Deprecated
@@ -159,7 +159,7 @@ public class Artemis implements Deity, MovementPhase{
     public MovementRuleChecker getChecker(){return checker;}
 
     /**
-     * a method intended for testing that simulates the input from users
+     * A method intended for testing that simulates the input from users
      * @return a boolean
      */
     @Deprecated

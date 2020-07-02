@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * A class that implements the deity Aphrodite
+ */
 public class Aphrodite implements Deity, MovementRule {
 
     Board board;
@@ -11,7 +14,7 @@ public class Aphrodite implements Deity, MovementRule {
     }
 
     /**
-     * method that contains the god description
+     * Method that contains the god description
      * @return the string with the god's description for the player to read
      */
     @Override
@@ -21,7 +24,7 @@ public class Aphrodite implements Deity, MovementRule {
 
 
     /**
-     * checks if the move obeys to the rule
+     * Checks if the move obeys to the rule
      * @param action is the movement action (worker + destination)
      * @return true if the move is legal
      */
@@ -50,7 +53,7 @@ public class Aphrodite implements Deity, MovementRule {
     public boolean isOpponent(){return true;}
 
     /**
-     * this method does nothing because this rule doesn't allow the player to force move anyone
+     * This method does nothing because this rule doesn't allow the player to force move anyone
      * @param action is the action that would cause the forced move
      */
     @Override

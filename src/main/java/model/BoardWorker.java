@@ -59,7 +59,7 @@ public class BoardWorker implements Subject{
     }
 
     /**
-     * getter for the worker's position
+     * Getter for the worker's position
      * @return the position array
      */
     public int[] getPosition(){
@@ -91,7 +91,7 @@ public class BoardWorker implements Subject{
 
 
     /**
-     *notifies every observer that position is change
+     *Notifies every observer that position is change
      */
     @Override
     public void notifyObservers() {
@@ -100,11 +100,18 @@ public class BoardWorker implements Subject{
         }
     }
 
-
+    /***
+     * A method to get the position before it was changed by the movement
+     * @return a position
+     */
     public int[] getOldPosition(){
         return oldPosition;
     }
 
+    /**
+     * A method that checks if the worker was moved
+     * @return a boolean the tells if yes or no
+     */
     public boolean isWasMoved() {
         return wasMoved;
     }

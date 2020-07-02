@@ -11,7 +11,7 @@ public class DefaultBuildingLosingCondition {
     private final Board board;
 
     /**
-     * constructor
+     * Constructor
      * @param board is the board where the condition will be checked
      */
     public DefaultBuildingLosingCondition(Board board) {

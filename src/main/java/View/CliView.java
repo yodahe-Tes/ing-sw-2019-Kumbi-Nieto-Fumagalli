@@ -367,7 +367,7 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      */
 
     public void notYourTUrnMessage() {
-        inform("It's not your turn");
+        inform("Please wait for your turn");
 
     }
 
@@ -468,7 +468,6 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * Informs player that he can't move the worker to the chosen destination
      *
      */
-
     public void squareIsOccupiedMessage() {
         inform("You can't move worker there. choose another destination");
     }
@@ -478,7 +477,6 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * Informs player that he has won
      *
      */
-
     public void winnerMessage() {
         inform("Congratulations!!! YOU HAVE WON");
     }
@@ -487,7 +485,6 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * Informs player that he has lost because he has no moves left
      *
      */
-
     public void noMovesLeftMessage() {
         inform("Sorry,you have no moves left .You have lost");
     }
@@ -496,8 +493,6 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * Informs players that one of the players  has lost
      *
      */
-
-
     public void aPlayerHasLostmessage(Player loser) {
         inform("player "+ loser.getNickname()+" has lost.");
     }
@@ -512,16 +507,19 @@ public class CliView extends Observable implements model.Observer, Observer<Stri
      * Informs player that he has lost
      *
      */
-
     public void loserMessage() {
         inform("Sorry, you have lost");
     }
 
+    /**
+     * Informs player that the other player has won
+     *
+     */
     public void aPlayerHasWonMessage(Player winner){inform("player "+ winner.getNickname()+" has won.");}
+
     /**
      * method used to send info to client
      */
-
     private void inform(String infoForClient) {
         System.out.println("son dentro inform");
         client.asyncSend(infoForClient);

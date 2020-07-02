@@ -3,7 +3,7 @@ package model;
 import java.util.Arrays;
 
 /**
- * A class for the deity Hypnus
+ * A class that implements the deity Hypnus
  * @author Fumagalli
  */
 
@@ -13,20 +13,25 @@ public class Hypnus implements Deity, MovementRule {
     private final Board board;
     private final Player owner;
 
+    /**
+     * Constructor
+     * @param board where it has to move
+     * @param owner is the player that got this god
+     */
     public Hypnus (Board board, Player owner){
         this.owner=owner;
         this.board=board;
     }
 
     /**
-     * a method that gives the description of the god
+     * A method that gives the description of the god
      * @return a string that represents the god's name and a short description of its power
      */
     @Override
     public String desc(){ return "HYPNUS"+System.lineSeparator()+"Start of Opponent’s Turn: If one of your opponent’s Workers is higher than all of their others, it cannot move.";}
 
     /**
-     * checks if Hypnus's restrictions are fulfilled
+     * Checks if Hypnus's restrictions are fulfilled
      * @param action is the movement action (worker + destination)
      * @return true if move is legal
      */
@@ -46,6 +51,11 @@ public class Hypnus implements Deity, MovementRule {
         return true;
     }
 
+    /**
+     * A method that gets the player that is actually playing
+     * @param worker that is going to be checked
+     * @return the player if it's active
+     */
     private Player activePlayer(BoardWorker worker){
         for(int i=1; i<=board.numberPlayers();i++){
             for(int j=1;j<=2;j++){

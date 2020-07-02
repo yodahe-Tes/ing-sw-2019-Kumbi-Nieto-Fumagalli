@@ -2,7 +2,7 @@ package model;
 
 /**
  * @author Fumagalli
- * Implements a square
+ * A class that implements a square that compose che boardgame
  */
 
 public class
@@ -41,7 +41,7 @@ Square {
 
 
     /**
-     * returns the current floor
+     * Returns the current floor
      * @return floor
      */
     public int getFloor(){
@@ -50,7 +50,7 @@ Square {
 
 
     /**
-     * returns true if the square has a dome
+     * Returns true if the square has a dome
      * @return dome
      */
     public boolean hasDome() {

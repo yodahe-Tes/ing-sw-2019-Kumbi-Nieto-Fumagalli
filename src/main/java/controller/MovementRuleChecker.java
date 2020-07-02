@@ -6,7 +6,7 @@ import model.MovementRule;
 import model.Player;
 
 /**
- * a class that checks if the movement requested is legal
+ * A class that checks if the movement requested is legal
  * @author Fumagalli
  */
 
@@ -16,7 +16,7 @@ public class MovementRuleChecker {
     private final Player owner;
 
     /**
-     * constructor
+     * Constructor
      * @param rule the array of rules the player have to obey to
      * @param owner the player which the rules refers to
      */
@@ -26,7 +26,7 @@ public class MovementRuleChecker {
     }
 
     /**
-     * a method that checks if every rule is fulfilled
+     * A method that checks if every rule is fulfilled
      * @param action is the action that is needed to check
      * @return true if every condition is fulfilled
      */
@@ -41,7 +41,7 @@ public class MovementRuleChecker {
     }
 
     /**
-     * does the forced move for the rules
+     * Does the forced move for the rules
      * @param action the movement action that causes the forced move execution
      */
     public void checkForcedMove(MovementAction action){
@@ -51,7 +51,7 @@ public class MovementRuleChecker {
     }
 
     /**
-     * removes the rules applied by a god owned by a defeated player
+     * Removes the rules applied by a god owned by a defeated player
      * @param looserGod is the god whose effect are to be removed
      */
     public void removeLooser(MovementRule looserGod){
@@ -70,6 +70,10 @@ public class MovementRuleChecker {
         }
     }
 
+    /**
+     * A method to obtain the owner of a chosen worker
+     * @return the player's name
+     */
     public Player getOwner(){
         return owner;
     }

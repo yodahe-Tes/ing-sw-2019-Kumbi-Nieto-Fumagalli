@@ -9,9 +9,9 @@ import java.util.Scanner;
 
 
 /***
- * This class implements java socket class
+ * A class that implements the client socket
  * It implements a thin client that simply read user input and sends to the server
- * and vice-versa
+ * and vice-versa, using a CLI menu
  * @author Nieto
  */
 
@@ -23,12 +23,11 @@ public class ClientSide {
         private String name;
         private int players = 2;
         Scanner scanner = new Scanner(System.in);
+        private boolean active = true;
 
         public ClientSide(){
             name = getName();
         }
-
-        private boolean active = true;
 
         public synchronized boolean isActive(){
             return active;
@@ -37,6 +36,7 @@ public class ClientSide {
         public synchronized void setActive(boolean active){
             this.active = active;
         }
+
 
         public Thread asyncReadFromSocket(final ObjectInputStream socketIn){
             Thread t = new Thread(new Runnable() {
@@ -82,15 +82,14 @@ public class ClientSide {
         }
 
 
-
-
         public void run(){
             menu();
         }
 
-
-
-
+        /**
+        * A method that returns the name given by the player
+        * @return the name of the player
+        */
         private String getName(){
 
             String name=null;
@@ -109,6 +108,10 @@ public class ClientSide {
             return name;
         }
 
+        /**
+        * A method that return the number of players for the game decided by the player
+        * @return number of players for the game
+        */
         private int numberOpponents(){
             int players = 0;
             //Scanner scanner;
@@ -130,6 +133,10 @@ public class ClientSide {
             return players;
         }
 
+        /**
+        * A method that returns the new changed ip decided by the player
+        * @return new IP address
+        */
         private String changeIp(){
             String newIp = null;
             //Scanner scanner;
@@ -175,11 +182,17 @@ public class ClientSide {
             }
         }
 
+        /***
+        * A method to print the menù
+        */
         private void printMenu(){
             System.out.println("Your nickname is "+name+System.lineSeparator()+"Your game size is "+players+" players"+System.lineSeparator()+"The server's ip is "+ip+System.lineSeparator());
             System.out.println(System.lineSeparator()+"Do you want to:"+System.lineSeparator()+"[1]:    Start a new game with current settings"+System.lineSeparator()+"[2]:    Change nickname"+System.lineSeparator()+"[3]:   Change game's size"+System.lineSeparator()+"[4]:    Change server's ip address"+System.lineSeparator()+"[5]:    Exit the game");
         }
 
+        /**
+        * A method that sets up the menù to show to the player
+        */
         private void menu(){
             boolean insideMenu=true;
             while(insideMenu){
@@ -219,7 +232,11 @@ public class ClientSide {
             }
         }
 
-    private int getMenuInput(){
+        /**
+        * A method that saves the input from the player
+        * @return input from the player
+        */
+        private int getMenuInput(){
         int input = 0;
         //Scanner scanner;
 
@@ -233,37 +250,41 @@ public class ClientSide {
             }
         }
         return input;
-    }
-
-    private void connectToGame() throws IOException {
-
-        Socket socket = new Socket(ip, port);
-        System.out.println("Connection established");
-        ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
-        PrintWriter socketOut = new PrintWriter(socket.getOutputStream(),true);
-        Scanner stdin = new Scanner(System.in);
-
-        socketOut.println(name);
-        socketOut.println(players);
-
-        try{
-            Thread t0 = asyncReadFromSocket(socketIn);
-            Thread t1 = asyncWriteToSocket(stdin, socketOut);
-
-            t0.join();
-            t1.join();
-
-
-        } catch(InterruptedException | NoSuchElementException e){
-            active=false;
-            System.out.println("Connection closed from the client side");
-        } finally {
-            stdin.close();
-            socketIn.close();
-            socketOut.close();
-            socket.close();
-            System.err.println("finito di chiudere socket");
-            scanner = new Scanner(System.in);
         }
-    }
+
+        /**
+        * A method that creates the connection to the server
+        * @throws IOException
+        */
+        private void connectToGame() throws IOException {
+
+            Socket socket = new Socket(ip, port);
+            System.out.println("Connection established");
+            ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
+            PrintWriter socketOut = new PrintWriter(socket.getOutputStream(),true);
+            Scanner stdin = new Scanner(System.in);
+
+            socketOut.println(name);
+            socketOut.println(players);
+
+            try{
+                Thread t0 = asyncReadFromSocket(socketIn);
+                Thread t1 = asyncWriteToSocket(stdin, socketOut);
+
+                t0.join();
+                t1.join();
+
+
+            } catch(InterruptedException | NoSuchElementException e){
+                active=false;
+                System.out.println("Connection closed from the client side");
+            } finally {
+                stdin.close();
+                socketIn.close();
+                socketOut.close();
+                socket.close();
+                System.err.println("socket closed");
+                scanner = new Scanner(System.in);
+            }
+        }
 }

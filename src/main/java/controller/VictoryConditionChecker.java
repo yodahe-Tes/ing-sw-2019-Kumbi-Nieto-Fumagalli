@@ -3,11 +3,14 @@ package controller;
 import model.BoardWorker;
 import model.VictoryCondition;
 
+/**
+ * A class that checks the situation of every worker to find the winner
+ */
 public class VictoryConditionChecker {
     private final VictoryCondition[] condition;
 
     /**
-     * constructor
+     * Constructor
      * @param rule the array of victory conditions that represents the possible ways for the player to win
      */
     public VictoryConditionChecker(VictoryCondition[] rule) {
@@ -15,7 +18,7 @@ public class VictoryConditionChecker {
     }
 
     /**
-     * a method that checks if every rule is fulfilled
+     * A method that checks if every rule is fulfilled
      * @param worker is the worker that moved last
      * @return true if one condition is fulfilled
      */
