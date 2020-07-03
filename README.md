@@ -2,7 +2,7 @@
 Progetto ingegneria del software
 
 Componenti del gruppo:
-Yodahe Teshome Kumbi, Francisco Antonio Nieto Rodriguez, Francesco Fumagalli.
+Yodahe Teshome Kumbi, Francisco Nieto, Francesco Fumagalli.
 
 Componenti implementati:
 -regole complete
