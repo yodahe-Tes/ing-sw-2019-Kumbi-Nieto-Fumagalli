@@ -18,6 +18,7 @@ public class GuiView extends Observable implements Observer {
     private JTextField textField = new JTextField();
     private JPanel panel = new JPanel();
     private String message = "wait";
+    private ClientSideGui client;
 
     JButton createSquareButton(String SQUARE, ImageIcon icon){
         final JButton button = new JButton(SQUARE ,icon );
