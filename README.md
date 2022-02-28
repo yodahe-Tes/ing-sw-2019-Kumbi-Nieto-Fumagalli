@@ -24,3 +24,7 @@ Dopo di quello vai alla directory dei jar folder tramite explorer e fai doppio c
 
 Nota: per poter verificare parte dei casi di test presenti è necessario utilizzare dei metodi appositi inseriti
  nelle classi da testare invece della normale richiesta all'utente. 
+ 
+ 
+ ![SantoriniBoard](https://user-images.githubusercontent.com/61747783/155987510-40eac83a-3885-46b9-8344-53e36fb7cc9b.png)
+
